@@ -2,7 +2,7 @@
 
 This is my journey in learning Scala.
 
-I'll be using the recommended book from the Scala [website](): []().
+I'll be using the recommended book from the Scala [website](http://docs.scala-lang.org/books.html): [Programming in Scala, Third Edition](https://booksites.artima.com/programming_in_scala_3ed).
 
 Each chapter will have its own "take-aways" in the according "readme.md" files. 
 
