@@ -1,4 +1,4 @@
-# My journey in learning Scala.
+# My journey in learning Scala
 
 This is my diary in the journey of learning Scala.
 
