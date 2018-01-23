@@ -53,7 +53,7 @@ if (args.length > 0) {
       val numSpaces = maxWidth - widthOfLength(x)
       val padding = " " * numSpaces
       println(padding + x.length + " | " + x)
-  })
+  }: Unit)
 }
 else
   Console.err.println("Please enter filename")
@@ -66,3 +66,16 @@ else
 // This does not work: `List(1,2,3).map((x: Int) : Str => x.toString)`
 // This works but it is not so explicit: `List(1,2,3).map((x: Int) => x.toString)`
 // Or if I wanted to do this I should use a named function?
+//
+// One day later I got my reply:
+//
+// Is there a way to make the types more explicit? This works:
+// List(1,2,3).map(x => x + 10) This does not work: List(1,2,3).map((x: Int) :
+// Str => x.toString) This works but it is not so explicit: List(1,2,3).map((x:
+// Int) => x.toString) Or if I wanted to do this I should use a named function?
+// – monteiro yesterday
+//
+// @monteiro List(1,2,3).map((x: Int) => { x.toString }: String) – Mario Galic
+// 12 hours ago
+//
+// Much appreciated! : ) – monteiro 1 min ago   edit

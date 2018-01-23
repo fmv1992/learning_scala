@@ -22,5 +22,5 @@ while (i < 10) {
 // And with this example we become more acquainted with functional programming:
 var myarray: Array[Int] = Array(1, 2, 3, 4)
 println("FUNctional programming:")
-myarray.foreach((x: Int) => println("_" + x.toString + "_"))
+myarray.foreach((x: Int) => {println("_" + x.toString + "_")}: Unit)
 myarray.foreach(println)
