@@ -14,7 +14,6 @@ four million, find the sum of the even-valued terms.
 
 import scala.collection.mutable.ListBuffer
 
-
 def Fibb(x: Int): Int = {
   if (x == 1 || x == 0) 1 else Fibb(x - 1) + Fibb(x - 2)
 }
@@ -43,7 +42,7 @@ while (f_i < UPPER) {
   fibbos_list.append(f_i)
   i += 1
   f_i = Fibb(i)
-  // println(i, f_i)
+  // println("Input: " + i.toString + " Fibb: " + f_i.toString)
 }
 
 // 2 - Filter all the uneven ones.
