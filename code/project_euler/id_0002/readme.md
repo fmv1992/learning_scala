@@ -33,3 +33,7 @@
         1 loops, best of 10: 1.14 sec per loop
 
 To be more accurate one should also count the number of calls to the `Fibb` function.
+
+## Improvements
+
+* Cache calls to `Fibb` function.
