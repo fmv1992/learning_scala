@@ -4,6 +4,8 @@ This is my progress checker in my journey of learning Scala.
 
 I'll be using the recommended book from the Scala [website](http://docs.scala-lang.org/books.html): [Programming in Scala, Third Edition](https://booksites.artima.com/programming_in_scala_3ed) as the main source and a couple of other resources to do exercises.
 
+I'll also try to stick to the [functional programming](https://en.wikipedia.org/wiki/Functional_programming) style to challenge myself along the way.
+
 ## Resources
 
 ### Programming in Scala (book)
