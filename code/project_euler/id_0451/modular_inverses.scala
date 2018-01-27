@@ -35,11 +35,13 @@
  * up.
  */
 
+import System.currentTimeMillis
+
 // def GetFactorsAndExponents(x: Int): XXX[Int] = {
 // }
 
+// Computation complexity: O(n)
 def GetFactors(x: Int): Set[Int] = {
-    // TODO: does range include the upper lim?
     Range(1, x + 1).filter(n => x % n == 0).toSet
 }
 
@@ -67,13 +69,14 @@ def GetFactors(x: Int): Set[Int] = {
 // from the list [1, 2, ..., x - 1] excluding every number for which there is
 // any number in the factor list which number % factor == 0.
 
+// Computation complexity: O(n^2)
 def GetCoprimes(x: Int): Set[Int] = {
     val all = Range(1, x).toSet
     val factors = GetFactors(x)
     all.filter((n: Int) => {((factors intersect GetFactors(n)) size) == 1}: Boolean)
 }
 
-println(GetCoprimes(15).toList.sorted)
+// println(GetCoprimes(15).toList.sorted)
 assert(List(1, 2, 4, 7, 8, 11, 13, 14) == GetCoprimes(15).toList.sorted)
 
 /* Example: 11 and 4.
@@ -87,7 +90,6 @@ assert(List(1, 2, 4, 7, 8, 11, 13, 14) == GetCoprimes(15).toList.sorted)
  * 3 * 22 mod 5 = 1
  */
 
-// TODO: improve this strategy.
 // Brute force search for modular inverse.
 def GetModularInverse(num: Int, denom: Int): Int = {
     def RecGetModularInverse(x: Int, num:Int, denom: Int): Int = {
@@ -100,10 +102,11 @@ def GetModularInverse(num: Int, denom: Int): Int = {
 }
 
 def FunctionI(num: Int): Int = {
+    if (num % 50 == 0) println(System.currentTimeMillis() + ":" + num)
     def GetNEqualsModInvN(n: Int, denom: Int): Int = {
         // println("GetNEqualsModInvN | n: " + n + " denom: " + denom + " factors: " + GetFactors(n))
-        if (n == 1) 1
-        else if (! (GetFactors(n).intersect(GetFactors(denom)).size== 1))
+        if (n == 1 || n == 0) 1
+        else if (! (GetFactors(n).intersect(GetFactors(denom)).size == 1))
                 GetNEqualsModInvN(n - 1, denom)
         else if (n == GetModularInverse(n, denom)) n
         else GetNEqualsModInvN(n - 1, denom)
@@ -115,6 +118,5 @@ assert(FunctionI(15) == 11)
 assert(FunctionI(100) == 51)
 assert(FunctionI(7) == 1)
 
-Range(3, 100).foreach((x: Int) => println(x + " -- FunctionI --> " + FunctionI(x)))
-// Range(1, 100).foreach(x: Int => println(x))
-// val r1 = Range(1, 100).foreach(println)
+val result = Range(2, 2e7.toInt).map(FunctionI).sum
+println(result)
