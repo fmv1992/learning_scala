@@ -40,8 +40,14 @@
 
 def GetFactors(x: Int): Set[Int] = {
     // TODO: does range include the upper lim?
-    Range(2, x).filter(n => x % n == 0).toSet
+    Range(1, x + 1).filter(n => x % n == 0).toSet
 }
+
+// println(GetFactors(4))
+// println(GetFactors(3))
+// println(GetFactors(2))
+// println(GetFactors(1))
+// throw new Exception
 
 // Strategy 01 for calculating coprimes: factors and exponents.
 //
@@ -64,9 +70,10 @@ def GetFactors(x: Int): Set[Int] = {
 def GetCoprimes(x: Int): Set[Int] = {
     val all = Range(1, x).toSet
     val factors = GetFactors(x)
-    all.filterNot((n: Int) => {factors.exists(y => n % y == 0)}: Boolean)
+    all.filter((n: Int) => {((factors intersect GetFactors(n)) size) == 1}: Boolean)
 }
 
+println(GetCoprimes(15).toList.sorted)
 assert(List(1, 2, 4, 7, 8, 11, 13, 14) == GetCoprimes(15).toList.sorted)
 
 /* Example: 11 and 4.
@@ -88,23 +95,26 @@ def GetModularInverse(num: Int, denom: Int): Int = {
                else RecGetModularInverse(x + 1, num, denom)
     }
     val invmod = RecGetModularInverse(1, num, denom)
-    println("\t" + num + " % " + denom + " = " + invmod)
+    // println("\t" + num + " % " + denom + " = " + invmod)
     invmod
 }
 
 def FunctionI(num: Int): Int = {
     def GetNEqualsModInvN(n: Int, denom: Int): Int = {
-        if (n == GetModularInverse(n, denom)) n
-        else if (! (GetFactors(n - 1) intersect GetFactors(denom) isEmpty))
-            GetNEqualsModInvN(n - 2, denom)
+        // println("GetNEqualsModInvN | n: " + n + " denom: " + denom + " factors: " + GetFactors(n))
+        if (n == 1) 1
+        else if (! (GetFactors(n).intersect(GetFactors(denom)).size== 1))
+                GetNEqualsModInvN(n - 1, denom)
+        else if (n == GetModularInverse(n, denom)) n
         else GetNEqualsModInvN(n - 1, denom)
     }
-    println(num)
     GetNEqualsModInvN(num - 2, num)
 }
 
 assert(FunctionI(15) == 11)
-println(FunctionI(29))
-println(FunctionI(32))
-// assert(FunctionI(100) == 51)
-// assert(FunctionI(7) == 1)
+assert(FunctionI(100) == 51)
+assert(FunctionI(7) == 1)
+
+Range(3, 100).foreach((x: Int) => println(x + " -- FunctionI --> " + FunctionI(x)))
+// Range(1, 100).foreach(x: Int => println(x))
+// val r1 = Range(1, 100).foreach(println)
