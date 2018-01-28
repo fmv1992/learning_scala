@@ -28,18 +28,30 @@ def main():
     y = np.array(y)
     y = y - y.min()
 
-    # Instantiate figure.
-    fig, ax = plt.subplots()
-    # Execute the plot.
-    sns.regplot(x, y, ax=ax, order=2, ci=95, fit_reg=True)
-    ax.set_xlabel('input N to FunctionI')
-    ax.set_ylabel('Wall time when N was computed (ms)')
+    for INTERP_ORDER in (2, 3):
+        # Instantiate figure.
+        fig, ax = plt.subplots()
+        # Execute the plot.
+        sns.regplot(x,
+                    y,
+                    ax=ax,
+                    order=INTERP_ORDER,
+                    ci=95,
+                    fit_reg=True,
+                    marker='x',
+                    scatter_kws={"s": 10,
+                                 "color": "orange",
+                                 })
+        fig.suptitle('Polynomial interpolation of order ' + str(INTERP_ORDER))
+        ax.set_xlabel('input N to FunctionI')
+        ax.set_ylabel('Wall time when N was computed (ms)')
 
-    # import ipdb; ipdb.set_trace()  # XXX BREAKPOINT
-    fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+        # import ipdb; ipdb.set_trace()  # XXX BREAKPOINT
+        fig.tight_layout(rect=[0, 0.03, 1, 0.95])
 
-    fig.savefig('modular_inverses_time_from_commit_ec30f27.png',
-                dpi=500)
+        fig.savefig(
+            'modular_inverses_time_polyorder' + str(INTERP_ORDER) + '.png',
+            dpi=500)
 
 
 if __name__ == '__main__':

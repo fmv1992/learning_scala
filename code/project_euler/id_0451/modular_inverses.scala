@@ -40,7 +40,7 @@ import System.currentTimeMillis
 // def GetFactorsAndExponents(x: Int): XXX[Int] = {
 // }
 
-// Computation complexity: O(n)
+// Computational complexity: O(n).
 def GetFactors(x: Int): Set[Int] = {
     Range(1, x + 1).filter(n => x % n == 0).toSet
 }
@@ -69,7 +69,8 @@ def GetFactors(x: Int): Set[Int] = {
 // from the list [1, 2, ..., x - 1] excluding every number for which there is
 // any number in the factor list which number % factor == 0.
 
-// Computation complexity: O(n^2)
+// Computational complexity: O(n^2).
+// Because GetFactors is O(n) and it gets called for every integer in range.
 def GetCoprimes(x: Int): Set[Int] = {
     val all = Range(1, x).toSet
     val factors = GetFactors(x)
@@ -91,6 +92,9 @@ assert(List(1, 2, 4, 7, 8, 11, 13, 14) == GetCoprimes(15).toList.sorted)
  */
 
 // Brute force search for modular inverse.
+// Computational complexity: O(n) [not sure].
+// Because each call to the function calls exactly one time the recursive
+// function which tries to brute force from 1 to n.
 def GetModularInverse(num: Int, denom: Int): Int = {
     def RecGetModularInverse(x: Int, num:Int, denom: Int): Int = {
         return if (((x * num) % denom) == 1) x
@@ -101,6 +105,8 @@ def GetModularInverse(num: Int, denom: Int): Int = {
     invmod
 }
 
+// Computationalal complexity: O(n^2) or O(n^3).
+// Because GetFactors may be called n times.
 def FunctionI(num: Int): Int = {
     if (num % 50 == 0) println(System.currentTimeMillis() + ":" + num)
     def GetNEqualsModInvN(n: Int, denom: Int): Int = {
@@ -114,9 +120,9 @@ def FunctionI(num: Int): Int = {
     GetNEqualsModInvN(num - 2, num)
 }
 
+assert(FunctionI(7) == 1)
 assert(FunctionI(15) == 11)
 assert(FunctionI(100) == 51)
-assert(FunctionI(7) == 1)
 
 val result = Range(2, 2e7.toInt).map(FunctionI).sum
 println(result)
