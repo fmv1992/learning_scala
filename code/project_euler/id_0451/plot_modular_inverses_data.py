@@ -1,7 +1,7 @@
 """Plot the profile of our current FunctionI function.
 
 Data was obtained by:
-`scala ./modular_inverses.scala > data.txt`
+`scala ./modular_inverses.scala > modular_inverses_data.txt`
 
 Referent to code of './modular_inverses.scala' in:
 Git commit:
@@ -43,8 +43,8 @@ def main():
                                  "color": "orange",
                                  })
         fig.suptitle('Polynomial interpolation of order ' + str(INTERP_ORDER))
-        ax.set_xlabel('input N to FunctionI')
-        ax.set_ylabel('Wall time when N was computed (ms)')
+        ax.set_xlabel('Input N to FunctionI')
+        ax.set_ylabel('Wall-clock time elapesed to compute N (ms)')
 
         # import ipdb; ipdb.set_trace()  # XXX BREAKPOINT
         fig.tight_layout(rect=[0, 0.03, 1, 0.95])

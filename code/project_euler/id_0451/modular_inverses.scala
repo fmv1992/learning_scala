@@ -105,7 +105,11 @@ def GetModularInverse(num: Int, denom: Int): Int = {
     invmod
 }
 
-// Computationalal complexity: O(n^2) or O(n^3).
+// Computationalal complexity: O(n^3).
+// Experimental data show us exatcly that (see
+// ./modular_inverses_time_polyorder2.png and
+// ./modular_inverses_time_polyorder3.png at commit
+// aa9369e3224c1d52109bd3a2b183bce9bb9e6056).
 // Because GetFactors may be called n times.
 def FunctionI(num: Int): Int = {
     if (num % 50 == 0) println(System.currentTimeMillis() + ":" + num)
@@ -119,6 +123,7 @@ def FunctionI(num: Int): Int = {
     }
     GetNEqualsModInvN(num - 2, num)
 }
+// TODO: check why `GetCoprimes` does not get called anywhere.
 
 assert(FunctionI(7) == 1)
 assert(FunctionI(15) == 11)
