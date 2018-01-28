@@ -34,7 +34,7 @@ val UPPER: Int = 4e6.asInstanceOf[Int]
 
 def GetFibbonacciInputSmallerButCloserToN(x: Int, limit: Int): Int = {
   if (Fibb(x) < limit) GetFibbonacciInputSmallerButCloserToN(x + 1, limit)
-      else x - 1
+  else x - 1
 }
 
 // 1 - Find the input x for which Fibb(x) < UPPER < Fibb(x + 1).

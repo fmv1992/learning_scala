@@ -40,11 +40,11 @@ object ChecksumAccumulator {
       cache(s)
     else {
 
-     val acc = new ChecksumAccumulator
+      val acc = new ChecksumAccumulator
       for (c <- s)
         acc.add(c.toByte)
-      val cs = acc.checksum()
-      cache += (s -> cs)
-      cs
+        val cs = acc.checksum()
+        cache += (s -> cs)
+        cs
     }
 }

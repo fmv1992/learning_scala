@@ -48,12 +48,12 @@ if (args.length > 0) {
   // when you have side effects (it returns Unit()). `map` on the other hand
   // returns a list.
   lines.map(
-  // lines.foreach(
+    // lines.foreach(
     (x: String) => {
       val numSpaces = maxWidth - widthOfLength(x)
       val padding = " " * numSpaces
       println(padding + x.length + " | " + x)
-  }: Unit)
+    }: Unit)
 }
 else
   Console.err.println("Please enter filename")
