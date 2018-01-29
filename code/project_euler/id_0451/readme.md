@@ -2,6 +2,7 @@
 
 ## Runtime
 
+* **2018-01-29 Errata**: actually each function call to `FunctionI` is `O(n^3)`.
 * As of 2018-01-27 (commit `aa9369e`) the code runs in `O(n^3)`. That due to the following function call structure:
 
         FunctionI -> GetNEqualsModInvN -> GetFactors
@@ -13,7 +14,7 @@
         ===================================================
           O(k)   x     O(n)       x         O(n)
         ===================================================
-          O(n^2)
+          O(n^2) (**wrong**)
 
     Since the problem asks one to calculate n calls to `FunctionI` one has an overall complexity of **O(n^3)**. The accompanying file:
 
@@ -25,6 +26,7 @@
 
 ## Improvements
 
+* Correct this file according to the errata above.
 * In the first attempts to solve the problem I used my own reasoning to structure the algorithms. Probably better algorithms exist for this problem.
 * To get this problem done in reasonable time at least one of the `GetNEqualsModInvN` or `GetFactors` should have their performance improved, that is, they should be computed in `O(n)` time.
 
