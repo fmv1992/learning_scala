@@ -76,6 +76,11 @@ Website: <http://aperiodic.net/phil/scala/s-99/>.
 
 [//]: # (One of [not initiated|initiated|half way through|done])
 
+### Other
+
+* A roadmap found on Reddit: <https://gist.github.com/d1egoaz/2180cbbf7d373a0c5575f9a62466e5e1>.
+* A list of courses: <https://hackr.io/tutorials/learn-scala>.
+
 ## Ideas for future projects in Scala
 
 * Create and deduplicator scanner with a similar behavior of [rdfind](https://rdfind.pauldreik.se/) (written in C).
