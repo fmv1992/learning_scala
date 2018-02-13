@@ -64,7 +64,7 @@ object Draw {
       }
     }
     ("A " + form.toString + " of " + getMeasure(form) + ": " + form.area
-     + " cm.")
+      + " cm.")
   }
 }
 println(Draw(Circle(10)))
@@ -155,6 +155,18 @@ sealed trait IntList {
       case Pair(hd, tl) => 1 + tl.length
     }
   }
+  def product: Int = {
+    this match {
+      case End => 1
+      case Pair(hd, tl) => hd * tl.product
+    }
+  }
+  def double: IntList = {
+    this match {
+      case End => End
+      case Pair(hd, tl) => Pair(2 * hd, tl.double)
+    }
+  }
 }
 final case object End extends IntList
 final case class Pair(head: Int, tail: IntList) extends IntList
@@ -164,7 +176,31 @@ val example = Pair(1, Pair(2, Pair(3, End)))
 assert(example.length == 3)
 assert(example.tail.length == 2)
 assert(End.length == 0)
+assert(example.product == 6)
+assert(example.tail.product == 6)
+assert(End.product == 1)
+assert(example.double == Pair(2, Pair(4, Pair(6, End))))
+assert(example.tail.double == Pair(4, Pair(6, End)))
+assert(End.double == End)
 
+// }}}
+
+// 4.6.3.2 {{{
+printExercise("4.6.3.2")
+
+sealed trait Node {
+  def sum: Int = this match {
+    case Leaf(e) => e
+    case Tree(l, r) => l.sum + r.sum
+  }
+  def double: Node = this match {
+    case Leaf(e) => Leaf(2 * e)
+    case Tree(l, r) => Tree(l.double, r.double)
+  }
+}
+
+final case class Tree(left: Node, right: Node) extends Node
+final case class Leaf(element: Int) extends Node
 
 // }}}
 
