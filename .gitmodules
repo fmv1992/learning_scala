@@ -1,0 +1,3 @@
+[submodule "submodules/functional_programming_in_scala"]
+	path = submodules/functional_programming_in_scala
+	url = https://github.com/fpinscala/fpinscala/
