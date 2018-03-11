@@ -1,5 +1,11 @@
 def PrintExercise(x: Any) = println("Exercise " + x.toString + ".")
 
+// TODO: These exercises were completed without looking at the hints on
+// submodules/functional_programming_in_scala. Some concepts were used in
+// advance such as _ as partials. Also all the exercises could be done using
+// one liners inside the body of the functions. It might be a good idea to do
+// this later.
+
 // Exercise 2.1 --- {{{
 // Write a recursive function to get the nth Fibonacci number
 // (http://mng.bz/C29s).
