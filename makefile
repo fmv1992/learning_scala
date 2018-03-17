@@ -11,6 +11,9 @@ IGNORE_FILES := ./code/project_euler/id_0451/modular_inverses.scala
 SCALA_FILES := $(filter-out $(IGNORE_FILES), $(SCALA_FILES))
 CLASS_FILES := $(filter-out $(IGNORE_FILES), $(CLASS_FILES))
 
+# Set scala compilation flags.
+SCALAC_CFLAGS = -cp $$PWD:$(ROOT_DIR)/code/my_scala_project/
+
 all:
 
 clean:
@@ -18,14 +21,15 @@ clean:
 
 run: $(CLASS_FILES) $(SCALA_FILES) .FORCE
 
-class: $(CLASS_FILES)
-
-scala: $(SCALA_FILES)
-
-# TODO: not working because all files must be compiled before.
-# Eg: Summer.scala and ChecksumAccumulator.scala.
+# If there is any makefile in the directory of the same scala file, run it's
+# "all" rule instead.
 %.scala: .FORCE
-	cd $$(dirname $@) && (scalac ./$$(basename $@) 2>/dev/null 1>/dev/null || scala -cp $$PWD ./$$(basename $@))
+	if [ -f $$(dirname $@)/makefile ];    \
+	then    \
+	    cd $$(dirname $@) && make all;    \
+	else    \
+	    cd $$(dirname $@) && (scalac ./$$(basename $@) 2>/dev/null 1>/dev/null || scala $(SCALAC_CFLAGS) ./$$(basename $@));    \
+	fi;
 
 # This brute force assumes that all .scala file generates a corrisponding
 # .class file, which is not true.

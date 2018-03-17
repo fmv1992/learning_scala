@@ -1,11 +1,14 @@
-SCALAC_FLAGS = -cp .
+# Set variables.
+SHELL := /bin/bash
+ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-.PHONY: test
+# Set scala compilation flags.
+SCALAC_CFLAGS = -cp $$PWD
 
 all: Summer.class test
 
 Summer.class: ChecksumAccumulator.scala Summer.scala
-	scalac ${SCALAC_FLAGS} ./ChecksumAccumulator.scala ./Summer.scala
+	scalac ${SCALAC_CFLAGS} ./ChecksumAccumulator.scala ./Summer.scala
 
 test: test_summer test_snippet
 
@@ -14,3 +17,5 @@ test_summer:
 
 test_snippet:
 	scalac ./chapter_04_snippet.scala
+
+.PHONY: test
