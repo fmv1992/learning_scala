@@ -94,7 +94,7 @@ println("Currying " + curried1(1)(5))
 // since => associates to the right, A => (B => C) can be written as A => B =>
 // C .
 PrintExercise(2.4)
-def uncurry[A,B,C](f: A => B => C): (A, B) => C = {
+def uncurry[A,B,C](f: A => B => C): (A, B) => C = {  // TODO: rewrite this.
   def group(a: A, b: B): C = {
     f(a)(b)
   }
@@ -108,7 +108,7 @@ println("Uncurrying " + uncurried(1, 5))
 // Exercise 2.5 --- {{{
 // Implement the higher-order function that composes two functions.
 PrintExercise(2.5)
-def compose[A,B,C](f: B => C, g: A => B): A => C = {
+def compose[A,B,C](f: B => C, g: A => B): A => C = {  // TODO: rewrite this.
   def go(x: A): C = {
     f(g(x))
   }

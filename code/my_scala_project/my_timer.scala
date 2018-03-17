@@ -25,7 +25,7 @@ object Operations {
   //// }
 }
 
-//// object Timer {
+object Timer {
 ////
 ////   private def run[A, B](func: A => B, arg: A): Double = {
 ////     val t1 = System.nanoTime
@@ -56,6 +56,6 @@ object Operations {
 ////   //   val Pairs = RunningTimes.zip(arguments)
 ////   // }
 ////
-//// }
+}
 ////
-//// case class Timer()
+case class Timer()
