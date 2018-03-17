@@ -79,11 +79,7 @@ assert(isSorted(test3, (x: Int, y: Int) => y > x))
 // implementation.
 PrintExercise(2.3)
 def curry[A,B,C](f: (A, B) => C): A => (B => C) = {
-
-  def partial(i: A, f: (A, B) => C): B => C = {
-    (l: B) => f(i, l)
-  }
-  partial(_, f)
+  (a: A) => ( (b: B) => f(a, b) )
 }
 // def addTwo(x: Int, y: Int): Int = x + y
 def addTwo(x: Int, y: Int): Int = { x + y }
