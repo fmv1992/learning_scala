@@ -427,72 +427,103 @@ assert(length(ex9b) == 11)
 
 // --- }}}
 
-// // Exercise 3.10 --- {{{
-//
-// PrintExercise(3.10)
-//
-// sealed trait ListE10[+A]
-//
-// case object NilE10 extends ListE10[Nothing]
-//
-// case class ConsE10[+A](head: A, tail: ListE10[A]) extends ListE10[A]
-//
-// object ListE10 {
-//
-//   def sum(ints: ListE10[Int]): Int = ints match {
-//     case NilE10 => 0
-//     case ConsE10(x,xs) => x + sum(xs)
-//   }
-//
-//   def product(ds: ListE10[Double]): Double = ds match {
-//     case NilE10 => 1.0
-//     case ConsE10(0.0, _) => 0.0
-//     case ConsE10(x,xs) => x * product(xs)
-//   }
-//
-//   def apply[A](as: A*): ListE10[A] = {
-//     if (as.isEmpty) NilE10
-//     else ConsE10(as.head, apply(as.tail: _*))
-//   }
-//
-//   def tail[A](list: ListE10[A]): ListE10[A] = list match {
-//     case NilE10 => NilE10
-//     case ConsE10(h, t) => t
-//   }
-//
-//   def setHead[A](new_element: A, list: ListE10[A]): ListE10[A] = list match {
-//     case NilE10 => ConsE10(new_element, NilE10)
-//     case ConsE10(h, t) => ConsE10(new_element, ConsE10(h, t))
-//   }
-//
-//   def drop[A](list: ListE10[A], n_elements: Int): ListE10[A] = {
-//     if (n_elements == 0) list else drop(ListE10.tail(list), n_elements - 1)
-//   }
-//
-//   def dropWhile[A](list: ListE10[A], f: A => Boolean): ListE10[A] = list match {
-//     case NilE10 => NilE10
-//     case ConsE10(h, t) => if (f(h)) t else dropWhile(t, f)
-//     //  if (f(list(0))) dropWhile(ListE10.tail(list), f) else list
-//   }
-//
-//   // Strategies: recursion.
-//   // 1. Iterate over list until finds a list of the type: (element, nil).
-//   //    In that case return NilE10
-//   //    Otherwise return (head, loop))
-//   // Write the problem down and your answer, then code!
-//   def init[A](list: ListE10[A]): ListE10[A] = list match {
-//     case ConsE10(h, NilE10) => NilE10
-//     case ConsE10(h, t) => ConsE10(h, init(t))  // This one copies h I guess...
-//   }
-// }
-//
-// def foldRight[A,B](as: ListE10[A], z: B)(f: (A, B) => B): B =
-//   as match {
-//     case NilE10 => z
-//     case ConsE10(x, xs) => f(x, foldRight(xs, z)(f))
-//   }
-//
-// // TODO: continue from here.
-// def foldLeft[A,B](as: List[A], z: B)(f: (B, A) => B): B
-//
-// // --- }}}
+// Exercise 3.10 --- {{{
+
+PrintExercise("3.10 and 3.11")
+
+sealed trait ListE10[+A]
+
+case object NilE10 extends ListE10[Nothing]
+
+case class ConsE10[+A](head: A, tail: ListE10[A]) extends ListE10[A]
+
+object ListE10 {
+
+  def sum(ints: ListE10[Int]): Int = ints match {
+    case NilE10 => 0
+    case ConsE10(x,xs) => x + sum(xs)
+  }
+
+  def product(ds: ListE10[Double]): Double = ds match {
+    case NilE10 => 1.0
+    case ConsE10(0.0, _) => 0.0
+    case ConsE10(x,xs) => x * product(xs)
+  }
+
+  def apply[A](as: A*): ListE10[A] = {
+    if (as.isEmpty) NilE10
+    else ConsE10(as.head, apply(as.tail: _*))
+  }
+
+  def tail[A](list: ListE10[A]): ListE10[A] = list match {
+    case NilE10 => NilE10
+    case ConsE10(h, t) => t
+  }
+
+  def setHead[A](new_element: A, list: ListE10[A]): ListE10[A] = list match {
+    case NilE10 => ConsE10(new_element, NilE10)
+    case ConsE10(h, t) => ConsE10(new_element, ConsE10(h, t))
+  }
+
+  def drop[A](list: ListE10[A], n_elements: Int): ListE10[A] = {
+    if (n_elements == 0) list else drop(ListE10.tail(list), n_elements - 1)
+  }
+
+  def dropWhile[A](list: ListE10[A], f: A => Boolean): ListE10[A] = list match {
+    case NilE10 => NilE10
+    case ConsE10(h, t) => if (f(h)) t else dropWhile(t, f)
+    //  if (f(list(0))) dropWhile(ListE10.tail(list), f) else list
+  }
+
+  // Strategies: recursion.
+  // 1. Iterate over list until finds a list of the type: (element, nil).
+  //    In that case return NilE10
+  //    Otherwise return (head, loop))
+  // Write the problem down and your answer, then code!
+  def init[A](list: ListE10[A]): ListE10[A] = list match {
+    case ConsE10(h, NilE10) => NilE10
+    case ConsE10(h, t) => ConsE10(h, init(t))  // This one copies h I guess...
+  }
+}
+
+def foldRight[A,B](as: ListE10[A], z: B)(f: (A, B) => B): B =
+  as match {
+    case NilE10 => z
+    case ConsE10(x, xs) => f(x, foldRight(xs, z)(f))
+  }
+
+// "A call is said to be in tail position if the caller does nothing other than
+// return the value of the recursive call."
+def foldLeft[A,B](as: ListE10[A], basecase: B)(f: (B, A) => B): B = {
+  @annotation.tailrec
+  def go(list: ListE10[A], accumulator: B): B = {
+    // println(list)
+    // println(accumulator)
+    // println("----")
+    list match {
+      case NilE10 => accumulator
+      case ConsE10(h, t) => go(t, f(accumulator, h))
+    }
+
+  }
+  go(as, basecase)
+}
+
+def sum3(ns: ListE10[Int]) =
+  foldLeft(ns, 0)((x,y) => x + y)
+
+def product3(ns: ListE10[Double]) =
+  foldLeft(ns, 1.0)(_ * _)
+
+def length[A](ns: ListE10[A]) = ???
+
+val ex10a = ListE10(1, 1, 1, 1, 1, 1)
+val ex10b = ListE10(1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
+val ex10c = ListE10(100, 300, 700, 1000)
+val ex10d = ListE10(5.0, 4.0, 3.0, 2.0, 1.0, 1.0, 1.0)
+println(sum3(ex10a))
+println(product3(ex10b))
+println(sum3(ex10c))
+println(product3(ex10d))
+
+// --- }}}
