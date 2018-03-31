@@ -79,11 +79,20 @@ Website: <http://aperiodic.net/phil/scala/s-99/>.
 ### Other
 
 * A roadmap found on Reddit: <https://gist.github.com/d1egoaz/2180cbbf7d373a0c5575f9a62466e5e1>.
+
 [//]: # (Maybe put some critic here; Essential Scala chapter 05 is very wtf; chapter 06 is more important and should have come sooner)
+
 [//]: # (?CONFIRM?: The red book is very basic and introductory, thus recommended for starters)
+
 * A list of courses: <https://hackr.io/tutorials/learn-scala>.
 
 ## Ideas for future projects in Scala
 
 * Create and deduplicator scanner with a similar behavior of [rdfind](https://rdfind.pauldreik.se/) (written in C).
     * Make use of the famous parallelism in Scala.
+
+## Recommended reading
+
+<!--
+* http://twitter.github.io/effectivescala/
+-->
