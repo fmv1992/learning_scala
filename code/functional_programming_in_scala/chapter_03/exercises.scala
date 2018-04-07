@@ -486,20 +486,30 @@ object ListE10 {
   }
 }
 
-def foldRight[A,B](as: ListE10[A], z: B)(f: (A, B) => B): B =
+// Consumes arguments from left to right.
+def foldRight[A,B](as: ListE10[A], z: B)(f: (A, B) => B): B = {
+  println("Foldright", as)
+  println("----")
   as match {
     case NilE10 => z
     case ConsE10(x, xs) => f(x, foldRight(xs, z)(f))
   }
+}
+def sum2(ns: ListE10[Int]) =
+  foldRight(ns, 0)((x,y) => x + y)
+def product2(ns: ListE10[Double]) =
+  foldRight(ns, 1.0)(_ * _)
 
 // "A call is said to be in tail position if the caller does nothing other than
 // return the value of the recursive call."
+//
+// Consumes arguments from left to right. Why?
 def foldLeft[A,B](as: ListE10[A], basecase: B)(f: (B, A) => B): B = {
   @annotation.tailrec
   def go(list: ListE10[A], accumulator: B): B = {
-    // println(list)
-    // println(accumulator)
-    // println("----")
+    println("Foldleft", list)
+    println("Foldleft", accumulator)
+    println("----")
     list match {
       case NilE10 => accumulator
       case ConsE10(h, t) => go(t, f(accumulator, h))
@@ -515,12 +525,17 @@ def sum3(ns: ListE10[Int]) =
 def product3(ns: ListE10[Double]) =
   foldLeft(ns, 1.0)(_ * _)
 
+// TODO: continue from here.
 def length[A](ns: ListE10[A]) = ???
 
 val ex10a = ListE10(1, 1, 1, 1, 1, 1)
 val ex10b = ListE10(1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
 val ex10c = ListE10(100, 300, 700, 1000)
 val ex10d = ListE10(5.0, 4.0, 3.0, 2.0, 1.0, 1.0, 1.0)
+println(sum2(ex10a))
+println(product2(ex10b))
+println(sum2(ex10c))
+println(product2(ex10d))
 println(sum3(ex10a))
 println(product3(ex10b))
 println(sum3(ex10c))

@@ -91,8 +91,8 @@ Website: <http://aperiodic.net/phil/scala/s-99/>.
 * Create and deduplicator scanner with a similar behavior of [rdfind](https://rdfind.pauldreik.se/) (written in C).
     * Make use of the famous parallelism in Scala.
 
+<!--
 ## Recommended reading
 
-<!--
 * http://twitter.github.io/effectivescala/
 -->
