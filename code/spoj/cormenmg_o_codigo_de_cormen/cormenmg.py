@@ -36,15 +36,25 @@ def scan_list(array):
             j = j + 1
             subsum = subsum + array[j]
         if subsum == SUBSUM:
-            indexes_list.append((i, j))
+            if j != i:
+                indexes_list.append((i, j))
     return indexes_list
 
 
 def n_overlaps(indexes_list):
     overlaps = 0
-    for a, b in zip(indexes_list, indexes_list[1:]):
-        if a[1] >= b[0]:
+    element_number = 0
+    len_list = len(indexes_list)
+    while element_number < len_list - 2:
+        current_item = indexes_list[element_number]
+        element_number_ahead = element_number + 1
+        next_item = indexes_list[element_number_ahead]
+        while (next_item[0] <= current_item[1]
+                    and element_number_ahead <= len_list - 1):
+            next_item = indexes_list[element_number_ahead]
             overlaps = overlaps + 1
+            element_number_ahead = element_number_ahead + 1
+        element_number = element_number_ahead
     return overlaps
 
 
@@ -52,7 +62,9 @@ def main():
     sections = get_sections()
     for sec in sections:
         idx_list = scan_list(sec)
-        res = len(idx_list) - n_overlaps(idx_list)
+        overlaps = n_overlaps(idx_list)
+        res = len(idx_list) - overlaps
+        # print(idx_list, overlaps)
         print(res)
 
 
