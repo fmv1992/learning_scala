@@ -12,22 +12,30 @@ object Main extends App {
 // 1. Every word begins with the same letter as the previous word ends.
 // 2. All the plates from the list must be used, each exactly once.
 
-object Const {
+object Answer {
+
   val answer = Map(false -> "The door cannot be opened.",
     true -> "Ordering is possible.")
+
+  def answer(ans: Vector[Boolean]): Unit = {
+
+    ans.foreach(x => println(Answer.answer(x)))
+
+  }
 }
 
 object EntryPoint {
 
   def main(args: Array[String]): Unit = {
     val parsedInput = parseStdin
+    val contiguousSections = parsedInput.map(isContiguous)
+    Answer.answer(contiguousSections)
   }
 
-  def parseStdin(): Vector[Vector[String]] = {
+  def parseStdin(): Vector[Vector[Vector[Int]]] = {
     val nSections = StdIn.readInt
-    val sections = (1 to nSections).map(parseSection)
-    val contiguousSections = sections.map(isContiguous)
-    Vector(Vector("aaa"))
+    val sections = (1 to nSections).map(parseSection).toVector
+    sections
   }
 
   def parseSection(throwAway: Int): Vector[Vector[Int]] = {
@@ -49,7 +57,7 @@ object EntryPoint {
       emptyMap ++ vec.map( x => x(0)).groupBy(identity).mapValues(_.size))
     val countEnd = (
       emptyMap ++ vec.map( x => x(1)).groupBy(identity).mapValues(_.size))
-    println(vec)
+    // println(vec)
     // println(countStart)
     // println(countEnd)
 
@@ -60,7 +68,7 @@ object EntryPoint {
     // println(diffNonZero)
 
     val flatDifference = diffNonZero.values.map(scala.math.abs).sum
-    println(flatDifference)
+    // println(flatDifference)
 
     flatDifference <= maximumAbsoluteDifference
 
