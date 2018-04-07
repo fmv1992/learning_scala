@@ -42,19 +42,24 @@ def scan_list(array):
 
 
 def n_overlaps(indexes_list):
+    # Empty list case.
+    if not indexes_list:
+        return 0
+
     overlaps = 0
     element_number = 0
     len_list = len(indexes_list)
-    while element_number < len_list - 2:
-        current_item = indexes_list[element_number]
-        element_number_ahead = element_number + 1
-        next_item = indexes_list[element_number_ahead]
-        while (next_item[0] <= current_item[1]
-                    and element_number_ahead <= len_list - 1):
-            next_item = indexes_list[element_number_ahead]
+    current_item = indexes_list[element_number]
+    # print(indexes_list)
+    while element_number < len_list - 1:
+        next_item = indexes_list[element_number + 1]
+        if (next_item[0] <= current_item[1]):
+            # print('\tis overlap:', current_item, next_item)
             overlaps = overlaps + 1
-            element_number_ahead = element_number_ahead + 1
-        element_number = element_number_ahead
+            element_number = element_number + 1
+        else:
+            element_number = element_number + 1
+            current_item = indexes_list[element_number]
     return overlaps
 
 
