@@ -2,12 +2,13 @@
 *
 
 # But not these files...
-!.gitignore
 !*.md
+!*.sbt
 !*.scala
 !*.sh
-!makefile
+!.gitignore
 !license.txt
+!makefile
 # etc...
 
 # ...even if they are in subdirectories
