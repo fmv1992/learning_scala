@@ -1,5 +1,7 @@
 # TODO
 
+* Since branch `new_dev` migrate code from `./legacy_code` to a scala test framework with each project as a subproject in sbt.
+
 * Add a Travis CI build.
     * Possibly with nested makefiles to test each program/snippet.
 
