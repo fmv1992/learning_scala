@@ -1,3 +1,5 @@
+![](https://travis-ci.org/fmv1992/learning_scala.svg?branch=dev)
+
 <p align="center">
   <img width="150" height="150" src="https://vignette.wikia.nocookie.net/sqmegapolis/images/4/42/Warning-2-256.png/revision/latest?cb=20130403220740">
 </p>

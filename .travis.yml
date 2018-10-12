@@ -1,0 +1,7 @@
+branches:
+  only:
+    - master
+    - dev
+script: cd ./scala_initiatives/ && sbt compile && sbt test
+
+# vim: set fileformat=unix filetype=yaml nowrap nospell :
