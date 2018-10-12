@@ -1,16 +1,16 @@
 package spoj
 
-object TESTLifetheUniverseandEverything {
+import scalainitiatives.common.{Reader, ScalaInitiativesMainSPOJ}
 
-  def main(stdin: Array[String]): Unit = {
-    // Parse stdin for input.
-    // val stdinList = ???
-    Unit
+// IMPORTANT: template for assignment submission: use name as 'Main'.
+object Main extends ScalaInitiativesMainSPOJ {
+
+  def main(args: Array[String]): Unit = {
+    ReadApplyPrint(Reader.parseIntsFromFileOrStdin _, filterBefore42 _)
   }
 
   def filterBefore42(input: List[Int]): List[Int] = {
-    ???
-    List(1)
+    input.takeWhile(_ != 42)
   }
 
 }

@@ -16,8 +16,11 @@ SCALAC_CFLAGS = -cp $$PWD:$(ROOT_DIR)/code/my_scala_project/
 
 all:
 
-clean:
+clean: .FORCE
 	find . -iname '*.class' -print0 | xargs -0 rm -rf
+	find . -iname 'project' -print0 | xargs -0 rm -rf
+	find . -iname 'target' -print0 | xargs -0 rm -rf
+	find . -type d -empty -delete
 
 run: $(CLASS_FILES) $(SCALA_FILES) .FORCE
 
