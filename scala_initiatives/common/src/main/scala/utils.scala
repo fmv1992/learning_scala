@@ -41,7 +41,7 @@ trait ScalaInitiativesTest {
 
 trait ScalaInitiativesTestPIS extends ScalaInitiativesTest{
 
-  val nTests = 100000
+  val nTests = 100
 
 }
 

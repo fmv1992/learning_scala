@@ -4,7 +4,7 @@ import org.scalatest._
 
 import spoj.Main
 
-class HelloSpec extends FunSuite with DiagrammedAssertions with ScalaInitiativesTestSPOJ {
+class TestSPOJTestLifeTheUniverseAndEverything extends FunSuite with DiagrammedAssertions with ScalaInitiativesTestSPOJ {
 
   val testPathAsList = List(
     ".",
@@ -13,7 +13,6 @@ class HelloSpec extends FunSuite with DiagrammedAssertions with ScalaInitiatives
     "spoj_test_life_the_universe_and_everything")
   val testPathAsString = Paths.getPathFromSeq(testPathAsList)
   val (dataFiles, resultFiles) = loadTestFiles(testPathAsString)
-
 
   test("Test main function.") {
     dataFiles.foreach(x => printFileToStdInAndComputeMainFunction(

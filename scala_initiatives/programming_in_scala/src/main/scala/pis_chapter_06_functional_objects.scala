@@ -1,20 +1,5 @@
 package scalainitiatives.programming_in_scala
 
-import scalainitiatives.common.{Reader, ScalaInitiativesMainSPOJ}
-
-// IMPORTANT: template for assignment submission: use name as 'Main'.
-object Main extends ScalaInitiativesMainSPOJ {
-
-  def main(args: Array[String]): Unit = {
-    ReadApplyPrint(Reader.parseIntsFromFileOrStdin _, filterBefore42 _)
-  }
-
-  def filterBefore42(input: List[Int]): List[Int] = {
-    input.takeWhile(_ != 42)
-  }
-
-}
-
 class Rational(private val n: Int, private val d: Int) {
 
   require(d != 0)
@@ -43,24 +28,30 @@ class Rational(private val n: Int, private val d: Int) {
   // Define operators.
   def +(that: Rational): Rational =
     new Rational(numer * that.denom + that.numer * denom, denom * that.denom)
-  def +(i: Int): Rational =
-    new Rational(i, 1) + this
+  def +(that: Int): Rational = new Rational(that, 1) + this
 
   def *(that: Rational): Rational =
     new Rational(numer * that.numer,  denom * that.denom)
-  def *(i: Int): Rational =
-    new Rational(i * this.numer, denom)
+  def *(that: Int): Rational = this * new Rational(that)
 
-  def -(that: Rational): Rational =
-    this + (that * -1)
+  def -(that: Rational): Rational = this + (that * -1)
+  def -(that: Int): Rational = this - new Rational(that)
 
   def /(that: Rational): Rational = this * new Rational(that.denom, that.numer)
+  def /(that: Int): Rational = this / new Rational(that)
 
-  def ==(that: Rational): Boolean =
-    // Do not compare denoms if numerator is zero
-  if (this.numer == 0) that.numer == 0
-  else
-    (this.numer == that.numer) && (this.denom == that.denom)
+  // Peeking into Chapter 30 we can do the following:
+  // Chapter 30 8< ------------------------------------------------------------
+  override def hashCode = (numer, denom).##
+  override def equals(other: Any) = other match {
+    case that: Rational =>
+      (that canEqual this) &&
+      (this.numer == that.numer) && (this.denom == that.denom)
+    case _ =>
+      false
+  }
+  def canEqual(other: Any) = other.isInstanceOf[Rational]
+  // Chapter 30 ------------------------------------------------------------ >8
 
   // Define implicit conversions.
   // Not implemented because they would have to be imported in the scope.

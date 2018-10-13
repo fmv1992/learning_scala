@@ -18,7 +18,7 @@ all:
 
 clean: .FORCE
 	find . -iname '*.class' -print0 | xargs -0 rm -rf
-	find . -iname 'project' -print0 | xargs -0 rm -rf
+	find . -path '*/project/*' -type d -prune -print0 | xargs -0 rm -rf
 	find . -iname 'target' -print0 | xargs -0 rm -rf
 	find . -type d -empty -delete
 
