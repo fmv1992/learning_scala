@@ -1,6 +1,6 @@
 package scalainitiatives.programming_in_scala
 
-class Rational(private val n: Int, private val d: Int) {
+case class Rational(private val n: Int, private val d: Int) {
 
   require(d != 0)
 
