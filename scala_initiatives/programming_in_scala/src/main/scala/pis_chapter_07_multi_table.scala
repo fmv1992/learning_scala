@@ -35,6 +35,7 @@ case class printMultiTable(val interval: Interval, val padding: Int) {
 
   def getMultiTable(): String = {
 
+    // Process the input/list of numbers.
     val listOfLists = getListOfLists()
 
     val maxFoundWidth = listOfLists.map(x => x.max).reduce(
@@ -43,10 +44,30 @@ case class printMultiTable(val interval: Interval, val padding: Int) {
       else { y.toString.length })
     val maxWidth = maxFoundWidth + padding
 
-    val linesAsString: List[List[String]] = listOfLists.map(
-      x => listOfIntsToString(x, maxWidth))
+    val linesAsString: List[String] = listOfLists.map(
+      x => listOfIntsToString(x, maxWidth)).map(_.mkString(""))
 
-    val joinedLines = linesAsString.map(_.mkString("")).mkString("\n")
+    // Process the header numbers: top rows.
+    val rowWiseHeaderFirstRow = listOfIntsToString(
+      Range(interval.c0, interval.c1).toList,
+      maxWidth)
+    val rowWiseHeaderFirstRowString = rowWiseHeaderFirstRow.mkString("")
+    val rowWiseHeaderSecondRow = "-" * rowWiseHeaderFirstRowString.length
+    val rowWiseHeader = List(rowWiseHeaderFirstRowString, rowWiseHeaderSecondRow) ++ linesAsString
+
+    // Process the header numbers: first column.
+    val columnWiseHeaderList = (
+      List(" " * maxWidth + "| ")
+    ++ List(" " * maxWidth + "|")
+    ++ (listOfIntsToString(
+      Range(interval.r0, interval.r1).toList,
+      maxWidth).map(_ + "| ")))
+    val columnWiseHeaderFirstcolumnString = columnWiseHeaderList.mkString("\n")
+
+    // Join both header and input numbers.
+    // assert(rowWiseHeader.length == columnWiseHeaderList)
+    val pairedLines = columnWiseHeaderList.zip(rowWiseHeader).map(x => x._1 + x._2)
+    val joinedLines = pairedLines.mkString("\n")
 
     joinedLines
   }

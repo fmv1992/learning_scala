@@ -6,12 +6,16 @@ import org.scalatest._
 
 class PISChapter07printMultiTableTest extends FunSuite with DiagrammedAssertions with ScalaInitiativesTestPIS {
 
+  val int1 = Interval(List(5, 10), List(15, 20))
+  val int2 = Interval(List(200, 200), List(200, 200))
+
   test("Simple test call.") {
 
-    val int1 = Interval(List(5, 10), List(15, 20))
     new printMultiTable(int1, 3)()
 
     new printMultiTable(10, 10, 2)()
+
+    new printMultiTable(int2, 0)()
 
   }
 
