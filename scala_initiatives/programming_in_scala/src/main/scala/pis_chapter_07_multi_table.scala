@@ -8,10 +8,10 @@ case class Interval(
     require(this.columnsInterval.length == 2)
 
     val r0 = rowsInterval(0)
-    val r1 = rowsInterval(1)
+    val r1 = rowsInterval(1) + 1
 
     val c0 = columnsInterval(0)
-    val c1 = columnsInterval(1)
+    val c1 = columnsInterval(1) + 1
 
   }
 
@@ -38,10 +38,14 @@ case class printMultiTable(val interval: Interval, val padding: Int) {
     // Process the input/list of numbers.
     val listOfLists = getListOfLists()
 
-    val maxFoundWidth = listOfLists.map(x => x.max).reduce(
-      (x, y) => if (x.toString.length > y.toString.length)
+    val listOfMax = listOfLists.map(x => x.max)
+    val maxFoundWidth = if (listOfMax.length == 1) {
+      listOfMax(0).toString.length
+    } else {
+      listOfMax.reduce((x, y) => if (x.toString.length > y.toString.length)
       { x.toString.length }
       else { y.toString.length })
+    }
     val maxWidth = maxFoundWidth + padding
 
     val linesAsString: List[String] = listOfLists.map(
@@ -80,7 +84,11 @@ case class printMultiTable(val interval: Interval, val padding: Int) {
 
     val columnsList = Range(this.interval.c0, this.interval.c1).toList
 
-    rowsList.map(x => columnsList.map(y => x * y))
+    assert (rowsList.length > 0)
+    assert (columnsList.length > 0)
+
+    val retVal = rowsList.map(x => columnsList.map(y => x * y))
+    retVal
 
   }
 
