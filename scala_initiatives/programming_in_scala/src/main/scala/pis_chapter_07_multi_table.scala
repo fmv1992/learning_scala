@@ -1,6 +1,25 @@
 package scalainitiatives.programming_in_scala
 
-case class printMultiTable(val rows: Int, val columns: Int, val extraPadding: Int) {
+case class Interval(
+  val rowsInterval: List[Int],
+  val columnsInterval: List[Int]) {
+
+    require(this.rowsInterval.length == 2)
+    require(this.columnsInterval.length == 2)
+
+    val r0 = rowsInterval(0)
+    val r1 = rowsInterval(1)
+
+    val c0 = columnsInterval(0)
+    val c1 = columnsInterval(1)
+
+  }
+
+case class printMultiTable(val interval: Interval, val padding: Int) {
+
+  def this(rows: Int, columns: Int, padding: Int) = this(
+    new Interval(List(0, rows), List(0, columns)),
+    padding)
 
   def listOfIntsToString(x: List[Int], padding: Int): List[String] = {
 
@@ -14,8 +33,6 @@ case class printMultiTable(val rows: Int, val columns: Int, val extraPadding: In
 
   }
 
-  private def listOfInts(x: Int) = Range(0, x).toList
-
   def getMultiTable(): String = {
 
     val listOfLists = getListOfLists()
@@ -24,7 +41,7 @@ case class printMultiTable(val rows: Int, val columns: Int, val extraPadding: In
       (x, y) => if (x.toString.length > y.toString.length)
       { x.toString.length }
       else { y.toString.length })
-    val maxWidth = maxFoundWidth + extraPadding
+    val maxWidth = maxFoundWidth + padding
 
     val linesAsString: List[List[String]] = listOfLists.map(
       x => listOfIntsToString(x, maxWidth))
@@ -34,13 +51,13 @@ case class printMultiTable(val rows: Int, val columns: Int, val extraPadding: In
     joinedLines
   }
 
-  def printMultiTable() = println(this.getMultiTable())
+  def apply() = println(this.getMultiTable())
 
   def getListOfLists(): List[List[Int]] = {
 
-    val rowsList = this.listOfInts(this.rows)
+    val rowsList = Range(this.interval.r0, this.interval.r1).toList
 
-    val columnsList = this.listOfInts(this.columns)
+    val columnsList = Range(this.interval.c0, this.interval.c1).toList
 
     rowsList.map(x => columnsList.map(y => x * y))
 
