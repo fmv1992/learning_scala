@@ -41,13 +41,9 @@ trait ScalaInitiativesTest {
 
 trait ScalaInitiativesTestPIS extends ScalaInitiativesTest{
 
-  val nTests = 100
-
-}
-
-trait ScalaInitiativesTestSPOJ extends ScalaInitiativesTest {
-
   // https://stackoverflow.com/questions/29474414/how-to-mock-scala-readline/39597093
+  // Completeness function: enable the program to write to stdin.
+  // Side effect function to be used with 'readLines'.
   def printFileToStdIn(path: String): Unit = {
     val content = new ByteArrayInputStream(
       Reader.readLines(path).mkString("\n").getBytes)
@@ -61,6 +57,12 @@ trait ScalaInitiativesTestSPOJ extends ScalaInitiativesTest {
       function(Array(""))
   }
 
+  val nTests = 100
+
+}
+
+trait ScalaInitiativesTestSPOJ extends ScalaInitiativesTest {
+
 }
 
 object Constants {
@@ -73,6 +75,8 @@ object Constants {
 
 object Reader {
 
+  // Completeness function: enable the program to read from stdin.
+  // Side effect function to be used with 'printFileToStdIn'.
   def readLines(path: String): List[String] = {
     val lines = if(new File(path).exists) {
       val src = io.Source.fromFile(path)
