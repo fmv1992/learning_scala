@@ -8,6 +8,7 @@ class PISChapter07printMultiTableTest extends FunSuite with DiagrammedAssertions
 
   val int1 = Interval(List(5, 10), List(15, 20))
   val int2 = Interval(List(200, 200), List(200, 200))
+  val int3 = Interval(List(2713, 2713), List(2713, 2713))
 
   test("Simple test call.") {
 
@@ -16,6 +17,8 @@ class PISChapter07printMultiTableTest extends FunSuite with DiagrammedAssertions
     new printMultiTable(10, 10, 2)()
 
     new printMultiTable(int2, 0)()
+
+    new printMultiTable(int3, 0)()
 
   }
 

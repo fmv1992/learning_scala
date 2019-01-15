@@ -56,7 +56,7 @@ case class printMultiTable(val interval: Interval, val padding: Int) {
       Range(interval.c0, interval.c1).toList,
       maxWidth)
     val rowWiseHeaderFirstRowString = rowWiseHeaderFirstRow.mkString("")
-    val rowWiseHeaderSecondRow = "-" * rowWiseHeaderFirstRowString.length
+    val rowWiseHeaderSecondRow = "-" * linesAsString.map(_.length).reduce((x, y) => if (x > y) x else y)
     val rowWiseHeader = List(rowWiseHeaderFirstRowString, rowWiseHeaderSecondRow) ++ linesAsString
 
     // Process the header numbers: first column.
@@ -72,6 +72,20 @@ case class printMultiTable(val interval: Interval, val padding: Int) {
     // assert(rowWiseHeader.length == columnWiseHeaderList)
     val pairedLines = columnWiseHeaderList.zip(rowWiseHeader).map(x => x._1 + x._2)
     val joinedLines = pairedLines.mkString("\n")
+
+    // ???:
+    // Remove padding from final column. Eg:
+    //
+    //        | 15    16    17    18    19    20
+    //        |------------------------------------
+    //  5     | 75    80    85    90    95    100
+    //  6     | 90    96    102   108   114   120
+    //  7     | 105   112   119   126   133   140
+    //  8     | 120   128   136   144   152   160
+    //  9     | 135   144   153   162   171   180
+    //  10    | 150   160   170   180   190   200
+    //                                           ^^^
+    //                                           |||
 
     joinedLines
   }
