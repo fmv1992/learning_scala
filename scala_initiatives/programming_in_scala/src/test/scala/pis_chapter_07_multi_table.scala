@@ -34,8 +34,7 @@ class PISChapter07printMultiTableTest extends FunSuite with DiagrammedAssertions
       x => new printMultiTable(
         new Interval(
           List(x(0), x(1)),
-          List(x(2), x(3))),
-        x(4))).map(_.getMultiTable)
+          List(x(2), x(3))))).map(_.getMultiTable)
     assert(computedResults == resultAsList)
   }
 
