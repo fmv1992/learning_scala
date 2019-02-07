@@ -9,6 +9,8 @@ set -e
 
 # Go to execution directory.
 # cd $(dirname $0)
+(cd ./scala_initiatives/ && sbt clean)
+make clean
 
 # https://stackoverflow.com/questions/3466166/how-to-check-if-running-in-cygwin-mac-or-linux
 cd ./scala_initiatives/
