@@ -6,6 +6,7 @@
 
 # Halt on error.
 set -e
+set -x
 
 # Go to execution directory.
 # cd $(dirname $0)
