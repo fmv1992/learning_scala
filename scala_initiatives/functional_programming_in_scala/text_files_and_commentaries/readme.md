@@ -1,4 +1,6 @@
-# Core concepts of Functinal programming.
+# Functional Programming in Scala
+
+## Core concepts of Functional programming.
 
 *   **Chapter 01**
 
@@ -16,6 +18,8 @@
 
     *   Recursion
 
+        *   Tail recursion
+
     *   Currying and partially applied functions
 
     *   Higher order functions (HOFs)
@@ -25,5 +29,9 @@
 * **Chapter 03**
 
     * Data sharing to avoid data copying.
+
+## Possible typos in the book
+
+*   "Introducing Scala the language" → "Introducing the Scala language", p. 15.
 
 [comment]: # ( vim: set filetype=markdown fileformat=unix wrap spell spelllang=en: )
