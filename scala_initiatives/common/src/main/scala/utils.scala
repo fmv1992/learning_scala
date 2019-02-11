@@ -13,20 +13,27 @@ trait ScalaInitiativesTest {
   def isClose[T](
     a: T,
     b: T,
-    atol: Double = 1e-5,
+    atol: Double = 1e-10,
     rtol: Double = Double.NaN)(
       implicit num: Numeric[T]): Boolean = {
         import num._
-        val aDiff = scala.math.abs(a.toDouble - b.toDouble)
-        if (rtol.isNaN) aDiff <= atol else {
-          val aAbs: Double = scala.math.abs(a.toDouble)
-          val bAbs: Double = scala.math.abs(b.toDouble)
-          val bigger = if (aAbs <= bAbs) bAbs else aAbs
-          val smaller = if (aAbs <= bAbs) aAbs else bAbs
-          val rDiff = (bigger - smaller) / bigger
-          println(bigger, smaller, rDiff, rtol)
-          rDiff <= rtol
-        }
+
+        val aD = a.toDouble
+        val bD = b.toDouble
+
+        val aDiff = scala.math.abs(aD - bD)
+        // atol.
+        if (rtol.isNaN) aDiff <= atol
+        // rtol.
+      else {
+        val aAbs: Double = scala.math.abs(aD)
+        val bAbs: Double = scala.math.abs(bD)
+        val bigger = if (aAbs <= bAbs) bAbs else aAbs
+        val smaller = if (aAbs <= bAbs) aAbs else bAbs
+        val rDiff = (bigger - smaller) / bigger
+        println(bigger, smaller, rDiff, rtol)
+        rDiff <= rtol
+      }
       }
 
   def loadTestFiles(folderPath: String): (Seq[String], Seq[String]) = {
