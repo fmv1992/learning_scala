@@ -13,9 +13,6 @@ class FPISTestChapter02 extends FunSuite with Matchers with ScalaInitiativesTest
     val x =     List(0, 1, 2, 3, 4, 7, 10, 30)
     val truth = List(0, 1, 1, 2, 3, 13, 55, 832040)
     val computed = x.map(FPISExerciseChapter02.Exercise2Dot1Fib)
-    // println("x: " + x)
-    // println("t: " + truth)
-    // println("c: " + computed)
     assert(computed == truth)
   }
 

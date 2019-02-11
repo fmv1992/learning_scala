@@ -22,4 +22,17 @@ class CommonUtilitiesTest extends FunSuite with Matchers with ScalaInitiativesTe
     assert(! isClose(10, 10.00001, rtol=9.9999e-7))
   }
 
+  test("Timer: Basic") {
+
+    def square(x: Int) = x * x
+    val arg1 = 10
+    val rt1 = Timer.runningTime(square(_), arg1)
+    println(rt1)
+
+    val arg2 = 0 to 10000 toList
+    val rt2 = Timer.runningTime(square(_), arg2)
+    println(rt2)
+
+  }
+
 }

@@ -3,12 +3,28 @@ package scalainitiatives.common
 import java.io.File
 import java.io.ByteArrayInputStream
 
-// Common to all projects. --- {{{
+// Common to all projects. --- {
 
 trait ScalaInitiativesMain {
 }
 
+trait ScalaInitiativesUtilities {
+  def curry[A, B, C](f: (A, B) => C): A => (B => C) = {
+    (a: A) => (
+      (b: B) => f(a, b)
+    )
+  }
+}
+
 trait ScalaInitiativesTest {
+
+  // // https://jaytaylor.com/notes/node/1348628729000.html
+  // def tupleize[A, B](f: A => B => C) = {
+
+  //   // Function.tupled(f(_))
+  //   f(_).tupled
+
+  // }
 
   def isClose[T](
     a: T,
@@ -31,7 +47,6 @@ trait ScalaInitiativesTest {
         val bigger = if (aAbs <= bAbs) bAbs else aAbs
         val smaller = if (aAbs <= bAbs) aAbs else bAbs
         val rDiff = (bigger - smaller) / bigger
-        println(bigger, smaller, rDiff, rtol)
         rDiff <= rtol
       }
       }
@@ -96,17 +111,20 @@ object Paths {
 
 }
 
-// --- }}}
+// --- }
 
-// Project PIS. --- {{{
+// Project PIS. --- {
+
 trait ScalaInitiativesTestPIS extends ScalaInitiativesTest{
 
   val nTests = 100
 
 }
-// --- }}}
 
-// Project SPOJ. --- {{{
+// --- }
+
+// Project SPOJ. --- {
+
 trait ScalaInitiativesMainSPOJ extends ScalaInitiativesMain {
 
   def ReadApplyPrint[A, B](
@@ -141,4 +159,7 @@ trait ScalaInitiativesTestSPOJ extends ScalaInitiativesTest {
   }
 
 }
-// --- }}}
+
+// --- }
+
+// vim: set filetype=scala fileformat=unix foldmarker={,} wrap tabstop=2 softtabstop=2:

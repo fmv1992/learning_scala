@@ -31,7 +31,6 @@ object FPISExerciseChapter02 extends ScalaInitiativesExercise {
   def Exercise2Dot2isSorted[A](as: Array[A], ordered: (A, A) => Boolean): Boolean = {
 
     def go(leftPosition: Int): Boolean = {
-      // println(leftPosition, as, as(0))
       if (as.length == 1 || as.length == 0) true else {
         if (leftPosition == as.length - 1) true else {
           if (ordered(as(leftPosition), as(leftPosition + 1))) go(leftPosition + 1)
