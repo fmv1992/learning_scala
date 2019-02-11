@@ -42,10 +42,15 @@ object FPISExerciseChapter02 extends ScalaInitiativesExercise {
 
     go(0)
   }
-  def Exercise2Dot3() {}
+
+  def Exercise2Dot3Currying[A, B, C](f: (A, B) => C): A => (B => C) = {
+    (a: A) => (
+      (b: B) => f(a, b)
+    )
+  }
   def Exercise2Dot4() {}
   def Exercise2Dot5() {}
 
 }
 
-// vim: set filetype=scala fileformat=unix wrap tabstop=2 softtabstop=2:
+// vim: set filetype=scala fileformat=unix foldmarker={,} wrap tabstop=2 softtabstop=2:

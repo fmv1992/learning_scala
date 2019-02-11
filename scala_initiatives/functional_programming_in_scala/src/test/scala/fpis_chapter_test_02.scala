@@ -2,7 +2,7 @@ package scalainitiatives.functional_programming_in_scala
 
 import scalainitiatives.common.ScalaInitiativesTest
 
-// ???
+// ???: How to import with the namespace?
 import org.scalatest._
 
 class FPISTestChapter02 extends FunSuite with Matchers with ScalaInitiativesTest {
@@ -18,7 +18,7 @@ class FPISTestChapter02 extends FunSuite with Matchers with ScalaInitiativesTest
     assert(computed == truth)
   }
 
-  test ("2.2: is Sorted") {
+  test ("2.2: Is Sorted") {
     val pairs01 = List(
       (Array(0), true),
       (Array(100), true),
@@ -38,4 +38,16 @@ class FPISTestChapter02 extends FunSuite with Matchers with ScalaInitiativesTest
       sortFunction))
   }
 
+  test ("2.3: Curry") {
+    val addInts = (x: Int, y: Int) => x + y
+    val curriedAddInts = FPISExerciseChapter02.Exercise2Dot3Currying(addInts)
+    assert(addInts(2, 3) == curriedAddInts(2)(3))
+
+    val repeatString = (x: Int, y: String) => y * x
+    val curriedRepeatString = FPISExerciseChapter02.Exercise2Dot3Currying(repeatString)
+    assert(repeatString(5, "123") == curriedRepeatString(5)("123"))
+  }
+
 }
+
+// vim: set filetype=scala fileformat=unix foldmarker={,} wrap tabstop=2 softtabstop=2:
