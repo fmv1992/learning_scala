@@ -18,13 +18,14 @@ trait ScalaInitiativesTest {
       implicit num: Numeric[T]): Boolean = {
         import num._
         val aDiff = scala.math.abs(a.toDouble - b.toDouble)
-        if (rtol.isNaN) aDiff < atol else {
-          val aAbs: Double = scala.math.abs(a.asInstanceOf[Double])
-          val bAbs: Double = scala.math.abs(b.asInstanceOf[Double])
+        if (rtol.isNaN) aDiff <= atol else {
+          val aAbs: Double = scala.math.abs(a.toDouble)
+          val bAbs: Double = scala.math.abs(b.toDouble)
           val bigger = if (aAbs <= bAbs) bAbs else aAbs
           val smaller = if (aAbs <= bAbs) aAbs else bAbs
           val rDiff = (bigger - smaller) / bigger
-          rDiff < rtol
+          println(bigger, smaller, rDiff, rtol)
+          rDiff <= rtol
         }
       }
 
