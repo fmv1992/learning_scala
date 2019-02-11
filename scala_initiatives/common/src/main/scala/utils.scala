@@ -10,6 +10,12 @@ trait ScalaInitiativesMain {
 
 trait ScalaInitiativesTest {
 
+  def isClose[T](a: T, b: T, rtol: Double = 1e-5, atol: Double = 1e-5)(implicit num: Numeric[T]): Boolean = {
+    import num._
+    val absDiff = scala.math.abs(a.toDouble - b.toDouble)
+    absDiff < atol
+  }
+
   def loadTestFiles(folderPath: String): (Seq[String], Seq[String]) = {
     // Read the test files.
     val inputFiles = Paths.getFilesFromDir(folderPath)
@@ -81,7 +87,6 @@ trait ScalaInitiativesTestPIS extends ScalaInitiativesTest{
 // --- }}}
 
 // Project SPOJ. --- {{{
-// ???: Should go into project spoj.
 trait ScalaInitiativesMainSPOJ extends ScalaInitiativesMain {
 
   def ReadApplyPrint[A, B](
@@ -99,7 +104,6 @@ trait ScalaInitiativesMainSPOJ extends ScalaInitiativesMain {
 
 }
 
-// ???: Should go into project spoj.
 trait ScalaInitiativesTestSPOJ extends ScalaInitiativesTest {
 
   // https://stackoverflow.com/questions/29474414/how-to-mock-scala-readline/39597093

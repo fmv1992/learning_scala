@@ -57,6 +57,25 @@ class FPISTestChapter02 extends FunSuite with Matchers with ScalaInitiativesTest
     assert(repeatString(5, "123") == unCurriedRepeatString(5, "123"))
   }
 
+  test ("2.5: Function composition") {
+    val x = List(1, 3, 10, 15)
+
+    val linear1 = (x: Int) => x + 7
+    val linear2 = (x: Int) => x + 6
+    val composedLinear = FPISExerciseChapter02.Exercise2Dot5Compose(linear1, linear2)
+    val truthLinear = x map(_ + 13)
+    assert(x.map(composedLinear) == truthLinear)
+
+    val exp = scala.math.exp _
+    val log = scala.math.log _
+    val composedExpLog = FPISExerciseChapter02.Exercise2Dot5Compose(exp, log)
+    val computedExpLog = x.map(y => composedExpLog(y.toDouble))
+    val truthExpLog = x
+    val truthAndComposedAreAllClose = truthExpLog.zip(computedExpLog).map(
+      (t: Tuple2[Int, Double]) => isClose(t._1, t._2))
+    assert(truthAndComposedAreAllClose.forall(identity))
+  }
+
 }
 
 // vim: set filetype=scala fileformat=unix foldmarker={,} wrap tabstop=2 softtabstop=2:
