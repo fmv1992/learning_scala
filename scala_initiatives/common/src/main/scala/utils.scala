@@ -3,24 +3,9 @@ package scalainitiatives.common
 import java.io.File
 import java.io.ByteArrayInputStream
 
+// Common to all projects. --- {{{
+
 trait ScalaInitiativesMain {
-}
-
-trait ScalaInitiativesMainSPOJ extends ScalaInitiativesMain {
-
-  def ReadApplyPrint[A, B](
-    parsingFunction: String => List[A],
-    coreFunction: List[A] => List[B]): Unit = {
-      // Parse stdin for input.
-      val inputAsList: List[A] = parsingFunction("")
-
-      // Compute function.
-      val result = coreFunction(inputAsList)
-
-      // Print result do stdout.
-      println(result.map(_.toString).mkString("\n"))
-  }
-
 }
 
 trait ScalaInitiativesTest {
@@ -39,30 +24,7 @@ trait ScalaInitiativesTest {
 
 }
 
-trait ScalaInitiativesTestPIS extends ScalaInitiativesTest{
-
-  // https://stackoverflow.com/questions/29474414/how-to-mock-scala-readline/39597093
-  // Completeness function: enable the program to write to stdin.
-  // Side effect function to be used with 'readLines'.
-  def printFileToStdIn(path: String): Unit = {
-    val content = new ByteArrayInputStream(
-      Reader.readLines(path).mkString("\n").getBytes)
-    System.setIn(content)
-  }
-
-  def printFileToStdInAndComputeMainFunction(
-    path: String,
-    function: Array[String] => Unit): Unit = {
-      printFileToStdIn(path)
-      function(Array(""))
-  }
-
-  val nTests = 100
-
-}
-
-trait ScalaInitiativesTestSPOJ extends ScalaInitiativesTest {
-
+trait ScalaInitiativesExercise {
 }
 
 object Constants {
@@ -109,3 +71,52 @@ object Paths {
   }
 
 }
+
+// --- }}}
+
+// Project PIS. --- {{{
+trait ScalaInitiativesTestPIS extends ScalaInitiativesTest{
+
+  val nTests = 100
+
+}
+// --- }}}
+
+// Project SPOJ. --- {{{
+// ???: Should go into project spoj.
+trait ScalaInitiativesMainSPOJ extends ScalaInitiativesMain {
+
+  def ReadApplyPrint[A, B](
+    parsingFunction: String => List[A],
+    coreFunction: List[A] => List[B]): Unit = {
+      // Parse stdin for input.
+      val inputAsList: List[A] = parsingFunction("")
+
+      // Compute function.
+      val result = coreFunction(inputAsList)
+
+      // Print result do stdout.
+      println(result.map(_.toString).mkString("\n"))
+  }
+
+}
+
+// ???: Should go into project spoj.
+trait ScalaInitiativesTestSPOJ extends ScalaInitiativesTest {
+
+  // https://stackoverflow.com/questions/29474414/how-to-mock-scala-readline/39597093
+  def printFileToStdIn(path: String): Unit = {
+    val content = new ByteArrayInputStream(
+      Reader.readLines(path).mkString("\n").getBytes)
+    System.setIn(content)
+  }
+
+  def printFileToStdInAndComputeMainFunction(
+    path: String,
+    function: Array[String] => Unit): Unit = {
+      printFileToStdIn(path)
+      function(Array(""))
+  }
+
+}
+// --- }}}
