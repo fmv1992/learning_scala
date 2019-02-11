@@ -1,14 +1,15 @@
 package scalainitiatives.functional_programming_in_scala
 
 import scalainitiatives.common.ScalaInitiativesTest
+import FPISExerciseChapter02._
 
 // ???: How to import with the namespace?
 import org.scalatest._
 
 class FPISTestChapter02 extends FunSuite with Matchers with ScalaInitiativesTest {
 
-  // Here we have F(0) == 0.
   test ("2.1: Fibonacci") {
+    // Here we have F(0) == 0.
     val x =     List(0, 1, 2, 3, 4, 7, 10, 30)
     val truth = List(0, 1, 1, 2, 3, 13, 55, 832040)
     val computed = x.map(FPISExerciseChapter02.Exercise2Dot1Fib)
@@ -38,7 +39,8 @@ class FPISTestChapter02 extends FunSuite with Matchers with ScalaInitiativesTest
       sortFunction))
   }
 
-  test ("2.3: Curry") {
+  test ("2.3 and 2.4: Curry and Uncurry") {
+    // Curry.
     val addInts = (x: Int, y: Int) => x + y
     val curriedAddInts = FPISExerciseChapter02.Exercise2Dot3Currying(addInts)
     assert(addInts(2, 3) == curriedAddInts(2)(3))
@@ -46,6 +48,13 @@ class FPISTestChapter02 extends FunSuite with Matchers with ScalaInitiativesTest
     val repeatString = (x: Int, y: String) => y * x
     val curriedRepeatString = FPISExerciseChapter02.Exercise2Dot3Currying(repeatString)
     assert(repeatString(5, "123") == curriedRepeatString(5)("123"))
+
+    // Uncurry.
+    val unCurriedAddInts = FPISExerciseChapter02.Exercise2Dot4Uncurrying(curriedAddInts)
+    assert(addInts(2, 3) == unCurriedAddInts(2, 3))
+
+    val unCurriedRepeatString = FPISExerciseChapter02.Exercise2Dot4Uncurrying(curriedRepeatString)
+    assert(repeatString(5, "123") == unCurriedRepeatString(5, "123"))
   }
 
 }

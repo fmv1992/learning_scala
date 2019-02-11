@@ -48,7 +48,9 @@ object FPISExerciseChapter02 extends ScalaInitiativesExercise {
       (b: B) => f(a, b)
     )
   }
-  def Exercise2Dot4() {}
+  def Exercise2Dot4Uncurrying[A, B, C](f: A => B => C): (A, B) => C = {
+    (a: A, b: B) => f(a)(b)
+  }
   def Exercise2Dot5() {}
 
 }
