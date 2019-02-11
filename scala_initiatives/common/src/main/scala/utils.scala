@@ -10,11 +10,23 @@ trait ScalaInitiativesMain {
 
 trait ScalaInitiativesTest {
 
-  def isClose[T](a: T, b: T, rtol: Double = 1e-5, atol: Double = 1e-5)(implicit num: Numeric[T]): Boolean = {
-    import num._
-    val absDiff = scala.math.abs(a.toDouble - b.toDouble)
-    absDiff < atol
-  }
+  def isClose[T](
+    a: T,
+    b: T,
+    atol: Double = 1e-5,
+    rtol: Double = Double.NaN)(
+      implicit num: Numeric[T]): Boolean = {
+        import num._
+        val aDiff = scala.math.abs(a.toDouble - b.toDouble)
+        if (rtol.isNaN) aDiff < atol else {
+          val aAbs: Double = scala.math.abs(a.asInstanceOf[Double])
+          val bAbs: Double = scala.math.abs(b.asInstanceOf[Double])
+          val bigger = if (aAbs <= bAbs) bAbs else aAbs
+          val smaller = if (aAbs <= bAbs) aAbs else bAbs
+          val rDiff = (bigger - smaller) / bigger
+          rDiff < rtol
+        }
+      }
 
   def loadTestFiles(folderPath: String): (Seq[String], Seq[String]) = {
     // Read the test files.
