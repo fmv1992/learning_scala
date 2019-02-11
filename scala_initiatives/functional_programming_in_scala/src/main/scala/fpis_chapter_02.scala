@@ -6,15 +6,26 @@ object FPISExerciseChapter02 extends ScalaInitiativesExercise {
 
   def Exercise2Dot1Fibonacci(n: Int) : Int = {
 
-    // @annotation.tailrec
-    def fib(n:Int, acc:Int): Int = {
-      if (n == 1) 1 else {
-        if (n == 0) 0 else {
-          fib(n-1, 0) + fib(n-2, 0)
+    // F(n) = F(n-1) + F(n-2)
+    // Example:
+    // F(3) = F(2) + F(1)
+    // F(3) = [F(1) + F(0)] + F(1)
+    // F(4) = F(3) + F(2)
+    def fib(n: Int): Int = {
+      @annotation.tailrec
+      def go(fibprev1: Int, fibprev2: Int, position: Int): Int =
+      {
+        val newv = fibprev1 + fibprev2
+        if (position == n) newv
+        else {
+          go(fibprev2, newv, position + 1)
         }
       }
+      if (n == 0) 0 else if (n == 1) 1 else go(0, 1, 2)
     }
-    fib(n, 0)
+
+    fib(n)
+
   }
 
   def Exercise2Dot2isSorted[A](as: Array[A], ordered: (A, A) => Boolean): Boolean = {

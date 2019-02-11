@@ -9,11 +9,12 @@ class FPISTestChapter02 extends FunSuite with Matchers with ScalaInitiativesTest
 
   // Here we have F(0) == 0.
   test ("2.1: Fibonacci") {
-    val x = List(0, 1, 2, 7, 10, 30)
-    val truth = List(0, 1, 1, 13, 55, 832040)
+    val x =     List(0, 1, 2, 3, 4, 7, 10, 30)
+    val truth = List(0, 1, 1, 2, 3, 13, 55, 832040)
     val computed = x.map(FPISExerciseChapter02.Exercise2Dot1Fibonacci)
-    println(truth)
-    println(computed)
+    // println("x: " + x)
+    // println("t: " + truth)
+    // println("c: " + computed)
     assert(computed == truth)
   }
 
