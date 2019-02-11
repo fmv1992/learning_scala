@@ -4,7 +4,7 @@ import scalainitiatives.common.ScalaInitiativesExercise
 
 object FPISExerciseChapter02 extends ScalaInitiativesExercise {
 
-  def Exercise2Dot1Fibonacci(n: Int) : Int = {
+  def Exercise2Dot1Fib(n: Int) : Int = {
 
     // F(n) = F(n-1) + F(n-2)
     // Example:
@@ -33,7 +33,7 @@ object FPISExerciseChapter02 extends ScalaInitiativesExercise {
     def go(leftPosition: Int): Boolean = {
       // println(leftPosition, as, as(0))
       if (as.length == 1 || as.length == 0) true else {
-        if (leftPosition == as.length) true else {
+        if (leftPosition == as.length - 1) true else {
           if (ordered(as(leftPosition), as(leftPosition + 1))) go(leftPosition + 1)
           else false
         }
