@@ -26,18 +26,18 @@ class CommonUtilitiesTest extends FunSuite with Matchers with ScalaInitiativesTe
 
     def square(x: Int) = x * x
 
-    // val arg1 = 10
-    // val rt1 = Timer.runningTime(square(_), arg1)
-    // println(rt1)
+    val arg1 = 10
+    val rt1 = Timer.runningTime(square(_), arg1)
 
-    // val arg2 = 0 to 10000 toList
-    // val rt2 = Timer.runningTime(square(_), arg2)
-    // println(rt2)
+    val arg2 = (0 to 10000).toList
+    val rt2 = Timer.runningTime(square(_), arg2)
 
-    // val arg3 = 10000 to 30000 toList
-    val arg3 = 10000 to 30000 toList
-    val rt3 = Timer.avgRunningTime(square(_), arg3, 10)
-    // println(rt3)
+    val arg3 = (10000 to 30000).toList
+    val rt3 = Timer.runningTimeAgg(
+      square(_),
+      arg3,
+      (x: Seq[Double]) => Statistics.mean(x),
+      10)
 
   }
 
@@ -47,7 +47,7 @@ class StatisticsTest extends FunSuite with Matchers with ScalaInitiativesTest  {
 
   val repeatedZeros = List.fill(10)(0)
   val repeatedOnes = List.fill(10)(0)
-  val fromZeroToTen = 0 to 10 toList
+  val fromZeroToTen = (0 to 10).toList
   val ZerosAndTen = List.fill(9)(0D) :+ 10D
 
   test("Average and mean.") {

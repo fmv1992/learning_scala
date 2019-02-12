@@ -3,7 +3,7 @@ SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 # Find all scala files.
-SBT_FILES := $(shell find . -iname "build.sbt")
+SBT_FILES := $(shell find ./scala_initiatives -iname "build.sbt")
 SBT_FOLDERS := $(dir $(SBT_FILES))
 
 # Ignore these files.
@@ -29,8 +29,8 @@ tmp/.testcomplete:
 	touch $@
 
 $(SBT_FILES): $(shell find $(dir $@) -iname '*.scala') ./tmp/.testcomplete
-	cd $(dir $@) && sbt compile
-	cd $(dir $@) && sbt test
+	cd $(dir $@) && sbt -feature compile
+	cd $(dir $@) && sbt -feature test
 	touch $@
 
 .FORCE:
