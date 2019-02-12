@@ -70,6 +70,9 @@ trait ScalaInitiativesExercise {
 
 object Constants {
 
+  private val maxExp10 = scala.math.floor(scala.math.log10(Int.MaxValue))
+  val maxInt10 = scala.math.pow(10, maxExp10)
+
   object Test {
     val regexDataFiles = """data_\d+\.txt$""".r
     val regexResultFiles = """expected_answer_\d+\.txt$""".r
