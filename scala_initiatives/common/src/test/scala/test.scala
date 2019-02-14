@@ -48,13 +48,13 @@ class StatisticsTest extends FunSuite with Matchers with ScalaInitiativesTest  {
   val repeatedZeros = List.fill(10)(0)
   val repeatedOnes = List.fill(10)(0)
   val fromZeroToTen = (0 to 10).toList
-  val ZerosAndTen = List.fill(9)(0D) :+ 10D
+  val zerosAndTen = List.fill(9)(0D) :+ 10.0D
 
   test("Average and mean.") {
     assert(Statistics.average(repeatedZeros) == 0)
     assert(Statistics.average(repeatedOnes) == 0)
     assert(Statistics.average(fromZeroToTen) == 5D)
-    assert(isClose(Statistics.average(ZerosAndTen), 1D))
+    assert(isClose(Statistics.mean(zerosAndTen), 1D))
   }
 
 }

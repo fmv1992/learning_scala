@@ -5,29 +5,39 @@ import scalainitiatives.common.ScalaInitiativesExercise
 object FPISExerciseChapter03 extends ScalaInitiativesExercise {
 
   // From fpinscala.
-  sealed trait List[+A]
-  case object Nil extends List[Nothing]
-  case class Cons[+A](head: A, tail: List[A]) extends List[A]
+  sealed trait FPList[+A] {
 
-  object List {
+  }
+
+  case object FPNil extends FPList[Nothing]
+  case class FPCons[+A](head: A, tail: FPList[A]) extends FPList[A]
+
+  object FPList {
+
+    val isNotScalaBuiltinList = true
 
     // From fpinscala.
-    def sum(ints: List[Int]): Int = ints match {
-      case Nil => 0
-      case Cons(x,xs) => x + sum(xs)
+    def sum(ints: FPList[Int]): Int = ints match {
+      case FPNil => 0
+      case FPCons(x,xs) => x + sum(xs)
     }
 
     // From fpinscala.
-    def product(ds: List[Double]): Double = ds match {
-      case Nil => 1.0
-      case Cons(0.0, _) => 0.0
-      case Cons(x,xs) => x * product(xs)
+    def product(ds: FPList[Double]): Double = ds match {
+      case FPNil => 1.0
+      case FPCons(0.0, _) => 0.0
+      case FPCons(x,xs) => x * product(xs)
     }
 
     // From fpinscala.
-    def apply[A](as: A*): List[A] =
-      if (as.isEmpty) Nil
-      else Cons(as.head, apply(as.tail: _*))
+    def apply[A](as: A*): FPList[A] = if (as.isEmpty) FPNil else FPCons(as.head, apply(as.tail: _*))
+
+    def tail[A](x: FPList[A]): FPList[A] = {
+      x match {
+        case FPNil => FPNil
+        case FPCons(h, t) => t
+      }
+    }
 
   }
 

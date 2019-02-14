@@ -37,24 +37,6 @@ object Timer {
 
   }
 
-  // def avgRunningTime[A, B](
-  //   function: A => B,
-  //   iterArgs: Seq[A],
-  //   nRepeats: Int = 10
-  // ): Seq[Double] = {
-
-  //   @annotation.tailrec
-  //   def sumRunningTime(acc: Seq[Double], run: Int): Seq[Double] = {
-  //     if (run == nRepeats) acc else {
-  //       val rts: Seq[Double] = iterArgs.map(runningTime(function, _))
-  //       sumRunningTime(
-  //         acc.zip(rts).map(x => x._1 + x._2),
-  //         run + 1)
-  //     }
-  //   }
-  //   sumRunningTime(
-  //     Seq.fill(iterArgs.length)(0),
-  //     0).map((x: Double) => x / nRepeats)
-  // }
-
 }
+
+// vim: set filetype=scala fileformat=unix foldmarker={,} wrap tabstop=2 softtabstop=2:
