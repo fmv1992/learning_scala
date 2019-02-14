@@ -76,6 +76,10 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     assert(FPList.prepend(oneToFive, 0) == FPList(0, 1,2,3,4,5))
     assert(FPList.prepend(FPNil, 0) == FPList(0))
 
+    // Append.
+    assert(FPList.append(oneToFive, 0) == FPList(1,2,3,4,5, 0))
+    assert(FPList.append(FPNil, 0) == FPList(0))
+
     // assert(FPList.+(oneToFive, oneToFive) == FPList(1,2,3,4,5, 1,2,3,4,5))
     // assert(FPList.+(FPNil, FPNil) == FPNil)
 
