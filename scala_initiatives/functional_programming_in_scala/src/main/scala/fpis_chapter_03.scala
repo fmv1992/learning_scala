@@ -83,13 +83,16 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       FPCons(v, l)
     }
 
-    // def +[A](a: FPList[A], b: FPList[A]): FPList[A] = {
-    // ???
-    // b match {
-    //   case FPNil => a
-    //   case Cons(h, t) => FPList.+(gggg
-    // }
-    // }
+    def +[A](a: FPList[A], b: FPList[A]): FPList[A] = {
+      a match {
+        // Corner case.
+        case FPNil => b
+        // Decomposition case: bottom case.
+        case FPCons(h, FPNil) => FPCons(h, b)
+        // Decomposition case: recursion.
+        case FPCons(h, t) => prepend(FPList.+(t, b), h)
+      }
+    }
     // |--------------------------------------------------- My custom functions
 
   }
