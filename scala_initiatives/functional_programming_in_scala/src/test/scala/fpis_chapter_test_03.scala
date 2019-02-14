@@ -29,6 +29,9 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
       case FPCons(h, t) => h + FPList.sum(t)                   // (4)
       case _ => 101                                        // (5)
     }
+    //
+    // Written answer:
+    //
     // (1): The pattern does not match because 3 is not included.
     // (2): A filled FPList is different from FPNil.
     // (3): x → 1; y → 2 and _ → 5; the pattern matches returning 3
@@ -91,9 +94,35 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
 
   }
 
-  // test("3.6: Implementation of init.") {
-  //   assert(oneToFive == init(FPList(1, 2, 3, 4, 5, 6))
-  // }
+  test("3.6: Implementation of init.") {
+    //
+    // Written answer:
+    //
+    // The function cannot be implemented in constant time because the list
+    // structure does not say anything about where it ends. The function has to
+    // transverse the entire list before to extract its last element from it.
+    // This is a characteristic of linked lists.
+    //
+    // Tail on the other hand, is whatever is left from the list, except its
+    // first element. Removing the first element from the list takes constant
+    // time: a single comparison:
+    //
+    // ```
+    //    x match {
+    //      case FPNil => FPNil
+    //      case FPCons(h, t) => t
+    //    }
+    // ```
+    //
+    // ???: create hard evidence for algorithmic complexity in this test.
+    assert(oneToFive == FPList.init(FPList(1, 2, 3, 4, 5, 6)))
+    val removedFourTimes = FPList.init(
+      FPList.init(
+        FPList.init(
+          FPList.init(oneToFive))))
+    assert(FPList(1) == removedFourTimes)
+    assert(void == FPList.init(void))
+  }
 
   // test("3.7: ???.") {
   // }

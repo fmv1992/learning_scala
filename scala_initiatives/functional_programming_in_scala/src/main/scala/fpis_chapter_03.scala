@@ -75,13 +75,13 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       }
     }
 
-    // def init[A](l: List[A]): List[A] = {
-    // l match {
-    // case FPNil => FPNil
-    // case FPCons(h: A, FPNil) => FPNil
-    // case FPCons(h: A, t: List[A]) => FPCons(h, init(t))
-    // }
-    // }
+    def init[A](l: FPList[A]): FPList[A] = {
+      l match {
+        case FPNil => FPNil
+        case FPCons(h, FPNil) => FPNil
+        case FPCons(h, t) => FPCons(h, init(t))
+      }
+    }
 
     // My custom functions ---------------------------------------------------|
     def append[A](l: FPList[A], v: A): FPList[A] = {
