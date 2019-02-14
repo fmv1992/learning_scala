@@ -91,7 +91,8 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
 
   }
 
-  // test("3.6: ???.") {
+  // test("3.6: Implementation of init.") {
+  //   assert(oneToFive == init(FPList(1, 2, 3, 4, 5, 6))
   // }
 
   // test("3.7: ???.") {

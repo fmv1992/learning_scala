@@ -29,6 +29,12 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
     }
 
     def apply[A](as: A*): FPList[A] = if (as.isEmpty) FPNil else FPCons(as.head, apply(as.tail: _*))
+
+    // def foldRight[A,B](as: FPCons[A], z: B)(f: (A, B) => B): B =
+    // as match {
+    // case FPNil => z
+    // case FPCons(x, xs) => f(x, foldRight(xs, z)(f))
+    // }
     // |-------------------------------------------------------- From fpinscala
 
     def tail[A](x: FPList[A]): FPList[A] = {
@@ -69,12 +75,20 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       }
     }
 
+    // def init[A](l: List[A]): List[A] = {
+    // l match {
+    // case FPNil => FPNil
+    // case FPCons(h: A, FPNil) => FPNil
+    // case FPCons(h: A, t: List[A]) => FPCons(h, init(t))
+    // }
+    // }
+
     // My custom functions ---------------------------------------------------|
     def append[A](l: FPList[A], v: A): FPList[A] = {
       l match {
         case FPNil => apply(v): FPList[A]
         case FPCons(h, t) => prepend(
-          append(t: FPList[A], v: A),
+          append(t, v),
           h)
       }
     }
