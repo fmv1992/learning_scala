@@ -9,7 +9,9 @@ import org.scalatest._
 class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest {
 
   // Declare constant
-  val oneToFive = FPList(1,2,3,4,5)
+  val oneToFive: FPList[Int] = FPList(1,2,3,4,5)
+  val fiveToTen: FPList[Int] = FPList(5, 6, 7, 8, 9, 10)
+  val void: FPList[Nothing] = FPNil
 
   test ("3.0: Test that the list used here is not Scala's list") {
 
@@ -39,10 +41,119 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
   test ("3.2: Implementing tail.") {
 
     assert(FPList.tail(oneToFive) == FPList(2, 3, 4, 5))
+    assert(FPList.tail(void) == void)
     // ???: Assert that this function takes constant time.
 
   }
 
+  test("3.3: Implement setHead.") {
+
+    assert(FPList.setHead(oneToFive, 99) == FPList(99, 2, 3, 4, 5))
+    assert(FPList.setHead(void, 1) == FPList(1))
+
+  }
+
+  test("3.4: Implement drop.") {
+
+    assert(FPList.drop(oneToFive, 4) == FPList(5))
+    assert(FPList.drop(oneToFive, 0) == oneToFive)
+    assert(FPList.drop(oneToFive, 5) == void)
+
+  }
+
+  test("3.5: Implement dropWhile.") {
+
+    assert(FPList.dropWhile(oneToFive)(x => true) == void)
+    assert(FPList.dropWhile(oneToFive)(x => false) == oneToFive)
+    assert(FPList.dropWhile(oneToFive)( _ < 5) == FPList(5))
+    assert(FPList.dropWhile(oneToFive)( _ < 0) == oneToFive)
+
+  }
+
+  // test("Test '+' function.") {
+
+  //   assert(FPList.+(oneToFive, oneToFive) == FPList(1,2,3,4,5, 1,2,3,4,5))
+  //   assert(FPList.+(FPNil, FPNil) == FPNil)
+
+  // }
+
+  // test("3.6: ???.") {
+  // }
+
+  // test("3.7: ???.") {
+  // }
+
+  // test("3.8: ???.") {
+  // }
+
+  // test("3.9: ???.") {
+  // }
+
+  // test("3.10: ???.") {
+  // }
+
+  // test("3.11: ???.") {
+  // }
+
+  // test("3.12: ???.") {
+  // }
+
+  // test("3.13: ???.") {
+  // }
+
+  // test("3.14: ???.") {
+  // }
+
+  // test("3.15: ???.") {
+  // }
+
+  // test("3.16: ???.") {
+  // }
+
+  // test("3.17: ???.") {
+  // }
+
+  // test("3.18: ???.") {
+  // }
+
+  // test("3.19: ???.") {
+  // }
+
+  // test("3.20: ???.") {
+  // }
+
+  // test("3.21: ???.") {
+  // }
+
+  // test("3.22: ???.") {
+  // }
+
+  // test("3.23: ???.") {
+  // }
+
+  // test("3.24: ???.") {
+  // }
+
+  // test("3.25: ???.") {
+  // }
+
+  // test("3.26: ???.") {
+  // }
+
+  // test("3.27: ???.") {
+  // }
+
+  // test("3.28: ???.") {
+  // }
+
+  // test("3.29: ???.") {
+  // }
+
 }
 
+//  Run this in vim to avoid troubles:
+//
+//  call matchadd("ErrorXXX", '\<List\>', 2)
+//  iabbrev List FPList
+//
 // vim: set filetype=scala fileformat=unix foldmarker={,} wrap tabstop=2 softtabstop=2:
