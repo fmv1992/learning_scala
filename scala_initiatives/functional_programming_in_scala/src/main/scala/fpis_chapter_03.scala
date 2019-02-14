@@ -71,22 +71,22 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
 
     // My custom functions ---------------------------------------------------|
     // def append[A](l: FPList[A], v: A): FPList[A] = {
-    //   a match {
+    //   l match {
     //     case FPNil => apply(v): FPList[A]
     //     case FPCons(h, t) => prepend(h, append(t: FPList[A], v: A))
     //   }
     // }
 
-    // def prepend[A](l: FPList[A], v: A): FPList[A] = {
-    //   FPCons(v, l)
-    // }
+    def prepend[A](l: FPList[A], v: A): FPList[A] = {
+      FPCons(v, l)
+    }
 
     // def +[A](a: FPList[A], b: FPList[A]): FPList[A] = {
-    //   ???
-    //   // b match {
-    //   //   case FPNil => a
-    //   //   case Cons(h, t) => FPList.+(gggg
-    //   // }
+    // ???
+    // b match {
+    //   case FPNil => a
+    //   case Cons(h, t) => FPList.+(gggg
+    // }
     // }
     // |--------------------------------------------------- My custom functions
 
