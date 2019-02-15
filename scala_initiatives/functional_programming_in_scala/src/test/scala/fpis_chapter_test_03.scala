@@ -11,6 +11,7 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
   // Declare constant
   val oneToFive: FPList[Int] = FPList(1,2,3,4,5)
   val fiveToTen: FPList[Int] = FPList(5, 6, 7, 8, 9, 10)
+  val minusTentoTen: FPList[Int] = FPList( -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
   val void: FPList[Nothing] = FPNil
 
   test ("3.0: Test that the list used here is not Scala's list") {
@@ -124,8 +125,28 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     assert(void == FPList.init(void))
   }
 
-  // test("3.7: ???.") {
-  // }
+  test("3.7: Short circuiting foldRight.") {
+    // This might be possible by using the 'return' keyword.
+    // Assuming this would work, with a large list it would scan the list until
+    // it finds the value, returning it instantly.
+    println(FPList.foldRightWithShortCircuit(
+      FPList(-2, -1, 0, 1, 2),
+      1,
+      0)(_ * _))
+    // This prints:
+    //
+    // FPCons(-2,FPCons(-1,FPCons(0,FPCons(1,FPCons(2,FPNil)))))
+    // FPCons(-1,FPCons(0,FPCons(1,FPCons(2,FPNil))))
+    // FPCons(0,FPCons(1,FPCons(2,FPNil)))
+    // Has short circuit!
+    // Applying 'scalainitiatives.functional_programming_in_scala.FPISTestChapter03$$Lambda$6102/1122954351@570b7146' to '-1' and '0'.
+    // Applying 'scalainitiatives.functional_programming_in_scala.FPISTestChapter03$$Lambda$6102/1122954351@570b7146' to '-2' and '0'.
+    // 0
+    //
+    // Thus it halts the recursion yet it does compute the intermeadiate
+    // results. Considering the scenario of a large list, it still would do a
+    // lot of computation.
+  }
 
   // test("3.8: ???.") {
   // }

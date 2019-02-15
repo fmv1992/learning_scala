@@ -17,6 +17,7 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
     val isNotScalaBuiltinList = true
 
     // From fpinscala --------------------------------------------------------|
+
     def sum(ints: FPList[Int]): Int = ints match {
       case FPNil => 0
       case FPCons(x,xs) => x + sum(xs)
@@ -30,11 +31,16 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
 
     def apply[A](as: A*): FPList[A] = if (as.isEmpty) FPNil else FPCons(as.head, apply(as.tail: _*))
 
-    // def foldRight[A,B](as: FPCons[A], z: B)(f: (A, B) => B): B =
-    // as match {
-    // case FPNil => z
-    // case FPCons(x, xs) => f(x, foldRight(xs, z)(f))
-    // }
+    def foldRight[A,B](as: FPList[A], z: B)(f: (A, B) => B): B =
+      as match {
+        case FPNil => z
+        case FPCons(x, xs) => f(x, foldRight(xs, z)(f))
+      }
+
+    def sum2(ns: FPList[Int]) = foldRight(ns, 0)((x,y) => x + y)
+
+    def product2(ns: FPList[Double]) = foldRight(ns, 1.0)(_ * _)
+
     // |-------------------------------------------------------- From fpinscala
 
     def tail[A](x: FPList[A]): FPList[A] = {
@@ -80,6 +86,21 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
         case FPNil => FPNil
         case FPCons(h, FPNil) => FPNil
         case FPCons(h, t) => FPCons(h, init(t))
+      }
+    }
+
+    def foldRightWithShortCircuit[A,B](as: FPList[A], z: B, ss: B)(f: (A, B) => B) : B = {
+      println(as)
+      as match {
+        case FPNil => z
+        case FPCons(x, xs) => if (x == ss) {
+          println("Has short circuit!")
+          return ss
+        } else {
+          val resRec = foldRightWithShortCircuit(xs, z, ss)(f)
+          println(s"Applying '$f' to '$x' and '$resRec'.")
+          f(x, resRec)
+        }
       }
     }
 
