@@ -119,6 +119,22 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       go(as, z)
     }
 
+    def sumFoldLeft(ns: FPList[Int]) = foldLeft(ns, 0)((x,y) => x + y)
+
+    def productFoldLeft(ns: FPList[Double]) = foldLeft(ns, 1.0)(_ * _)
+
+    def productFoldLeft(ns: FPList[Int]) = foldLeft(ns, 1)(_ * _)
+
+    def lengthFoldLeft[A](as: FPList[A]): Int = {
+      foldLeft(as, 0)((x: Int, y: A) => x + 1)
+    }
+
+    def reverse[A](as: FPList[A]): FPList[A] = {
+      val nilOfTypeA: FPList[A] = FPNil
+      // foldRight(as, nilOfTypeA)((x: A, y: FPList[A]) => FPCons(x, y))
+      foldLeft(as, nilOfTypeA)((x: FPList[A], y: A) => FPCons(y, x))
+    }
+
     // My custom functions ---------------------------------------------------|
     def append[A](l: FPList[A], v: A): FPList[A] = {
       l match {

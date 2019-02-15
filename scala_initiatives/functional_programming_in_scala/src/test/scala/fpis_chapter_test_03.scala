@@ -170,11 +170,30 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     assert(0 == FPList.foldLeft(minusTentoTen, 0)(_ + _))
   }
 
-  // test("3.11: ???.") {
-  // }
+  test("3.11: Reimplementation of sum, product and length in terms of foldLeft.") {
+    // Sum with foldLeft.
+    assert(FPList.sumFoldLeft(oneToFive) == FPList.sum(oneToFive))
+    assert(FPList.sumFoldLeft(FPNil) == 0)
 
-  // test("3.12: ???.") {
-  // }
+    // Product with foldLeft.
+    assert(FPList.productFoldLeft(oneToFive) == 5 * 4 * 3 * 2 * 1)
+    assert(FPList.productFoldLeft(minusTentoTen) == 0)
+    assert(FPList.productFoldLeft(FPNil: FPList[Int]) == 1)
+    assert(FPList.productFoldLeft(FPList(1)) == 1)
+
+    // Length with foldLeft.
+    assert(! (FPList.lengthFoldLeft(oneToFive) == 6))
+    assert(FPList.lengthFoldLeft(oneToFive) == 5)
+    assert(FPList.lengthFoldLeft(minusTentoTen) == 21)
+    assert(FPList.lengthFoldLeft(void) == 0)
+
+  }
+
+  test("3.12: Implement the reverse of a FPList in terms of folding.") {
+    assert(FPList.reverse(oneToFive) == FPList(5, 4, 3, 2, 1))
+    assert(FPList.reverse(void) == void)
+    assert(FPList.reverse(FPList(1)) == FPList(1))
+  }
 
   // test("3.13: ???.") {
   // }
