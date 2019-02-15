@@ -8,6 +8,22 @@ import org.scalatest._
 
 class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest {
 
+  // ???: To be able to control tests that require printing, I'm adding a
+  // temporary solution which is naming the test names such as this:
+  //
+  // private val test37String = "3.7: Short circuiting foldRight."
+  // test(test37String) {
+  // }
+  //
+  def namedTest(x: String): Any => Unit = {
+    (testBody: Any) => {
+      println("Starting: " + x)
+      val testResult = test(x)(testBody)
+      println("Ended: " + x)
+      testResult
+    }
+  }
+
   // Declare constant
   val oneToFive: FPList[Int] = FPList(1,2,3,4,5)
   val fiveToTen: FPList[Int] = FPList(5, 6, 7, 8, 9, 10)
@@ -125,7 +141,7 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     assert(void == FPList.init(void))
   }
 
-  test("3.7: Short circuiting foldRight.") {
+  namedTest("3.7: Short circuiting foldRight.") {
     // This might be possible by using the 'return' keyword.
     // Assuming this would work, with a large list it would scan the list until
     // it finds the value, returning it instantly.
@@ -195,7 +211,15 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     assert(FPList.reverse(FPList(1)) == FPList(1))
   }
 
-  // test("3.13: ???.") {
+  // test("Compare foldRight and foldLeft.") {
+  // val joinAsString: (Int, String) => String = (member: Int, agg: String) => agg + member.toString
+  // println(FPList.foldRight(oneToFive, "start →")(joinAsString))
+  // }
+  // test("abcde") {}
+
+  // test("3.13: Inter conversion of folding.") {
+  // "Can you write foldLeft in terms of foldRight?"
+  // "How about the other way around?"
   // }
 
   // test("3.14: ???.") {
@@ -214,6 +238,7 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
   // }
 
   // test("3.19: ???.") {
+  // assert(FPList.filter(oneToFive)(_ % 2 == 0)
   // }
 
   // test("3.20: ???.") {

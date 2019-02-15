@@ -7,6 +7,10 @@ lazy val commonSettings = Seq(
     scalacOptions ++= Seq("-feature", "-deprecation", "-Xfatal-warnings")
     )
 
+// This final part makes test artifacts being only importable by the test files
+// libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % Test,
+//                                                                   ↑↑↑↑↑
+
 // Common to all projects.
 lazy val common = (project in file("common")).settings(commonSettings)
 

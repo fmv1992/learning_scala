@@ -31,11 +31,25 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
 
     def apply[A](as: A*): FPList[A] = if (as.isEmpty) FPNil else FPCons(as.head, apply(as.tail: _*))
 
-    def foldRight[A,B](as: FPList[A], z: B)(f: (A, B) => B): B =
+    // -----------------
+    // | 1 | 2 | 3 | 4 | : type A
+    // -----------------
+    //
+    // Foldright descends to the last element of it, applies the function with
+    // the initial argument (of type B), returns the result in the type B and
+    // consume the list from right to left.
+    def foldRight[A,B](as: FPList[A], z: B)(f: (A, B) => B): B = {
+
+      // Much more readable with a freezed/partially applied function.
+      // Freeze the function to be applied as well as the "tail-case" of type
+      // B.
+      val freezeF: FPList[A] => B = l => foldRight(l, z)(f)
+
       as match {
         case FPNil => z
-        case FPCons(x, xs) => f(x, foldRight(xs, z)(f))
+        case FPCons(x, xs) => f(x, freezeF(xs))
       }
+    }
 
     def sum2(ns: FPList[Int]) = foldRight(ns, 0)((x,y) => x + y)
 
@@ -108,6 +122,13 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       foldRight(as, 0)((x, y) => y + 1)
     }
 
+    // -----------------
+    // | 1 | 2 | 3 | 4 | : type A
+    // -----------------
+    //
+    // Foldleft descends to the last element of it, applies the function with
+    // the initial argument (of type B), returns the result in the type B and
+    // consume the list from right to left.
     def foldLeft[A, B](as: FPList[A], z: B)(f: (B, A) => B): B = {
       @annotation.tailrec
       def go(subas: FPList[A], state: B): B = {
@@ -134,6 +155,13 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       // foldRight(as, nilOfTypeA)((x: A, y: FPList[A]) => FPCons(x, y))
       foldLeft(as, nilOfTypeA)((x: FPList[A], y: A) => FPCons(y, x))
     }
+
+    // def filter[A](as: FPList[A])(f: A => Boolean): FPList[A] = {
+    // as match {
+    // case FPNil => FPNil
+    // case FPCons(h, t) => if (f(h))
+    // }
+    // }
 
     // My custom functions ---------------------------------------------------|
     def append[A](l: FPList[A], v: A): FPList[A] = {
