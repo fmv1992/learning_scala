@@ -104,6 +104,10 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       }
     }
 
+    def length[A](as: FPList[A]): Int = {
+      foldRight(as, 0)((x, y) => y + 1)
+    }
+
     // My custom functions ---------------------------------------------------|
     def append[A](l: FPList[A], v: A): FPList[A] = {
       l match {

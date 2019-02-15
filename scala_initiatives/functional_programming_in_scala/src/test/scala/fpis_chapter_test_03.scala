@@ -148,14 +148,24 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     // lot of computation.
   }
 
-  // test("3.8: ???.") {
-  // }
+  test("3.8: Passing constructors to folding.") {
+    // It gives us:
+    //
+    // FPCons(1,FPCons(2,FPCons(3,FPNil)))
+    //
+    // It tells us that foldRight and Cons are equivalent.
+    println(FPList.foldRight(FPList(1, 2, 3), FPNil:FPList[Int])(FPCons(_, _)))
+  }
 
-  // test("3.9: ???.") {
-  // }
+  test("3.9: Implementation of length.") {
+    assert(FPList.length(void) == 0)
+    assert(FPList.length(oneToFive) == 5)
+    assert(FPList.length(minusTentoTen) == 21)
+    assert(! (FPList.length(minusTentoTen) == 22))
+  }
 
-  // test("3.10: ???.") {
-  // }
+  test("3.10: Implementation of tail recursive foldLeft.") {
+  }
 
   // test("3.11: ???.") {
   // }
@@ -218,7 +228,12 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
 
 //  Run this in vim to avoid troubles:
 //
-//  call matchadd("ErrorXXX", '\<List\>', 2)
-//  iabbrev List FPList
+// call matchadd("ErrorXXX", '\<List\>', 2)
+// call matchadd("ErrorXXX", '\<Cons\>', 2)
+// call matchadd("ErrorXXX", '\<Const\>', 2)
+// call matchadd("ErrorXXX", '\<Nil\>', 2)
+// iabbrev List FPList
+// iabbrev Cons FPConst
+// iabbrev Nil FPNil
 //
 // vim: set filetype=scala fileformat=unix foldmarker={,} wrap tabstop=2 softtabstop=2:
