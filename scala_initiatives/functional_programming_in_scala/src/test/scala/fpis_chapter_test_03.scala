@@ -165,6 +165,9 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
   }
 
   test("3.10: Implementation of tail recursive foldLeft.") {
+    assert(FPList.foldRight(oneToFive, 1)(_ * _)
+      == FPList.foldLeft(oneToFive, 1)(_ * _))
+    assert(0 == FPList.foldLeft(minusTentoTen, 0)(_ + _))
   }
 
   // test("3.11: ???.") {

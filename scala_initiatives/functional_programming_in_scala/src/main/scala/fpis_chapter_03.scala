@@ -108,6 +108,17 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       foldRight(as, 0)((x, y) => y + 1)
     }
 
+    def foldLeft[A, B](as: FPList[A], z: B)(f: (B, A) => B): B = {
+      @annotation.tailrec
+      def go(subas: FPList[A], state: B): B = {
+        subas match {
+          case FPNil => state
+          case FPCons(x, xs) => go(xs, f(state, x))
+        }
+      }
+      go(as, z)
+    }
+
     // My custom functions ---------------------------------------------------|
     def append[A](l: FPList[A], v: A): FPList[A] = {
       l match {
