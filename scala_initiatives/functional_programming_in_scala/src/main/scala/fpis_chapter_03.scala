@@ -172,10 +172,13 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
 
     def append[T](l1: FPList[T], l2: FPList[T]): FPList[T] = {
       l1 match {
-        case FPCons(h: T, t: FPList[T]) => FPCons(h, foldLeft(t, l2)(append))
+        case FPCons(h, t) => FPCons(h,
+          foldRight(t, l2)(FPCons(_, _)))
         case FPNil => l2
       }
-    // append: (FPList[T], FPList[T]) => FPList[T] ))
+    }
+    def append[T](l1: FPList[T], v: T): FPList[T] = {
+      append(l1, FPList(v))
     }
 
 

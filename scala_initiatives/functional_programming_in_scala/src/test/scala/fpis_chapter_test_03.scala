@@ -227,6 +227,8 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     // (1) "Can you write foldLeft in terms of foldRight?"
     //
     // (2) "How about the other way around?"
+    //
+    // ???: Not satisfactorily answered.
 
     val nonCommutativeFunctionL: (String, Int) => String = (s, x) => s + "→" + x.toString + "←"
     val foldLeftResult = FPList.foldLeft(oneToFive, "seed")(nonCommutativeFunctionL)
@@ -275,6 +277,21 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     //
     // Actually it is not... The answer for this exercise is done via
     // foldRight... Going to catch a break now...
+    assert(
+      FPList.append(oneToFive, oneToFive) == FPList(1,2,3,4,5, 1,2,3,4,5)
+    )
+    assert(
+      FPList.append(FPNil, FPNil) == FPNil
+    )
+    assert(
+      FPList.append(oneToFive, FPNil) == oneToFive
+    )
+    assert(
+      FPList.append(FPNil, oneToFive) == oneToFive
+    )
+    assert(
+      FPList.append(oneToFive, 6) == FPList(1,2,3,4,5,6)
+    )
   }
 
   // test("3.15: ???.") {
