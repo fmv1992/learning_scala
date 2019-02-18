@@ -8,20 +8,16 @@ import org.scalatest._
 
 class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest {
 
-  // ???: To be able to control tests that require printing, I'm adding a
-  // temporary solution which is naming the test names such as this:
-  //
-  // private val test37String = "3.7: Short circuiting foldRight."
-  // test(test37String) {
-  // }
-  //
-  def namedTest(x: String): Any => Unit = {
-    (testBody: Any) => {
-      println("Starting: " + x)
-      val testResult = test(x)(testBody)
-      println("Ended: " + x)
+  def namedTest(x: => String): (=> Any) => Unit = {
+    def lazyTestBody(testBody: => Any) = {
+      lazy val testResult = test(x) {
+        println("Starting: " + x + " " + System.nanoTime)
+        testBody
+        println("Ended:    " + x + " " + System.nanoTime)
+      }
       testResult
     }
+    lazyTestBody
   }
 
   // Declare constant
@@ -164,7 +160,7 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     // lot of computation.
   }
 
-  test("3.8: Passing constructors to folding.") {
+  namedTest("3.8: Passing constructors to folding.") {
     // It gives us:
     //
     // FPCons(1,FPCons(2,FPCons(3,FPNil)))
@@ -211,11 +207,13 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     assert(FPList.reverse(FPList(1)) == FPList(1))
   }
 
-  // test("Compare foldRight and foldLeft.") {
-  // val joinAsString: (Int, String) => String = (member: Int, agg: String) => agg + member.toString
-  // println(FPList.foldRight(oneToFive, "start →")(joinAsString))
-  // }
-  // test("abcde") {}
+  namedTest("Compare foldRight and foldLeft.") {
+    val joinAsStringRight: (Int, String) => String = (member: Int, agg: String) => agg + member.toString
+    val joinAsStringLeft: (String, Int) => String = (x, y) => joinAsStringRight(y, x)
+    println("Original sequence: " + oneToFive)
+    println(FPList.foldRight(oneToFive, "start right →")(joinAsStringRight))
+    println(FPList.foldLeft(oneToFive, "start left →")(joinAsStringLeft))
+  }
 
   // test("3.13: Inter conversion of folding.") {
   // "Can you write foldLeft in terms of foldRight?"
@@ -283,4 +281,4 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
 // iabbrev Cons FPConst
 // iabbrev Nil FPNil
 //
-// vim: set filetype=scala fileformat=unix foldmarker={,} wrap tabstop=2 softtabstop=2:
+// vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:

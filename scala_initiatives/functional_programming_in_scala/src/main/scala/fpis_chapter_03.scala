@@ -104,7 +104,6 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
     }
 
     def foldRightWithShortCircuit[A,B](as: FPList[A], z: B, ss: B)(f: (A, B) => B) : B = {
-      println(as)
       as match {
         case FPNil => z
         case FPCons(x, xs) => if (x == ss) {
@@ -156,6 +155,13 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       foldLeft(as, nilOfTypeA)((x: FPList[A], y: A) => FPCons(y, x))
     }
 
+    def map[A, B](as: FPList[A])(f: A => B): FPList[B] = {
+      as match {
+        case FPNil => FPNil
+        case FPCons(h, t) => FPCons(f(h), map(t)(f))
+      }
+    }
+
     // def filter[A](as: FPList[A])(f: A => Boolean): FPList[A] = {
     // as match {
     // case FPNil => FPNil
@@ -193,4 +199,4 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
 
 }
 
-// vim: set filetype=scala fileformat=unix foldmarker={,} wrap tabstop=2 softtabstop=2:
+// vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:
