@@ -43,7 +43,7 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       // Much more readable with a freezed/partially applied function.
       // Freeze the function to be applied as well as the "tail-case" of type
       // B.
-      val freezeF: FPList[A] => B = l => foldRight(l, z)(f)
+      def freezeF: FPList[A] => B = l => foldRight(l, z)(f)
 
       as match {
         case FPNil => z
@@ -155,12 +155,18 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       foldLeft(as, nilOfTypeA)((x: FPList[A], y: A) => FPCons(y, x))
     }
 
-    def map[A, B](as: FPList[A])(f: A => B): FPList[B] = {
-      as match {
-        case FPNil => FPNil
-        case FPCons(h, t) => FPCons(f(h), map(t)(f))
-      }
+    def foldLeftUsingFR[A, B](as: FPList[A], z: B)(f: (B, A) => B): B = {
+      val reversedFunction = (a: A, b: B) => f(b, a)
+      val reversedList = reverse(as)
+      foldRight(reversedList, z)(reversedFunction)
     }
+
+    def foldRightUsingFL[A,B](as: FPList[A], z: B)(f: (A, B) => B): B = {
+      val reversedFunction = (b: B, a: A) => f(a, b)
+      val reversedList = reverse(as)
+      foldLeft(reversedList, z)(reversedFunction)
+    }
+
 
     // def filter[A](as: FPList[A])(f: A => Boolean): FPList[A] = {
     // as match {
@@ -191,6 +197,13 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
         case FPCons(h, FPNil) => FPCons(h, b)
         // Decomposition case: recursion.
         case FPCons(h, t) => prepend(FPList.+(t, b), h)
+      }
+    }
+
+    def map[A, B](as: FPList[A])(f: A => B): FPList[B] = {
+      as match {
+        case FPNil => FPNil
+        case FPCons(h, t) => FPCons(f(h), map(t)(f))
       }
     }
     // |--------------------------------------------------- My custom functions

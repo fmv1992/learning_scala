@@ -145,6 +145,7 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
       FPList(-2, -1, 0, 1, 2),
       1,
       0)(_ * _))
+    //
     // This prints:
     //
     // FPCons(-2,FPCons(-1,FPCons(0,FPCons(1,FPCons(2,FPNil)))))
@@ -213,12 +214,40 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     println("Original sequence: " + oneToFive)
     println(FPList.foldRight(oneToFive, "start right →")(joinAsStringRight))
     println(FPList.foldLeft(oneToFive, "start left →")(joinAsStringLeft))
+    // This prints:
+    //
+    // Starting: Compare foldRight and foldLeft. 24468267411482
+    // Original sequence: FPCons(1,FPCons(2,FPCons(3,FPCons(4,FPCons(5,FPNil)))))
+    // start right →54321
+    // start left →12345
+    // Ended:    Compare foldRight and foldLeft. 24468268110440
   }
 
-  // test("3.13: Inter conversion of folding.") {
-  // "Can you write foldLeft in terms of foldRight?"
-  // "How about the other way around?"
-  // }
+  namedTest("3.13: Inter conversion of folding.") {
+    // (1) "Can you write foldLeft in terms of foldRight?"
+    // (2) "How about the other way around?"
+    val nonCommutativeFunctionL: (String, Int) => String = (s, x) => s + "→" + x.toString + "←"
+    val foldLeftResult = FPList.foldLeft(oneToFive, "seed")(nonCommutativeFunctionL)
+    assert(
+      (foldLeftResult == FPList.foldLeftUsingFR(oneToFive, "seed")(nonCommutativeFunctionL))
+    )
+    val nonCommutativeFunctionR = (i: Int, s: String) => nonCommutativeFunctionL(s, i)
+    val foldRightResult = FPList.foldRight(oneToFive, "seed")(nonCommutativeFunctionR)
+    assert(
+      (foldRightResult == FPList.foldRightUsingFL(oneToFive, "seed")(nonCommutativeFunctionR))
+    )
+    println("FLResult: " + foldLeftResult)
+    println("FRResult: " + foldRightResult)
+    // foldLeftUsingFR
+    //
+    // Written answer:
+    //
+    // (1): It is possible to reimplement foldLeft using the 'reverse'
+    // function.
+    //
+    // (2): It is possible to reimplement foldRight using the 'reverse'
+    // function.
+  }
 
   // test("3.14: ???.") {
   // }
