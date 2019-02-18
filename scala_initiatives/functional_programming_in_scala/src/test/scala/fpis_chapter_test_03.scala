@@ -307,7 +307,7 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
 // call matchadd("ErrorXXX", '\<Const\>', 2)
 // call matchadd("ErrorXXX", '\<Nil\>', 2)
 // iabbrev List FPList
-// iabbrev Cons FPConst
+// iabbrev Cons FPCons
 // iabbrev Nil FPNil
 //
 // vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:

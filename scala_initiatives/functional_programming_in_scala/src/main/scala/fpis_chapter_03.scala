@@ -151,14 +151,17 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
 
     def reverse[A](as: FPList[A]): FPList[A] = {
       val nilOfTypeA: FPList[A] = FPNil
-      // foldRight(as, nilOfTypeA)((x: A, y: FPList[A]) => FPCons(x, y))
       foldLeft(as, nilOfTypeA)((x: FPList[A], y: A) => FPCons(y, x))
     }
 
     def foldLeftUsingFR[A, B](as: FPList[A], z: B)(f: (B, A) => B): B = {
       val reversedFunction = (a: A, b: B) => f(b, a)
-      val reversedList = reverse(as)
-      foldRight(reversedList, z)(reversedFunction)
+      as match {
+        case FPNil => z
+        case FPCons(h, t) => foldLeftUsingFR(
+          t,
+          foldRight(FPCons(h, FPNil), z)(reversedFunction))(f)
+      }
     }
 
     def foldRightUsingFL[A,B](as: FPList[A], z: B)(f: (A, B) => B): B = {
