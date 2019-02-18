@@ -170,6 +170,14 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       foldLeft(reversedList, z)(reversedFunction)
     }
 
+    def append[T](l1: FPList[T], l2: FPList[T]): FPList[T] = {
+      l1 match {
+        case FPCons(h: T, t: FPList[T]) => FPCons(h, foldLeft(t, l2)(append))
+        case FPNil => l2
+      }
+    // append: (FPList[T], FPList[T]) => FPList[T] ))
+    }
+
 
     // def filter[A](as: FPList[A])(f: A => Boolean): FPList[A] = {
     // as match {
@@ -179,11 +187,11 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
     // }
 
     // My custom functions ---------------------------------------------------|
-    def append[A](l: FPList[A], v: A): FPList[A] = {
+    def myAppend[A](l: FPList[A], v: A): FPList[A] = {
       l match {
         case FPNil => apply(v): FPList[A]
         case FPCons(h, t) => prepend(
-          append(t, v),
+          myAppend(t, v),
           h)
       }
     }

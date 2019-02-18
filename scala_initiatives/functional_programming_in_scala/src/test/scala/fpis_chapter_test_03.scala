@@ -92,9 +92,9 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     assert(FPList.prepend(oneToFive, 0) == FPList(0, 1,2,3,4,5))
     assert(FPList.prepend(FPNil, 0) == FPList(0))
 
-    // Append.
-    assert(FPList.append(oneToFive, 0) == FPList(1,2,3,4,5, 0))
-    assert(FPList.append(FPNil, 0) == FPList(0))
+    // MyAppend.
+    assert(FPList.myAppend(oneToFive, 0) == FPList(1,2,3,4,5, 0))
+    assert(FPList.myAppend(FPNil, 0) == FPList(0))
 
     // +.
     assert(FPList.+(oneToFive, oneToFive) == FPList(1,2,3,4,5, 1,2,3,4,5))
@@ -262,8 +262,20 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     // (2): Could not easily implement foldRightUsingFL using solely foldLeft.
   }
 
-  // test("3.14: ???.") {
-  // }
+  test("3.14: Implementation of append.") {
+    // assert(FPList.append(oneToFive, 6) == FPList(1, 2, 3, 4, 5, 6))
+    // It took me hours of thinking just to peek into the solution and see that
+    // it depends on 2 lists...
+    // ```
+    // def append[A](a1: List[A], a2: List[A]): List[A] =
+    // ```
+    // In this scenario the solution is much simpler...
+    //
+    // ...
+    //
+    // Actually it is not... The answer for this exercise is done via
+    // foldRight... Going to catch a break now...
+  }
 
   // test("3.15: ???.") {
   // }
