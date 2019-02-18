@@ -225,7 +225,9 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
 
   namedTest("3.13: Inter conversion of folding.") {
     // (1) "Can you write foldLeft in terms of foldRight?"
+    //
     // (2) "How about the other way around?"
+
     val nonCommutativeFunctionL: (String, Int) => String = (s, x) => s + "→" + x.toString + "←"
     val foldLeftResult = FPList.foldLeft(oneToFive, "seed")(nonCommutativeFunctionL)
     assert(
@@ -238,15 +240,26 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     )
     println("FLResult: " + foldLeftResult)
     println("FRResult: " + foldRightResult)
+
     // foldLeftUsingFR
     //
     // Written answer:
+    //
+    // Commit: 'cfe6164'
     //
     // (1): It is possible to reimplement foldLeft using the 'reverse'
     // function.
     //
     // (2): It is possible to reimplement foldRight using the 'reverse'
     // function.
+    //
+    // Commit: '4e5016a' (later than commit 'cfe6164')
+    //
+
+    // (1): Reimplemented foldLeftUsingFR using both foldLeftUsingFR and
+    // foldRight; maybe this was not the point of the exercise.
+    //
+    // (2): Could not easily implement foldRightUsingFL using solely foldLeft.
   }
 
   // test("3.14: ???.") {
