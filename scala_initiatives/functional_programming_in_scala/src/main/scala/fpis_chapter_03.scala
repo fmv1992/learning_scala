@@ -193,6 +193,13 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       }
     }
 
+    def doubleToString(l: FPList[Double]): FPList[String] = {
+      l match {
+        case FPCons(h, t) => FPCons(h.toString, doubleToString(t))
+        case FPNil => FPNil
+      }
+    }
+
 
     // def filter[A](as: FPList[A])(f: A => Boolean): FPList[A] = {
     // as match {

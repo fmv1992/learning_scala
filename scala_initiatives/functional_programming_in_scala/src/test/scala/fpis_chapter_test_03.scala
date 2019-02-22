@@ -321,8 +321,14 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     assert(FPList(1, 100) == FPList.addOneInt(FPList(0, 99)))
   }
 
-  // test("3.17: ???.") {
-  // }
+  test("3.17: Implementation of doubleToString.") {
+    assert(
+      FPList.doubleToString(FPList(0, 1)) == FPList("0.0", "1.0")
+    )
+    assert(
+      FPList.doubleToString(FPNil: FPList[Double]) == (FPNil: FPList[String])
+    )
+  }
 
   // test("3.18: ???.") {
   // }
