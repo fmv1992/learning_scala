@@ -294,8 +294,26 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     )
   }
 
-  // test("3.15: ???.") {
-  // }
+  test("3.15: Implementation of concatenateListOfLists.") {
+    val listOfLists = FPList(FPList(1), FPList(2), FPList(3))
+    assert(
+      FPList.concatenateListOfLists(listOfLists) == FPList(1, 2, 3)
+    )
+    val threeTimesOneToFive = FPList(oneToFive, oneToFive, oneToFive)
+    assert(
+      FPList.concatenateListOfLists(threeTimesOneToFive) == FPList(
+        1,2,3,4,5,1,2,3,4,5,1,2,3,4,5)
+      )
+    assert(
+      FPList.concatenateListOfLists(FPList(FPList(1.0))) == FPList(1.0)
+    )
+    val nestedStringNil = FPList(FPList(FPNil: FPList[String]))
+    assert(
+      FPList.concatenateListOfLists(
+        FPList.concatenateListOfLists(
+          nestedStringNil)) == (FPNil: FPList[String])
+      )
+  }
 
   // test("3.16: ???.") {
   // }
