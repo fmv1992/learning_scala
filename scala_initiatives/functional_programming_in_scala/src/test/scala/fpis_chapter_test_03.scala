@@ -277,6 +277,22 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     //
     // Actually it is not... The answer for this exercise is done via
     // foldRight... Going to catch a break now...
+    //
+    // ???: Bonus exercise: does append run in linear time?
+    //
+    //                | Commit: e871cb96a264b27693fa1300bcf180ee6f547e95
+    // 1:             | def append[T](l1: FPList[T], l2: FPList[T]): FPList[T] = {
+    // 2: [constant]  |   l1 match {
+    // 3: [linear]    |     case FPCons(h, t) => FPCons(h,
+    //  :             |       foldRight(t, l2)(FPCons(_, _)))
+    // 4: [constant]  |     case FPNil => l2
+    // 5:             |   }
+    // 6:             | }
+    //
+    // Theoretically append is linear time respective to the length of the
+    // longest list. The function 'FPCons(_, _)' is constant time. 'foldRight'
+    // applies this function to the tail of the list, which is ~N.
+    // Thus O(n) * O(k) = O(n)
     assert(
       FPList.append(oneToFive, oneToFive) == FPList(1,2,3,4,5, 1,2,3,4,5)
     )
@@ -295,6 +311,8 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
   }
 
   test("3.15: Implementation of concatenateListOfLists.") {
+    // ???: Should run in linear time of the total sum of inner list length.
+
     val listOfLists = FPList(FPList(1), FPList(2), FPList(3))
     assert(
       FPList.concatenateListOfLists(listOfLists) == FPList(1, 2, 3)
@@ -331,8 +349,27 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
   }
 
   test("3.18: Implementation of map.") {
-    assert(FPList.mapNonTailRec(oneToFive)(_.toDouble) == FPList(1.0, 2.0, 3.0, 4.0, 5))
-    assert(FPList.mapNonTailRec(oneToFive)(2 * _ + 10) == FPList(12, 14, 16, 18, 20))
+    // Promoting '1' to '1.0' promotes the entire FPList to FPList[Double].
+    val oneToFiveDouble = FPList(1.0, 2, 3, 4, 5)
+    assert(FPList.mapNonTailRec(oneToFive)(_.toDouble) == oneToFiveDouble)
+    val aProgression = FPList(12, 14, 16, 18, 20)
+    assert(FPList.mapNonTailRec(oneToFive)(2 * _ + 10) == aProgression)
+
+    // ???: Check map's running time profile.
+    // I guess that it is O(n^2) because it:
+    //    1.  Uses append (which is probably linear). → n
+    //    2.  For every element of the list. → n
+    //
+    // Total cost: n * n
+    //
+    // If that's the case then a foldRight implementation could be implemented
+    // in linear time:
+    //    1. Transverse the list to its end. → n
+    //    1. Create a new list processing the elements → f(n).
+    //
+    // Total cost: O(n) + O(n) = O(n)
+    assert(FPList.map(oneToFive)(_.toDouble) == oneToFiveDouble)
+    assert(FPList.map(oneToFive)(2 * _ + 10) == aProgression)
   }
 
   // test("3.19: ???.") {

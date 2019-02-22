@@ -2,6 +2,11 @@ package scalainitiatives.functional_programming_in_scala
 
 import scalainitiatives.common.ScalaInitiativesExercise
 
+// In order to use this interactively do:
+// |    $ sbt
+// |    sbt:LearningScala> project fpis
+// |    import scalainitiatives.functional_programming_in_scala.FPISExerciseChapter03
+
 object FPISExerciseChapter03 extends ScalaInitiativesExercise {
 
   // From fpinscala.
@@ -210,17 +215,19 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       }
     }
 
-    // def map[A, B](l: FPList[A])(f: A => B): FPList[B] = {
-    // @annotation.tailrec
-    // def go(goHead: A, goTail: FPList[A]): FPList[B] = {
-    // goTail match {
-    // case FPCons(h, t) => FPCons(f(goHead), go(
-    // case FPNil => FPCons(f(goHead), FPNil)
-    // }
-    // }
-    // val nilOfTypeA: FPList[A] = FPNil
-    // go(nilOfTypeA, l)
-    // }
+    def map[A, B](l: FPList[A])(f: A => B): FPList[B] = {
+
+      @annotation.tailrec
+      def go(accList: FPList[B], goTail: FPList[A]): FPList[B] = {
+        goTail match {
+          case FPCons(h, t) => go(append(accList, f(h)), t)
+          case FPNil => accList
+        }
+      }
+
+      val seed: FPList[B] = FPNil
+      go(seed, l)
+    }
 
 
     // def filter[A](as: FPList[A])(f: A => Boolean): FPList[A] = {
