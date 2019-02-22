@@ -428,8 +428,18 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     assertThrows[IllegalArgumentException](FPList.addPairedLists(oneToFive, FPCons(0, oneToFive)))
   }
 
-  // test("3.23: ???.") {
-  // }
+  test("3.23: Implementation of zipWith.") {
+    val x1 = FPList("10", "100", "1000")
+    val x2 = FPList('1', '2', '3')
+    val x3 = FPList(-100D, 1000L, 0)
+    assert(
+      FPList.toBuiltinScalaList(
+        FPList.zipWith(
+          FPList.zipWith(x1, x2)((s, c) => (c.asDigit + s.toInt) * (c.asDigit)),
+          x3)(_ + _))
+      == List(-89, 1204, 3009)
+    )
+  }
 
   // test("3.24: ???.") {
   // }

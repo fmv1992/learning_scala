@@ -263,6 +263,19 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       }
     }
 
+    def zipWith[A, B, C](l1: FPList[A], l2: FPList[B])(f: (A, B) => C): FPList[C] = {
+      // This requirement already covers the case of one of them being
+      // "unpaired", that is, when the zipping would produce (someValue, null).
+      require(length(l1) == length(l2))
+      l1 match {
+        case FPNil => FPNil
+        case FPCons(h1, t1) => l2 match {
+          case FPNil => FPNil
+          case FPCons(h2, t2) => FPCons(f(h1, h2), zipWith(t1, t2)(f))
+        }
+      }
+    }
+
     // My custom functions ---------------------------------------------------|
     def myAppend[A](l: FPList[A], v: A): FPList[A] = {
       l match {
