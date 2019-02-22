@@ -412,10 +412,21 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
   }
 
   test("3.21: Implementation of filter via flatMap.") {
+    import FPList.{filterUsingFlatMap => filterFM}
+    assert(filterFM(oneToFive)((x: Int) => x % 2 == 0) == FPList(2, 4))
+    assert(filterFM(FPNil)((x: Int) => true) == FPNil)
+    assert(filterFM(minusTentoTen)((x: Int) => false) == FPNil)
+    assert(
+      filterFM(FPList("alice", "bob", "jalile", "adam"))(
+        (x: String) => x.startsWith("a")) == FPList("alice", "adam")
+      )
   }
 
-  // test("3.22: ???.") {
-  // }
+  test("3.22: Implementation of adding paired lists.") {
+    assert(FPList.addPairedLists(oneToFive, oneToFive) ==
+      FPList(2, 4, 6, 8, 10))
+    assertThrows[IllegalArgumentException](FPList.addPairedLists(oneToFive, FPCons(0, oneToFive)))
+  }
 
   // test("3.23: ???.") {
   // }

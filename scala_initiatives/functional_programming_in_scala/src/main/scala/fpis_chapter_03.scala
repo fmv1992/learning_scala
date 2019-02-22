@@ -247,11 +247,18 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
     }
 
     def filterUsingFlatMap[A](as: FPList[A])(f: A => Boolean): FPList[A] = {
-      def freezeF: FPList[A] => FPList[A] = filter(_)(f)
-      as match {
+      flatMap(as)((x: A) => ((if (f(x)) FPList(x) else FPNil): FPList[A]))
+    }
+
+    def addPairedLists(l1: FPList[Int], l2: FPList[Int]): FPList[Int] = {
+      // This requirement already covers the case of one of them being
+      // "unpaired", that is, when the zipping would produce (someValue, null).
+      require(length(l1) == length(l2))
+      l1 match {
         case FPNil => FPNil
-        case FPCons(h, t) => {
-          if (f(h)) FPCons(h, freezeF(t)) else freezeF(t)
+        case FPCons(h1, t1) => l2 match {
+          case FPNil => FPNil
+          case FPCons(h2, t2) => FPCons(h1 + h2, addPairedLists(t1, t2))
         }
       }
     }
