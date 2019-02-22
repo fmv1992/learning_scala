@@ -365,22 +365,54 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     // If that's the case then a foldRight implementation could be implemented
     // in linear time:
     //    1. Transverse the list to its end. → n
-    //    1. Create a new list processing the elements → f(n).
+    //    1. Create a new list processing the elements → n.
     //
     // Total cost: O(n) + O(n) = O(n)
     assert(FPList.map(oneToFive)(_.toDouble) == oneToFiveDouble)
     assert(FPList.map(oneToFive)(2 * _ + 10) == aProgression)
   }
 
-  // test("3.19: ???.") {
-  // assert(FPList.filter(oneToFive)(_ % 2 == 0)
-  // }
+  test("3.19: Implementation of filter.") {
+    assert(FPList.filter(oneToFive)((x: Int) => x % 2 == 0) == FPList(2, 4))
+    assert(FPList.filter(FPNil)((x: Int) => true) == FPNil)
+    assert(FPList.filter(minusTentoTen)((x: Int) => false) == FPNil)
+    assert(
+      FPList.filter(FPList("alice", "bob", "jalile", "adam"))(
+        (x: String) => x.startsWith("a")) == FPList("alice", "adam")
+      )
+  }
 
-  // test("3.20: ???.") {
-  // }
+  test("3.20: Implementation of flatMap.") {
+    assert(FPList.flatMap(oneToFive)(i => FPList(i, i)) == FPList(1,1,2,2,3,3,4,4,5,5))
+    assert(
+      FPList.toBuiltinScalaList(
+        FPList.flatMap(oneToFive)(i => FPList("" + i + "|", "empty"))
+      )
+    ==
+      List(
+        "1|",
+        "empty",
+        "2|",
+        "empty",
+        "3|",
+        "empty",
+        "4|",
+        "empty",
+        "5|",
+        "empty",
+        )
+      )
+  }
 
-  // test("3.21: ???.") {
-  // }
+  test("Test conversion to builtin Scala List") {
+    assert(FPList.toBuiltinScalaList(oneToFive) == List(1, 2, 3, 4, 5))
+    assert(FPList.toBuiltinScalaList(FPNil) == Nil)
+    assert(FPList.toBuiltinScalaList(FPList(10D)) == List(10D))
+    assert(FPList.toBuiltinScalaList(FPList(1)) != List(2))
+  }
+
+  test("3.21: Implementation of filter via flatMap.") {
+  }
 
   // test("3.22: ???.") {
   // }

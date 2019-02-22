@@ -230,12 +230,31 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
     }
 
 
-    // def filter[A](as: FPList[A])(f: A => Boolean): FPList[A] = {
-    // as match {
-    // case FPNil => FPNil
-    // case FPCons(h, t) => if (f(h))
-    // }
-    // }
+    def filter[A](as: FPList[A])(f: A => Boolean): FPList[A] = {
+      def freezeF: FPList[A] => FPList[A] = filter(_)(f)
+      as match {
+        case FPNil => FPNil
+        case FPCons(h, t) => {
+          if (f(h)) FPCons(h, freezeF(t)) else freezeF(t)
+        }
+      }
+    }
+
+    def flatMap[A, B](as: FPList[A])(f: A => FPList[B]): FPList[B] = {
+      val mapped: FPList[FPList[B]] = FPList.map(as)(f)
+      val flattened: FPList[B] = concatenateListOfLists(mapped)
+      flattened
+    }
+
+    def filterUsingFlatMap[A](as: FPList[A])(f: A => Boolean): FPList[A] = {
+      def freezeF: FPList[A] => FPList[A] = filter(_)(f)
+      as match {
+        case FPNil => FPNil
+        case FPCons(h, t) => {
+          if (f(h)) FPCons(h, freezeF(t)) else freezeF(t)
+        }
+      }
+    }
 
     // My custom functions ---------------------------------------------------|
     def myAppend[A](l: FPList[A], v: A): FPList[A] = {
@@ -266,6 +285,13 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       as match {
         case FPNil => FPNil
         case FPCons(h, t) => FPCons(f(h), myMap(t)(f))
+      }
+    }
+
+    def toBuiltinScalaList[A](as: FPList[A]): scala.collection.immutable.List[A] = {
+      as match {
+        case FPNil => Nil
+        case FPCons(h, t) => h :: toBuiltinScalaList(t)
       }
     }
     // |--------------------------------------------------- My custom functions
