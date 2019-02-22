@@ -200,6 +200,28 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       }
     }
 
+    // Non tail recursive implementation of map. I believe a tail recursive
+    // implementation is possible.
+    def mapNonTailRec[A, B](l: FPList[A])(f: A => B): FPList[B] = {
+      val freezeF: FPList[A] => FPList[B] = x => mapNonTailRec(x)(f)
+      l match {
+        case FPCons(h, t) => FPCons(f(h), freezeF(t))
+        case FPNil => FPNil
+      }
+    }
+
+    // def map[A, B](l: FPList[A])(f: A => B): FPList[B] = {
+    // @annotation.tailrec
+    // def go(goHead: A, goTail: FPList[A]): FPList[B] = {
+    // goTail match {
+    // case FPCons(h, t) => FPCons(f(goHead), go(
+    // case FPNil => FPCons(f(goHead), FPNil)
+    // }
+    // }
+    // val nilOfTypeA: FPList[A] = FPNil
+    // go(nilOfTypeA, l)
+    // }
+
 
     // def filter[A](as: FPList[A])(f: A => Boolean): FPList[A] = {
     // as match {
@@ -233,10 +255,10 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       }
     }
 
-    def map[A, B](as: FPList[A])(f: A => B): FPList[B] = {
+    def myMap[A, B](as: FPList[A])(f: A => B): FPList[B] = {
       as match {
         case FPNil => FPNil
-        case FPCons(h, t) => FPCons(f(h), map(t)(f))
+        case FPCons(h, t) => FPCons(f(h), myMap(t)(f))
       }
     }
     // |--------------------------------------------------- My custom functions

@@ -330,8 +330,10 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     )
   }
 
-  // test("3.18: ???.") {
-  // }
+  test("3.18: Implementation of map.") {
+    assert(FPList.mapNonTailRec(oneToFive)(_.toDouble) == FPList(1.0, 2.0, 3.0, 4.0, 5))
+    assert(FPList.mapNonTailRec(oneToFive)(2 * _ + 10) == FPList(12, 14, 16, 18, 20))
+  }
 
   // test("3.19: ???.") {
   // assert(FPList.filter(oneToFive)(_ % 2 == 0)
