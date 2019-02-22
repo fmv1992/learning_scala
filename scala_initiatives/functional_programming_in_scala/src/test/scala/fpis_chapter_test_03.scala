@@ -315,8 +315,11 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
       )
   }
 
-  // test("3.16: ???.") {
-  // }
+  test("3.16: Implementation of addOneToInt.") {
+    assert(oneToFive == FPList.addOneInt(FPList(0, 1, 2, 3, 4)))
+    assert(FPNil == FPList.addOneInt(FPNil))
+    assert(FPList(1, 100) == FPList.addOneInt(FPList(0, 99)))
+  }
 
   // test("3.17: ???.") {
   // }

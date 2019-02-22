@@ -183,12 +183,14 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
     }
 
     def concatenateListOfLists[A](l: FPList[FPList[A]]): FPList[A] = {
-      // def go(l
-      // l match {
-      // case FPCons(h1, FPCons(h2, t)) => concatenateListOfLists(
-      // case FPNil => FPNil
-      // }
       foldLeft(l, FPNil: FPList[A])(append)
+    }
+
+    def addOneInt(l: FPList[Int]): FPList[Int] = {
+      l match {
+        case FPCons(h, t) => FPCons(h + 1, addOneInt(t))
+        case FPNil => FPNil
+      }
     }
 
 
