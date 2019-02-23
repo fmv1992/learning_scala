@@ -477,7 +477,7 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
 
     // Prove that this is efficient.
     //
-    // Attempt 1:
+    // Attempt 1: (now base64 encoded)
     //
     // ICAgIGRlZiBoYXNTdWJzZXF1ZW5jZUxhenlbQV0oeDogPT4gRlBMaXN0W0FdLCB5OiA9PiBGUExp
     // c3RbQV0pOiBCb29sZWFuID0geyBoYXNTdWJzZXF1ZW5jZSh4LCB5KSB9CiAgICBsYXp5IHZhbCBs
@@ -488,6 +488,8 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     // RlBMaXN0KDMsIDQsIDUpKQogICAgKQo=
     //
     // Attempt 2:
+    //
+    // See commit '46152bd'. For reproduction of the code below.
     //
     // Using the definition of from '':
     //
@@ -535,9 +537,6 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     // -------------------------------------------------------------------------------
     //
     // Thus our implementation is efficient.
-    println("+" * 79)
-    assert(hasSubsequence(minusTentoTen, FPList(-9)))
-    println("-" * 79)
   }
 
   // test("3.25: ???.") {
