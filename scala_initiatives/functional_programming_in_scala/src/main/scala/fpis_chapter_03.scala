@@ -276,6 +276,28 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       }
     }
 
+    def hasSubsequence[A](sup: FPList[A], sub: FPList[A]): Boolean = {
+      // Debugging with print...
+      // println("sup " + foldLeft(sup, "")((x: String, y: A) => x + "|" + y))
+      // println("sub " + foldLeft(sub, "")((x: String, y: A) => x + "|" + y))
+      if (sup == FPNil) {
+        if (sub == FPNil)  {
+          true
+        } else {
+          false
+        }
+        } else {  // sup is not FPNil.
+          sup match {
+            case FPNil => throw new Exception()  // Covered above.
+            case FPCons(h1, t1) => sub match {
+              case FPNil => true
+              case FPCons(h2, t2) => if (h1 == h2) hasSubsequence(t1, t2) else hasSubsequence(t1, sub)
+            }
+          }
+        }
+        // throw new Exception()
+    }
+
     // My custom functions ---------------------------------------------------|
     def myAppend[A](l: FPList[A], v: A): FPList[A] = {
       l match {

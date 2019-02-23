@@ -441,8 +441,33 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     )
   }
 
-  // test("3.24: ???.") {
-  // }
+  test("3.24: Implementation of hasSubsequence.") {
+    import FPList.hasSubsequence
+    // Group 1 of 2: at least one of them are nills.
+    // Subgroup 1 of 2: Sup is nill.
+    assert(hasSubsequence(FPNil, FPNil))
+    assert(! hasSubsequence(FPNil, oneToFive))
+    // Subgroup 2 of 2: Sub is nill.
+    assert(hasSubsequence(oneToFive, FPNil))
+
+    // Group 2 of 2: None of them are nills.
+    // Subgroup 1 of 3: Identical lists.
+    assert(hasSubsequence(oneToFive, oneToFive))
+    assert(hasSubsequence(minusTentoTen, minusTentoTen))
+    // Subgroup 2 of 3: A contains B.
+    // A contains B on start.
+    assert(hasSubsequence(minusTentoTen, FPList(-10, -9, -8)))
+    assert(hasSubsequence(minusTentoTen, FPList(-10)))
+    // A contains B on middle.
+    assert(hasSubsequence(minusTentoTen, FPList(-9)))
+    assert(hasSubsequence(minusTentoTen, FPList(0)))
+    assert(hasSubsequence(minusTentoTen, FPList(5)))
+    // A contains B on end.
+    assert(hasSubsequence(minusTentoTen, FPList(8, 9, 10)))
+    assert(hasSubsequence(minusTentoTen, FPList(10)))
+    // Subgroup 3 of 3: B contains A.
+    assert(! hasSubsequence(oneToFive, minusTentoTen))
+  }
 
   // test("3.25: ???.") {
   // }
