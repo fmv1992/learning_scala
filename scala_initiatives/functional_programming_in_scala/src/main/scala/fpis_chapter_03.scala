@@ -278,8 +278,8 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
 
     def hasSubsequence[A](sup: FPList[A], sub: FPList[A]): Boolean = {
       // Debugging with print...
-      // println("sup " + foldLeft(sup, "")((x: String, y: A) => x + "|" + y))
-      // println("sub " + foldLeft(sub, "")((x: String, y: A) => x + "|" + y))
+      println("sup " + foldLeft(sup, "")((x: String, y: A) => x + "|" + y))
+      println("sub " + foldLeft(sub, "")((x: String, y: A) => x + "|" + y))
       if (sup == FPNil) {
         if (sub == FPNil)  {
           true

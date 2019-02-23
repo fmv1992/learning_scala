@@ -1,5 +1,8 @@
 # Functional Programming in Scala
 
+[comment]: # ( Define project symbols somewhere: ???)
+[comment]: # ( NOTE???: '5efd106' that's why I love tests... While I was expanding them)
+
 ## Core concepts of Functional programming.
 
 *   **Chapter 01**

@@ -451,10 +451,10 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     assert(hasSubsequence(oneToFive, FPNil))
 
     // Group 2 of 2: None of them are nills.
-    // Subgroup 1 of 3: Identical lists.
+    // Subgroup 1 of 4: Identical lists.
     assert(hasSubsequence(oneToFive, oneToFive))
     assert(hasSubsequence(minusTentoTen, minusTentoTen))
-    // Subgroup 2 of 3: A contains B.
+    // Subgroup 2 of 4: A contains B.
     // A contains B on start.
     assert(hasSubsequence(minusTentoTen, FPList(-10, -9, -8)))
     assert(hasSubsequence(minusTentoTen, FPList(-10)))
@@ -465,8 +465,20 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     // A contains B on end.
     assert(hasSubsequence(minusTentoTen, FPList(8, 9, 10)))
     assert(hasSubsequence(minusTentoTen, FPList(10)))
-    // Subgroup 3 of 3: B contains A.
+    // Subgroup 3 of 4: B contains A.
     assert(! hasSubsequence(oneToFive, minusTentoTen))
+    // Subgroup 4 of 4: Disjoint lists.
+    // Completely disjoint.
+    assert(! hasSubsequence(FPList(-1), FPList(5)))
+    // Not completely disjoint.
+    assert(! hasSubsequence(minusTentoTen, FPList(7, 8, 9)))
+    // NOTE???: '5efd106' that's why I love tests... While I was expanding them
+    // I got the programming mistake from the line above. ☺
+
+    // Prove that this is efficient.
+    val lazyListWithException = FPList(0, 1, 2, 3, 4, () => {throw new Exception()})
+    assert(hasSubsequence(lazyListWithException, FPList(2, 3)))
+    assertThrows[Exception](lazyListWithException, FPList(3, 4, 5))
   }
 
   // test("3.25: ???.") {
