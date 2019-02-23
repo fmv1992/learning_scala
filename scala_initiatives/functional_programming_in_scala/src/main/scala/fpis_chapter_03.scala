@@ -278,24 +278,27 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
 
     def hasSubsequence[A](sup: FPList[A], sub: FPList[A]): Boolean = {
       // Debugging with print...
-      println("sup " + foldLeft(sup, "")((x: String, y: A) => x + "|" + y))
-      println("sub " + foldLeft(sub, "")((x: String, y: A) => x + "|" + y))
-      if (sup == FPNil) {
-        if (sub == FPNil)  {
-          true
-        } else {
-          false
-        }
-        } else {  // sup is not FPNil.
-          sup match {
-            case FPNil => throw new Exception()  // Covered above.
-            case FPCons(h1, t1) => sub match {
-              case FPNil => true
-              case FPCons(h2, t2) => if (h1 == h2) hasSubsequence(t1, t2) else hasSubsequence(t1, sub)
+      @annotation.tailrec
+      def go(l1: FPList[A], l2: FPList[A]): Boolean = {
+        println("sup " + foldLeft(l1, "")((x: String, y: A) => x + "|" + y))
+        println("sub " + foldLeft(l2, "")((x: String, y: A) => x + "|" + y))
+        l1 match {
+          case FPNil => l1 == l2
+          case FPCons(h1, t1) => l2 match {
+            case FPNil => {
+              // true  // ???: Violates: FPISTestChapter03.this.minusTentoTen, FPISExerciseChapter03.FPList.apply[Int](7, 8, 9)
+              // false // ???: Violates: FPISTestChapter03.this.minusTentoTen, FPISExerciseChapter03.FPList.apply[Int](-10, -9, -8)
+              throw new Exception()
             }
+            case FPCons(h2, t2) => if (h1 == h2) go(t1, t2) else go(t1, sub)
           }
         }
-        // throw new Exception()
+      }
+      if (sup == FPNil) {
+        if (sub == FPNil) true else false
+        } else {
+          if (sub == FPNil) true else go(sup, sub)
+        }
     }
 
     // My custom functions ---------------------------------------------------|
