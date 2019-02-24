@@ -575,6 +575,19 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
 
     val tree4 = Branch(Branch(Leaf(1), Leaf(2)), Leaf(3))
 
+    val tree5 = Branch(
+      Branch(Leaf(-1), Leaf(-1)),
+      Branch(
+        Branch(
+          Leaf(-1),
+          Leaf(-1)),
+        Branch(
+          Branch(
+            Leaf(-1),
+            Leaf(-1)),
+          Leaf(-1))),
+      )
+
     test("3.25: Tree's Implementation of size.") {
       assert(Tree.size(tree1) == 13)
       assert(Tree.size(tree2) == 1)
@@ -606,10 +619,49 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     }
 
     test("3.29: Tree's Implementation of fold.") {
+      // Size.
       assert(Tree.size(tree1) == Tree.sizeUsingFold(tree1))
       assert(Tree.size(tree2) == Tree.sizeUsingFold(tree2))
       assert(Tree.size(tree3) == Tree.sizeUsingFold(tree3))
       assert(Tree.size(tree4) == Tree.sizeUsingFold(tree4))
+
+      // Max.
+      assert(Tree.max(tree1) == Tree.maxUsingFold(tree1))
+      assert(Tree.max(tree2) == Tree.maxUsingFold(tree2))
+      assert(Tree.max(tree3) == Tree.maxUsingFold(tree3))
+      assert(Tree.max(tree4) == Tree.maxUsingFold(tree4))
+      assert(Tree.max(tree4) == Tree.maxUsingFold(tree4))
+      assert(Tree.max(tree5) == Tree.maxUsingFold(tree5))
+
+      // Depth.
+      assert(Tree.depth(tree1) == Tree.depthUsingFold(tree1))
+      assert(Tree.depth(tree2) == Tree.depthUsingFold(tree2))
+      assert(Tree.depth(tree3) == Tree.depthUsingFold(tree3))
+      assert(Tree.depth(tree4) == Tree.depthUsingFold(tree4))
+      assert(Tree.depth(tree4) == Tree.depthUsingFold(tree4))
+      assert(Tree.depth(tree5) == Tree.depthUsingFold(tree5))
+
+      // Map.
+      val lot: List[Tree[Int]] = List(tree1, tree2, tree3, tree4, tree5)
+      val lof: List[Int => Int] = List(
+        identity,
+        _ + 2,
+        x => 0,
+        x => x * x,
+        )
+      lot.map(x => {
+        println("-" * 79)
+        println("Original: " + x)
+        lof.map(f =>
+        {
+          val simpleMap = Tree.map(x)(f)
+          val map = Tree.mapUsingFold(x)(f)
+          println("Mapped:\n" + f + ":\n" + map)
+          assert(simpleMap == map)
+        }
+        )
+      }
+      )
     }
 
   }  // Scope of Tree, Branch and Leaf.

@@ -380,33 +380,51 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
             }
           }
 
-          def fold[A, B](t: Tree[A], seed: B)(fLeaf: (Leaf[A], B) => B)(fBranch: (B, B) => B): B = {
-            t match {
-              case Leaf(v) => fLeaf(Leaf(v), seed)
-              case Branch(l, r) => fBranch(
-                fold(l, seed)(fLeaf)(fBranch),
-                fold(r, seed)(fLeaf)(fBranch))
+          def fold[A, B](
+            t: Tree[A])(fLeaf: Leaf[A] => B)(fBranch: (B, B) => B): B = {
+              t match {
+                case Leaf(v) => fLeaf(Leaf(v))
+                case Branch(l, r) => fBranch(
+                  fold(l)(fLeaf)(fBranch),
+                  fold(r)(fLeaf)(fBranch))
+              }
             }
-          }
 
           def sizeUsingFold[C](t: Tree[C]): Int = {
-            def sizeFuncLeaf(x: Leaf[C], y: Int): Int = y + 1
+            def sizeFuncLeaf(x: Leaf[C]) = 1
             def sizeFuncBranch(x: Int, y: Int): Int = x + y + 1
-            fold(t, 0)(sizeFuncLeaf)(sizeFuncBranch)
+            fold(t)(sizeFuncLeaf)(sizeFuncBranch)
           }
 
-          // def maxUsingFold(t: Tree[Int]): Int = {
-          // def depthUsingFold[A](t: Tree[A]): Int = {
-          // def mapUsingFold[A, B](t: Tree[A])(f: A => B): Tree[B] = {
+          def maxUsingFold(t: Tree[Int]): Int = {
+            def maxFuncLeaf(x: Leaf[Int]) = x.value
+            def maxFuncBranch(x: Int, y: Int): Int = x max y
+            fold(t)(maxFuncLeaf)(maxFuncBranch)
+          }
+
+          def depthUsingFold[A](t: Tree[A]): Int = {
+            def depthFuncLeaf(x: Leaf[A]) = 1
+            def depthFuncBranch(x: Int, y: Int): Int = (x max y) + 1
+            fold(t)(depthFuncLeaf)(depthFuncBranch)
+          }
+
+          def mapUsingFold[A, B](t: Tree[A])(f: A => B): Tree[B] = {
+            def mapFuncLeaf(x: Leaf[A]): Tree[B] = Leaf(f(x.value))
+            def mapFuncBranch(l: Tree[B], r: Tree[B]): Tree[B] = Branch(
+              mapUsingFold(l)(identity),
+              mapUsingFold(r)(identity))
+            fold(t)(mapFuncLeaf)(mapFuncBranch)
+          }
+
           // Binary tree. ----------------------------------------------------------| }
-          }
-          }
+  }
+}
 
-          // ???: Fix weird identation.
-          //
-          // Ly8gLy8gdmltOiBzZXQgZmlsZXR5cGU9c2NhbGEgZmlsZWZvcm1hdD11bml4IGZvbGRtYXJrZXI9
-          // eyx9IG5vd3JhcCB0YWJzdG9wPTIgc29mdHRhYnN0b3A9MiBpbmRlbnRleHByPUluZGVudFNjYWxh
-          // KCkgc2hpZnR3aWR0aD0yOgo=
+// ???: Fix weird identation.
+//
+// Ly8gLy8gdmltOiBzZXQgZmlsZXR5cGU9c2NhbGEgZmlsZWZvcm1hdD11bml4IGZvbGRtYXJrZXI9
+// eyx9IG5vd3JhcCB0YWJzdG9wPTIgc29mdHRhYnN0b3A9MiBpbmRlbnRleHByPUluZGVudFNjYWxh
+// KCkgc2hpZnR3aWR0aD0yOgo=
 
-          // vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:
+// vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:
 
