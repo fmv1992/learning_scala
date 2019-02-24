@@ -9,6 +9,7 @@ import scalainitiatives.common.ScalaInitiativesExercise
 
 object FPISExerciseChapter03 extends ScalaInitiativesExercise {
 
+  // Linked list. ----------------------------------------------------------| {
   // From fpinscala.
   sealed trait FPList[+A] {
 
@@ -297,7 +298,7 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
         }
     }
 
-    // My custom functions ---------------------------------------------------|
+    // My custom functions -------------------------------------------------| {
     def myAppend[A](l: FPList[A], v: A): FPList[A] = {
       l match {
         case FPNil => apply(v): FPList[A]
@@ -335,10 +336,50 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
         case FPCons(h, t) => h :: toBuiltinScalaList(t)
       }
     }
-    // |--------------------------------------------------- My custom functions
+    // |------------------------------------------------- My custom functions }
 
   }
+  // Linked list. ----------------------------------------------------------| }
 
+
+  // Binary tree. ----------------------------------------------------------| {
+  // From fpinscala.
+  sealed trait Tree[+A]
+
+  // ???: Weird identation.
+        case class Leaf[A](value: A) extends Tree[A]
+        case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
+
+        object Tree {
+          def size[A](t: Tree[A]): Int = {
+            t match {
+              case Leaf(v) => 1
+              case Branch(l, r) => 1 + size(l) + size(r)
+            }
+          }
+
+          def max(t: Tree[Int]): Int = {
+            t match {
+              case Leaf(v) => v
+              case Branch(l, r) => max(l).max(max(r))
+            }
+          }
+
+          def depth[A](t: Tree[A]): Int = {
+            t match {
+              case Leaf(v) => 1
+              case Branch(l, r) => depth(l).max(depth(r)) + 1
+            }
+          }
+          // Binary tree. ----------------------------------------------------------| }
+  }
 }
 
+// ???: Fix weird identation.
+//
+// Ly8gLy8gdmltOiBzZXQgZmlsZXR5cGU9c2NhbGEgZmlsZWZvcm1hdD11bml4IGZvbGRtYXJrZXI9
+// eyx9IG5vd3JhcCB0YWJzdG9wPTIgc29mdHRhYnN0b3A9MiBpbmRlbnRleHByPUluZGVudFNjYWxh
+// KCkgc2hpZnR3aWR0aD0yOgo=
+
 // vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:
+

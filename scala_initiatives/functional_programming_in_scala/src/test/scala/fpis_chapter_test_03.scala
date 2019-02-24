@@ -54,7 +54,7 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
 
   }
 
-  test ("3.2: Implementing tail.") {
+  test ("3.2: List's implementation of tail.") {
 
     assert(FPList.tail(oneToFive) == FPList(2, 3, 4, 5))
     assert(FPList.tail(void) == void)
@@ -62,14 +62,14 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
 
   }
 
-  test("3.3: Implement setHead.") {
+  test("3.3: List's implementation of setHead.") {
 
     assert(FPList.setHead(oneToFive, 99) == FPList(99, 2, 3, 4, 5))
     assert(FPList.setHead(void, 1) == FPList(1))
 
   }
 
-  test("3.4: Implement drop.") {
+  test("3.4: List's implementation of drop.") {
 
     assert(FPList.drop(oneToFive, 4) == FPList(5))
     assert(FPList.drop(oneToFive, 0) == oneToFive)
@@ -77,7 +77,7 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
 
   }
 
-  test("3.5: Implement dropWhile.") {
+  test("3.5: List's implementation of dropWhile.") {
 
     assert(FPList.dropWhile(oneToFive)(x => true) == void)
     assert(FPList.dropWhile(oneToFive)(x => false) == oneToFive)
@@ -107,7 +107,7 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
 
   }
 
-  test("3.6: Implementation of init.") {
+  test("3.6: List's implementation of of init.") {
     //
     // Written answer:
     //
@@ -170,20 +170,20 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     println(FPList.foldRight(FPList(1, 2, 3), FPNil:FPList[Int])(FPCons(_, _)))
   }
 
-  test("3.9: Implementation of length.") {
+  test("3.9: List's implementation of of length.") {
     assert(FPList.length(void) == 0)
     assert(FPList.length(oneToFive) == 5)
     assert(FPList.length(minusTentoTen) == 21)
     assert(! (FPList.length(minusTentoTen) == 22))
   }
 
-  test("3.10: Implementation of tail recursive foldLeft.") {
+  test("3.10: List's implementation of of tail recursive foldLeft.") {
     assert(FPList.foldRight(oneToFive, 1)(_ * _)
       == FPList.foldLeft(oneToFive, 1)(_ * _))
     assert(0 == FPList.foldLeft(minusTentoTen, 0)(_ + _))
   }
 
-  test("3.11: Reimplementation of sum, product and length in terms of foldLeft.") {
+  test("3.11: List's reimplementation of sum, product and length in terms of foldLeft.") {
     // Sum with foldLeft.
     assert(FPList.sumFoldLeft(oneToFive) == FPList.sum(oneToFive))
     assert(FPList.sumFoldLeft(FPNil) == 0)
@@ -202,7 +202,7 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
 
   }
 
-  test("3.12: Implement the reverse of a FPList in terms of folding.") {
+  test("3.12: List's implementation of the reverse of a FPList in terms of folding.") {
     assert(FPList.reverse(oneToFive) == FPList(5, 4, 3, 2, 1))
     assert(FPList.reverse(void) == void)
     assert(FPList.reverse(FPList(1)) == FPList(1))
@@ -264,7 +264,7 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     // (2): Could not easily implement foldRightUsingFL using solely foldLeft.
   }
 
-  test("3.14: Implementation of append.") {
+  test("3.14: List's implementation of of append.") {
     // assert(FPList.append(oneToFive, 6) == FPList(1, 2, 3, 4, 5, 6))
     // It took me hours of thinking just to peek into the solution and see that
     // it depends on 2 lists...
@@ -310,7 +310,7 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     )
   }
 
-  test("3.15: Implementation of concatenateListOfLists.") {
+  test("3.15: List's implementation of concatenateListOfLists.") {
     // ???: Should run in linear time of the total sum of inner list length.
 
     val listOfLists = FPList(FPList(1), FPList(2), FPList(3))
@@ -333,13 +333,13 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
       )
   }
 
-  test("3.16: Implementation of addOneToInt.") {
+  test("3.16: List's implementation of addOneToInt.") {
     assert(oneToFive == FPList.addOneInt(FPList(0, 1, 2, 3, 4)))
     assert(FPNil == FPList.addOneInt(FPNil))
     assert(FPList(1, 100) == FPList.addOneInt(FPList(0, 99)))
   }
 
-  test("3.17: Implementation of doubleToString.") {
+  test("3.17: List's implementation of doubleToString.") {
     assert(
       FPList.doubleToString(FPList(0, 1)) == FPList("0.0", "1.0")
     )
@@ -348,7 +348,7 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     )
   }
 
-  test("3.18: Implementation of map.") {
+  test("3.18: List's implementation of map.") {
     // Promoting '1' to '1.0' promotes the entire FPList to FPList[Double].
     val oneToFiveDouble = FPList(1.0, 2, 3, 4, 5)
     assert(FPList.mapNonTailRec(oneToFive)(_.toDouble) == oneToFiveDouble)
@@ -372,7 +372,7 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     assert(FPList.map(oneToFive)(2 * _ + 10) == aProgression)
   }
 
-  test("3.19: Implementation of filter.") {
+  test("3.19: List's implementation of filter.") {
     assert(FPList.filter(oneToFive)((x: Int) => x % 2 == 0) == FPList(2, 4))
     assert(FPList.filter(FPNil)((x: Int) => true) == FPNil)
     assert(FPList.filter(minusTentoTen)((x: Int) => false) == FPNil)
@@ -382,7 +382,7 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
       )
   }
 
-  test("3.20: Implementation of flatMap.") {
+  test("3.20: List's implementation of flatMap.") {
     assert(FPList.flatMap(oneToFive)(i => FPList(i, i)) == FPList(1,1,2,2,3,3,4,4,5,5))
     assert(
       FPList.toBuiltinScalaList(
@@ -411,7 +411,7 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     assert(FPList.toBuiltinScalaList(FPList(1)) != List(2))
   }
 
-  test("3.21: Implementation of filter via flatMap.") {
+  test("3.21: List's implementation of filter via flatMap.") {
     import FPList.{filterUsingFlatMap => filterFM}
     assert(filterFM(oneToFive)((x: Int) => x % 2 == 0) == FPList(2, 4))
     assert(filterFM(FPNil)((x: Int) => true) == FPNil)
@@ -422,13 +422,13 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
       )
   }
 
-  test("3.22: Implementation of adding paired lists.") {
+  test("3.22: List's implementation of adding paired lists.") {
     assert(FPList.addPairedLists(oneToFive, oneToFive) ==
       FPList(2, 4, 6, 8, 10))
     assertThrows[IllegalArgumentException](FPList.addPairedLists(oneToFive, FPCons(0, oneToFive)))
   }
 
-  test("3.23: Implementation of zipWith.") {
+  test("3.23: List's implementation of zipWith.") {
     val x1 = FPList("10", "100", "1000")
     val x2 = FPList('1', '2', '3')
     val x3 = FPList(-100D, 1000L, 0)
@@ -441,7 +441,7 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     )
   }
 
-  test("3.24: Implementation of hasSubsequence.") {
+  test("3.24: List's implementation of hasSubsequence.") {
     import FPList.hasSubsequence
     // Group 1 of 2: at least one of them are nills.
     // Subgroup 1 of 2: Sup is nill.
@@ -539,20 +539,54 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     // Thus our implementation is efficient.
   }
 
-  // test("3.25: ???.") {
-  // }
+  {  // Scope of Tree, Branch and Leaf.
+    import FPISExerciseChapter03.{Tree, Branch, Leaf}
+    val tree1 = Branch(         // depth 1.
+      Branch(Leaf(1), Leaf(1)), // depth 2 and 3.
+      Branch(                   // depth 2.
+        Branch(                 // depth 3.
+          Leaf(1),              // depth 4.
+          Leaf(1)),             // depth 4.
+        Branch(                 // depth 3.
+          Branch(               // depth 4.
+            Leaf(1),            // depth 5.
+            Leaf(1)),           // depth 5.
+          Leaf(1))),            // depth 4.
+      )
 
-  // test("3.26: ???.") {
-  // }
+    val tree2 = Leaf(1)  // depth 1.
 
-  // test("3.27: ???.") {
-  // }
+    val tree3 = Branch(  // depth 1.
+      Branch(            // depth 2.
+        Leaf(5),         // depth 3.
+        Leaf(6)),        // depth 3.
+      Leaf(10))          // depth 2.
 
-  // test("3.28: ???.") {
-  // }
+    test("3.25: Tree's Implementation of size.") {
+      assert(Tree.size(tree1) == 13)
+      assert(Tree.size(tree2) == 1)
+    }
 
-  // test("3.29: ???.") {
-  // }
+    test("3.26: Tree's Implementation of max.") {
+      assert(Tree.max(tree1) == 1)
+      assert(Tree.max(tree2) == 1)
+      assert(Tree.max(tree3) == 10)
+      assert(! (Tree.max(tree3) == 11))
+    }
+
+    test("3.27: Tree's Implementation of depth.") {
+      assert(Tree.depth(tree1) == 5)
+      assert(Tree.depth(tree2) == 1)
+      assert(Tree.depth(tree3) == 3)
+    }
+
+    // test("3.28: ???.") {
+    // }
+
+    // test("3.29: ???.") {
+    // }
+
+  }  // Scope of Tree, Branch and Leaf.
 
 }
 
