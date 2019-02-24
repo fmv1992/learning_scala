@@ -561,6 +561,19 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
         Leaf(5),         // depth 3.
         Leaf(6)),        // depth 3.
       Leaf(10))          // depth 2.
+    val tree3AsDoubledTuple = Branch(
+      Branch(
+        Leaf((5, 5)),
+        Leaf((6, 6))),
+      Leaf((10, 10)))
+    val tree3Expanded = Branch(tree3, Leaf(1))
+    val tree3AsString = Branch(
+      Branch(
+        Leaf("5"),
+        Leaf("6")),
+      Leaf("10"))
+
+    val tree4 = Branch(Branch(Leaf(1), Leaf(2)), Leaf(3))
 
     test("3.25: Tree's Implementation of size.") {
       assert(Tree.size(tree1) == 13)
@@ -580,11 +593,24 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
       assert(Tree.depth(tree3) == 3)
     }
 
-    // test("3.28: ???.") {
-    // }
+    test("3.28: Tree's Implementation of map.") {
+      // Test objects identities.
+      assert(tree4 == tree4)
+      assert(tree4 != tree3)
+      assert(tree3 != tree3Expanded)
 
-    // test("3.29: ???.") {
-    // }
+      // Test some maps.
+      assert(Tree.map(tree2)(_ + 999) == Leaf(1000))
+      assert(Tree.map(tree3)(_.toString) == tree3AsString)
+      assert(tree3AsDoubledTuple == Tree.map(tree3)(x => (x, x)))
+    }
+
+    test("3.29: Tree's Implementation of fold.") {
+      assert(Tree.size(tree1) == Tree.sizeUsingFold(tree1))
+      assert(Tree.size(tree2) == Tree.sizeUsingFold(tree2))
+      assert(Tree.size(tree3) == Tree.sizeUsingFold(tree3))
+      assert(Tree.size(tree4) == Tree.sizeUsingFold(tree4))
+    }
 
   }  // Scope of Tree, Branch and Leaf.
 
