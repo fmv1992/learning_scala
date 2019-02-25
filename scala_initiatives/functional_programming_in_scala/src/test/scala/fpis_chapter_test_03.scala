@@ -3,10 +3,11 @@ package scalainitiatives.functional_programming_in_scala
 import scalainitiatives.common.ScalaInitiativesTest
 import FPISExerciseChapter03.{FPNil, FPCons, FPList}
 
-// ???: How to import with the namespace?
-import org.scalatest._
+// ??!: How to import with the namespace?
+// ??!: Scala gets around this with alising.
+import org.scalatest.FunSuite
 
-class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest {
+class FPISTestChapter03 extends FunSuite with ScalaInitiativesTest {
 
   def namedTest(x: => String): (=> Any) => Unit = {
     def lazyTestBody(testBody: => Any) = {
@@ -472,7 +473,7 @@ class FPISTestChapter03 extends FunSuite with Matchers with ScalaInitiativesTest
     assert(! hasSubsequence(FPList(-1), FPList(5)))
     // Not completely disjoint.
     assert(! hasSubsequence(minusTentoTen, FPList(7, 8, 9)))
-    // NOTE???: '5efd106' that's why I love tests... While I was expanding them
+    // NOTE: '5efd106' that's why I love tests... While I was expanding them
     // I got the programming mistake from the line above. ☺
 
     // Prove that this is efficient.
