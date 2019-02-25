@@ -6,10 +6,22 @@ This chapter presented core concepts of FP:
 
 *   Loops is to imperative programming what recursion is to functional programming.
 
-*   Higher order functions: functions that take functions as arguments and return functions.
-
-*   Polymorphic functions: a way to get around the static types (i.e.: how to write functions that take generic types arguments).
-
 *   Exercises on currying and partial application.
+
+*   **Terms and concepts**
+
+    *   Recursion: ???.
+
+        *   Tail recursion: ???.
+
+    *   Currying: ???.
+
+    *   Partially applied functions: ???.
+
+    *   Higher order functions (HOF): functions that take functions as arguments and return functions.
+
+    *   Polymorphism (in FP): allows data type generalization in strongly typed languages such as `Scala`.
+    *   Polymorphic functions (POLYF): a way to get around the static types (i.e.: how to write functions that take generic types arguments).
+
 
 [comment]: # ( vim: set filetype=markdown fileformat=unix wrap spell spelllang=en: )

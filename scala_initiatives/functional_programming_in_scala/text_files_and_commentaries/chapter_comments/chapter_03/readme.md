@@ -10,6 +10,10 @@
 
 *   The difference between arrays and linked lists: <https://stackoverflow.com/questions/14370953/what-is-the-difference-between-linked-list-and-array-when-search-through-them>.
 
+* Data sharing to avoid data copying.
+
+*   **Terms and concepts**
+
 *   **Exercise 3.6**:
 
     1.  Write the available strategies down (human form).

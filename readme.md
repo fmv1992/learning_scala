@@ -8,6 +8,35 @@ I'll be using the recommended book from the Scala [website](http://docs.scala-la
 
 I'll also try to stick to the [functional programming](https://en.wikipedia.org/wiki/Functional_programming) style to challenge myself along the way.
 
+## Project conventions
+
+The following tags are used in this project:
+
+*   `???`: Errors to be fixed at a later point.
+
+*   `??!`: Answers to these errors. Should be of the format:
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ???: How to import with the namespace?
+    import org.scalatest._
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    Gets answered into:
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ??!: How to import with the namespace?
+    // ??!: Scala gets around this with alising:
+    import org.scalatest.{FunSuite => FS}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*   `NOTE:`: Notes for exercise or code; these are not code comments.
+
+*   Special mixed natural language and code markers:
+
+    *   `Written answer:`: Written answer to the question in case tests are not enough.
+
+    *   `Commit: 'cfe6164'` or `commit: 'cfe6164'` (it has to have 7 chars): Reference to a commit inside the source files.
+
 ## Resources
 
 ### Functional Programming in Scala ("The Red Book")
@@ -118,3 +147,5 @@ Website: <http://aperiodic.net/phil/scala/s-99/>.
 
 * http://twitter.github.io/effectivescala/
 -->
+
+[comment]: # ( vim: set filetype=markdown fileformat=unix wrap spell spelllang=en: )
