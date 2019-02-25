@@ -1,5 +1,7 @@
 package scalainitiatives.common
 
+import org.scalatest.FunSuite
+
 import java.io.File
 import java.io.ByteArrayInputStream
 
@@ -16,7 +18,7 @@ trait ScalaInitiativesUtilities {
   }
 }
 
-trait ScalaInitiativesTest {
+trait ScalaInitiativesTest extends FunSuite{
 
   // // https://jaytaylor.com/notes/node/1348628729000.html
   // def tupleize[A, B](f: A => B => C) = {
@@ -25,6 +27,18 @@ trait ScalaInitiativesTest {
   //   f(_).tupled
 
   // }
+  //
+  def namedTest(x: => String): (=> Any) => Unit = {
+    def lazyTestBody(testBody: => Any) = {
+      lazy val testResult = test(x) {
+        println("Starting: " + x + " " + System.nanoTime)
+        testBody
+        println("Ended:    " + x + " " + System.nanoTime)
+      }
+      testResult
+    }
+    lazyTestBody
+  }
 
   def isClose[T](
     a: T,

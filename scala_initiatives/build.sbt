@@ -3,13 +3,17 @@ name := "LearningScala"
 lazy val commonSettings = Seq(
     version := "0.0.1-SNAPSHOT",
     scalaVersion := "2.12.8",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % Test,
+
+    // This final part makes test artifacts being only importable by the test files
+    // libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % Test,
+    //                                                                   ↑↑↑↑↑
+    // Removed on commit '???' to enable 'trait ScalaInitiativesTest' define
+    // 'namedTest'.
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5",
+
     scalacOptions ++= Seq("-feature", "-deprecation", "-Xfatal-warnings")
     )
 
-// This final part makes test artifacts being only importable by the test files
-// libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % Test,
-//                                                                   ↑↑↑↑↑
 
 // Common to all projects.
 lazy val common = (project in file("common")).settings(commonSettings)

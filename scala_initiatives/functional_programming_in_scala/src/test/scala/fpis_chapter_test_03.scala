@@ -9,18 +9,6 @@ import org.scalatest.FunSuite
 
 class FPISTestChapter03 extends FunSuite with ScalaInitiativesTest {
 
-  def namedTest(x: => String): (=> Any) => Unit = {
-    def lazyTestBody(testBody: => Any) = {
-      lazy val testResult = test(x) {
-        println("Starting: " + x + " " + System.nanoTime)
-        testBody
-        println("Ended:    " + x + " " + System.nanoTime)
-      }
-      testResult
-    }
-    lazyTestBody
-  }
-
   // Declare constant
   val oneToFive: FPList[Int] = FPList(1,2,3,4,5)
   val fiveToTen: FPList[Int] = FPList(5, 6, 7, 8, 9, 10)
