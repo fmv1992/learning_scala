@@ -5,6 +5,7 @@ import org.scalatest.FunSuite
 import java.io.File
 import java.io.ByteArrayInputStream
 
+
 // Common to all projects. --- {
 
 trait ScalaInitiativesMain {
@@ -18,7 +19,7 @@ trait ScalaInitiativesUtilities {
   }
 }
 
-trait ScalaInitiativesTest extends FunSuite{
+trait ScalaInitiativesTest extends FunSuite {
 
   // // https://jaytaylor.com/notes/node/1348628729000.html
   // def tupleize[A, B](f: A => B => C) = {
@@ -132,7 +133,7 @@ object Paths {
 
 // Project PIS. --- {
 
-trait ScalaInitiativesTestPIS extends ScalaInitiativesTest{
+trait ScalaInitiativesTestPIS extends ScalaInitiativesTest {
 
   val nTests = 100
 

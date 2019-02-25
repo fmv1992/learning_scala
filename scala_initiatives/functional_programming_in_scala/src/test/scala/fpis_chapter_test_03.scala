@@ -3,11 +3,8 @@ package scalainitiatives.functional_programming_in_scala
 import scalainitiatives.common.ScalaInitiativesTest
 import FPISExerciseChapter03.{FPNil, FPCons, FPList}
 
-// ??!: How to import with the namespace?
-// ??!: Scala gets around this with alising.
-import org.scalatest.FunSuite
 
-class FPISTestChapter03 extends FunSuite with ScalaInitiativesTest {
+class FPISTestChapter03 extends ScalaInitiativesTest {
 
   // Declare constant
   val oneToFive: FPList[Int] = FPList(1,2,3,4,5)

@@ -1,10 +1,7 @@
 package scalainitiatives.common
 
-// ??!: How to import with the namespace?
-// ??!: Scala gets around this with alising.
-import org.scalatest.FunSuite
 
-class CommonUtilitiesTest extends FunSuite with ScalaInitiativesTest  {
+class CommonUtilitiesTest extends ScalaInitiativesTest  {
 
   test("isClose") {
     // Trivial tests.
@@ -44,7 +41,7 @@ class CommonUtilitiesTest extends FunSuite with ScalaInitiativesTest  {
 
 }
 
-class StatisticsTest extends FunSuite with ScalaInitiativesTest  {
+class StatisticsTest extends ScalaInitiativesTest  {
 
   val repeatedZeros = List.fill(10)(0)
   val repeatedOnes = List.fill(10)(0)

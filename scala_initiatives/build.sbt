@@ -7,7 +7,7 @@ lazy val commonSettings = Seq(
     // This final part makes test artifacts being only importable by the test files
     // libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % Test,
     //                                                                   ↑↑↑↑↑
-    // Removed on commit '???' to enable 'trait ScalaInitiativesTest' define
+    // Removed on commit 'cd9d482' to enable 'trait ScalaInitiativesTest' define
     // 'namedTest'.
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5",
 

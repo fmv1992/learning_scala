@@ -3,11 +3,8 @@ package scalainitiatives.functional_programming_in_scala
 import scalainitiatives.common.ScalaInitiativesTest
 import FPISExerciseChapter02._
 
-// ??!: How to import with the namespace?
-// ??!: Scala gets around this with alising.
-import org.scalatest.FunSuite
 
-class FPISTestChapter02 extends FunSuite with ScalaInitiativesTest {
+class FPISTestChapter02 extends ScalaInitiativesTest {
 
   test ("2.1: Fibonacci") {
     // Here we have F(0) == 0.
