@@ -43,12 +43,14 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
     assert(! (nDouble.getOrElse(2.0) == 1.0))
     assert(nDouble.getOrElse(2.0) == 2.0)
 
-    // // Reimplement the orElse function.
-    // // assert(oIntTwo.orElse(oDouble) == oInt)
-    // assert(nDouble.orElse(nInt) == nInt)
-    // assert(nDouble.orElse(nInt) == nDouble)
-    // nDouble.orElse(oInt) should be theSameInstanceAs nDouble
-    // // ref1 should be theSameInstanceAs ref2
+    // Reimplement the orElse function.
+    assert(oInt.orElse(oDouble) == oInt)
+    assert(nDouble.orElse(nInt) == nInt)
+    // 'Type promotion' for assessing equality.
+    assert(nDouble.orElse(nInt) == nDouble)
+    nDouble.orElse(nString) should be theSameInstanceAs nString
+    nDouble.orElse(oString) should be theSameInstanceAs oString
+    // ref1 should be theSameInstanceAs ref2
 
     // Reimplement the filter function.
   }
