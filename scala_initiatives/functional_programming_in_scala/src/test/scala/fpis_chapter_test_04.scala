@@ -6,53 +6,52 @@ import org.scalatest.Matchers
 
 import scalainitiatives.common.ScalaInitiativesTest
 
-import FPISExerciseChapter0xx.{FPOption => Op}
-import FPISExerciseChapter0xx.{FPSome => So}
-import FPISExerciseChapter0xx.{FPNone => No}
+import FPISExerciseChapter04.{FPOption => Option}
+import FPISExerciseChapter04.{FPSome => Some}
+import FPISExerciseChapter04.{FPNone => None}
 
 // Se matchers here:
 // http://www.scalatest.org/user_guide/using_matchers#checkingObjectIdentity
 class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
 
   // Declare constants.
-  val nDouble: Op[Double] = No
-  val nInt: Op[Int] = No
-  val nString: Op[String] = No
-  val oDouble: Op[String] = Op(1.0)
-  val oInt: Op[String] = Op(1)
-  val oString: Op[String] = Op("1")
-  val oDoubleTwo: Op[String] = Op(2.0)
-  val oIntTwo: Op[String] = Op(2)
-  val oStringTwo: Op[String] = Op("2")
+  val nDouble: Option[Double] = None
+  val nInt: Option[Int] = None
+  val nString: Option[String] = None
+  val oDouble: Option[Double] = Some(1.0)
+  val oDoubleTwo: Option[Double] = Some(2.0)
+  val oInt: Option[Int] = Some(1)
+  val oIntTwo: Option[Int] = Some(2)
+  val oString: Option[String] = Some("1")
+  val oStringTwo: Option[String] = Some("2")
 
   test ("4.0: Basic tests on custom Op.") {
-    assert(So(1).isCustomOp)
-    assert(No.isCustomOp)
-    println(So(1))
+    assert(Some(1).isCustomOption)
+    assert(None.isCustomOption)
   }
 
-  //test ("4.1: Reimplement functions.") {
-  //  // Reimplement the map function.
-  //  assert(nDouble.map(_.toInt) == No)
-  //  assert(oString.map(_.toInt) == oInt)
+  test ("4.1: Reimplement functions.") {
+    // Reimplement the map function.
+    assert(nDouble.map(_.toInt) == None)
+    assert(oString.map(_.toInt) == oInt)
 
-  //  // Reimplement the flatMap function.
-  //  // oInt.flatMap(
+    // Reimplement the flatMap function.
+    // oInt.flatMap(
 
-  //  // Reimplement the getOrElse function.
-  //  assert(oDouble.getOrElse(2.0) == 1.0)
-  //  assert(! (nDouble.getOrElse(2.0) == 1.0))
-  //  assert(nDouble.getOrElse(2.0) == 2.0)
+    // Reimplement the getOrElse function.
+    assert(oDouble.getOrElse(2.0) == 1.0)
+    assert(! (nDouble.getOrElse(2.0) == 1.0))
+    assert(nDouble.getOrElse(2.0) == 2.0)
 
-  //  // Reimplement the orElse function.
-  //  // assert(oIntTwo.orElse(oDouble) == oInt)
-  //  assert(nDouble.orElse(nInt) == nInt)
-  //  assert(nDouble.orElse(nInt) == nDouble)
-  //  nDouble.orElse(oInt) should be theSameInstanceAs nDouble
-  //  // ref1 should be theSameInstanceAs ref2
+    // // Reimplement the orElse function.
+    // // assert(oIntTwo.orElse(oDouble) == oInt)
+    // assert(nDouble.orElse(nInt) == nInt)
+    // assert(nDouble.orElse(nInt) == nDouble)
+    // nDouble.orElse(oInt) should be theSameInstanceAs nDouble
+    // // ref1 should be theSameInstanceAs ref2
 
-  //  // Reimplement the filter function.
-  //}
+    // Reimplement the filter function.
+  }
 
 }
 

@@ -9,11 +9,11 @@ import scalainitiatives.common.ScalaInitiativesExercise
 // |    sbt:LearningScala> project fpis
 // |    import scalainitiatives.functional_programming_in_scala.FPISExerciseChapter04
 
-object FPISExerciseChapter0xx extends ScalaInitiativesExercise {
+object FPISExerciseChapter04 extends ScalaInitiativesExercise {
 
   // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------| {
 
-  trait FPOption[+A] {
+  sealed trait FPOption[+A] {
 
     val isCustomOption = true
 
