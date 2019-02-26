@@ -1,5 +1,7 @@
 package scalainitiatives.functional_programming_in_scala
 
+import scala.{Option => _, _}
+
 import scalainitiatives.common.ScalaInitiativesExercise
 
 // In order to use this interactively do:
@@ -7,23 +9,39 @@ import scalainitiatives.common.ScalaInitiativesExercise
 // |    sbt:LearningScala> project fpis
 // |    import scalainitiatives.functional_programming_in_scala.FPISExerciseChapter04
 
-object FPISExerciseChapter04 extends ScalaInitiativesExercise {
+object FPISExerciseChapter0xx extends ScalaInitiativesExercise {
 
   // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------| {
 
-  trait Option[+A] {
+  trait FPOption[+A] {
 
     val isCustomOption = true
 
-    def map[B](f: A => B): Option[B] = ???  // Can use pattern matching.
-    def flatMap[B](f: A => Option[B]): Option[B] = ???
-    def getOrElse[B >: A](default: => B): B = ???  // Can use pattern matching.
-    def orElse[B >: A](ob: => Option[B]): Option[B] = ???
-    def filter(f: A => Boolean): Option[A] = ???
+    def map[B](f: A => B): FPOption[B] = this match {
+      case FPSome(x) => FPSome(f(x))
+      case FPNone => FPNone
+    }
+
+    def flatMap[B](f: A => FPOption[B]): FPOption[B] = ???
+
+    def getOrElse[B >: A](default: => B): B = this match {
+      case FPSome(x) => x
+      case FPNone => default
+    }
+
+    def orElse[B >: A](ob: => FPOption[B]): FPOption[B] = {
+      if (this == FPNone) ob else this
+    }
+
+    def filter(f: A => Boolean): FPOption[A] = ???
+
   }
 
-  case class Some[+A](get: A) extends Option[A]
-  case object None extends Option[Nothing]
+  case class FPSome[+A](get: A) extends FPOption[A]
+  // https://docs.scala-lang.org/tour/unified-types.html
+  // Nothing is a subtype of all types, also called the bottom type. There is
+  // no value that has type Nothing.
+  case object FPNone extends FPOption[Nothing]
 
   // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------| }
 
