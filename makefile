@@ -14,6 +14,9 @@ CLASS_FILES := $(filter-out $(IGNORE_FILES), $(CLASS_FILES))
 # Set scala compilation flags.
 SCALAC_CFLAGS = -cp $$PWD:$(ROOT_DIR)/code/my_scala_project/
 
+# ???: Google drive link to download ~/.sbt needed to compile this project.
+# https://drive.google.com/open?id=1FoY3kQi52PWllwc3ytYU9452qJ4ack1u
+
 all: test
 
 clean:
