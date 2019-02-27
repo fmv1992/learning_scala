@@ -36,7 +36,7 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
     assert(oString.map(_.toInt) == oInt)
 
     // Reimplement the flatMap function.
-    // oInt.flatMap(
+    // ???
 
     // Reimplement the getOrElse function.
     assert(oDouble.getOrElse(2.0) == 1.0)
@@ -50,9 +50,9 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
     assert(nDouble.orElse(nInt) == nDouble)
     nDouble.orElse(nString) should be theSameInstanceAs nString
     nDouble.orElse(oString) should be theSameInstanceAs oString
-    // ref1 should be theSameInstanceAs ref2
 
     // Reimplement the filter function.
+    // ???
   }
 
 }
