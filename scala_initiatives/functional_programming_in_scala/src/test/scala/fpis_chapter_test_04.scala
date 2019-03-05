@@ -1,17 +1,16 @@
 package scalainitiatives.functional_programming_in_scala
 
 import scala.{Option => _, _}
+import scala.{Some => _, _}
+import scala.{None => _, _}
 
 import org.scalatest.Matchers
 
 import scalainitiatives.common.ScalaInitiativesTest
 
-// import FPISExerciseChapter04.{FPOption => Option}
-// import FPISExerciseChapter04.{FPSome => Some}
-// import FPISExerciseChapter04.{FPNone => None}
-import FPISExerciseChapter04.Option
-import FPISExerciseChapter04.Some
-import FPISExerciseChapter04.None
+import FPISExerciseChapter04.{FPOption => Option}
+import FPISExerciseChapter04.{FPSome => Some}
+import FPISExerciseChapter04.{FPNone => None}
 
 // Se matchers here:
 // http://www.scalatest.org/user_guide/using_matchers#checkingObjectIdentity
@@ -39,7 +38,16 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
     assert(oString.map(_.toInt) == oInt)
 
     // Reimplement the flatMap function.
-    // ???
+    def toOneDouble(x: Double) = Some(1D)
+    assert(nDouble == nDouble.flatMap(toOneDouble))
+    assert(oDouble != nDouble.flatMap(toOneDouble))
+    // Identity.
+    def toOption(x: Double) = Some(x)
+    assert(nDouble == nDouble.flatMap(toOption))
+    assert(oDoubleTwo == oDoubleTwo.flatMap(toOption))
+    // Map to single Some(3.0).
+    def toThree(x: Double) = Some(3)
+    assert(Some(3) == oDouble.flatMap(toThree))
 
     // Reimplement the getOrElse function.
     assert(oDouble.getOrElse(2.0) == 1.0)
@@ -64,5 +72,6 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
 //
 // vim source: call matchadd("ErrorXXX", '\<List\>', 2)
 // vim source: iabbrev a assert
+// vim source: call matchadd("ErrorXXX", '\<Option(.\{-})\>', 2)
 //
 // vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:

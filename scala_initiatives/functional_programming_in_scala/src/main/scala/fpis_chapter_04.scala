@@ -13,49 +13,47 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
 
   // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------| {
 
-  sealed trait Option[+A] {
+  sealed trait FPOption[+A] {
 
     val isCustomOption = true
 
     // Can use pattern matching.
-    def map[B](f: A => B): Option[B] = this match {
-      case Some(x) => Some(f(x))
-      case None => None
+    def map[B](f: A => B): FPOption[B] = this match {
+      case FPSome(x) => FPSome(f(x))
+      case FPNone => FPNone
     }
 
-    def flatMap[B](f: A => Option[B]): Option[B] = ???
-    // def flatMap[B](f: A => Option[B]): Option[B] = {
-    // if (this == None) None
-    // else {
-    // Some(f(this.get))
-    // }
-    // }
+    // Note: `flatMap` itself does not use pattern matching but it uses
+    // `map`... This is a bad hint on the authors' part.
+    def flatMap[B](f: A => FPOption[B]): FPOption[B] = {
+      this.map(f).getOrElse(FPNone)
+    }
 
     // Can use pattern matching.
     def getOrElse[B >: A](default: => B): B = this match {
-      case Some(x) => x
-      case None => default
+      case FPSome(x) => x
+      case FPNone => default
     }
 
-    def orElse[B >: A](ob: => Option[B]): Option[B] = {
-      if (this == None) ob else this
+    def orElse[B >: A](ob: => FPOption[B]): FPOption[B] = {
+      if (this == FPNone) ob else this
     }
 
-    // Fpinscala: can be defined in terms of flatMap.
-    def filter(f: A => Boolean): Option[A] = {
-      if (this == None) None else {
-        if (f(this.get)) this
-        else None
-      }
-    }
+    // // Fpinscala: can be defined in terms of flatMap.
+    // def filter(f: A => Boolean): FPOption[A] = ???
+    // if (this == None) None else {
+    // if (f(this.get)) this
+    // else None
+    // }
+    // }
 
   }
 
-  case class Some[+A](get: A) extends Option[A]
+  case class FPSome[+A](get: A) extends FPOption[A]
   // https://docs.scala-lang.org/tour/unified-types.html
   // Nothing is a subtype of all types, also called the bottom type. There is
   // no value that has type Nothing.
-  case object None extends Option[Nothing]
+  case object FPNone extends FPOption[Nothing]
 
   // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------| }
 
