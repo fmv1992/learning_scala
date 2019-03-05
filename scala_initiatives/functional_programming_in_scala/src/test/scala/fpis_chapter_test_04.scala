@@ -6,9 +6,12 @@ import org.scalatest.Matchers
 
 import scalainitiatives.common.ScalaInitiativesTest
 
-import FPISExerciseChapter04.{FPOption => Option}
-import FPISExerciseChapter04.{FPSome => Some}
-import FPISExerciseChapter04.{FPNone => None}
+// import FPISExerciseChapter04.{FPOption => Option}
+// import FPISExerciseChapter04.{FPSome => Some}
+// import FPISExerciseChapter04.{FPNone => None}
+import FPISExerciseChapter04.Option
+import FPISExerciseChapter04.Some
+import FPISExerciseChapter04.None
 
 // Se matchers here:
 // http://www.scalatest.org/user_guide/using_matchers#checkingObjectIdentity

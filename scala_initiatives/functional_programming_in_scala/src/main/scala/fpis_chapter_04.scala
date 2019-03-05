@@ -13,35 +13,49 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
 
   // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------| {
 
-  sealed trait FPOption[+A] {
+  sealed trait Option[+A] {
 
     val isCustomOption = true
 
-    def map[B](f: A => B): FPOption[B] = this match {
-      case FPSome(x) => FPSome(f(x))
-      case FPNone => FPNone
+    // Can use pattern matching.
+    def map[B](f: A => B): Option[B] = this match {
+      case Some(x) => Some(f(x))
+      case None => None
     }
 
-    def flatMap[B](f: A => FPOption[B]): FPOption[B] = ???
+    def flatMap[B](f: A => Option[B]): Option[B] = ???
+    // def flatMap[B](f: A => Option[B]): Option[B] = {
+    // if (this == None) None
+    // else {
+    // Some(f(this.get))
+    // }
+    // }
 
+    // Can use pattern matching.
     def getOrElse[B >: A](default: => B): B = this match {
-      case FPSome(x) => x
-      case FPNone => default
+      case Some(x) => x
+      case None => default
     }
 
-    def orElse[B >: A](ob: => FPOption[B]): FPOption[B] = {
-      if (this == FPNone) ob else this
+    def orElse[B >: A](ob: => Option[B]): Option[B] = {
+      if (this == None) ob else this
     }
 
-    def filter(f: A => Boolean): FPOption[A] = ???
+    // Fpinscala: can be defined in terms of flatMap.
+    def filter(f: A => Boolean): Option[A] = {
+      if (this == None) None else {
+        if (f(this.get)) this
+        else None
+      }
+    }
 
   }
 
-  case class FPSome[+A](get: A) extends FPOption[A]
+  case class Some[+A](get: A) extends Option[A]
   // https://docs.scala-lang.org/tour/unified-types.html
   // Nothing is a subtype of all types, also called the bottom type. There is
   // no value that has type Nothing.
-  case object FPNone extends FPOption[Nothing]
+  case object None extends Option[Nothing]
 
   // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------| }
 
