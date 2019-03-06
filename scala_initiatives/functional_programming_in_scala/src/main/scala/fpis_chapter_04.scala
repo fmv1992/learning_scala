@@ -11,6 +11,12 @@ import scalainitiatives.common.ScalaInitiativesExercise
 
 object FPISExerciseChapter04 extends ScalaInitiativesExercise {
 
+  case class Some[+A](get: A) extends Option[A]
+  // https://docs.scala-lang.org/tour/unified-types.html
+  // Nothing is a subtype of all types, also called the bottom type. There is
+  // no value that has type Nothing.
+  case object None extends Option[Nothing]
+
   sealed trait Option[+A] {
 
     val isCustomOption = true
@@ -77,13 +83,22 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
       }
     }
 
+    def sequence[A](a: List[Option[A]]): Option[List[A]] = {
+      val nilA: List[A] = Nil
+      val oL: Option[List[A]] = Some(nilA)
+      a.foldLeft(oL)(
+        (l: Option[List[A]], r: Option[A]) => r match {
+          case None => None
+          case Some(x) => l match {
+            case None => None
+            case Some(y) => Some(y ++ List(x))
+          }
+        }
+        )
+    }
+
   }
 
-          case class Some[+A](get: A) extends Option[A]
-          // https://docs.scala-lang.org/tour/unified-types.html
-          // Nothing is a subtype of all types, also called the bottom type. There is
-          // no value that has type Nothing.
-          case object None extends Option[Nothing]
 
 }
 

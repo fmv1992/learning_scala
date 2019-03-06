@@ -101,7 +101,13 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
       nDouble)(_ + _) == nDouble)
   }
 
-  test ("4.4: ???."){
+  test ("4.4: Implementation of sequence."){
+    val threeODoubleOne = List(oDoubleOne, oDoubleOne, oDoubleOne)
+    assert(Option.sequence(threeODoubleOne) == Some(List(1D, 1D, 1D)))
+    val threeNDoubleOne = List(oDoubleOne, oDoubleOne, nDouble)
+    assert(Option.sequence(threeNDoubleOne) == None)
+    val x = List(None: Option[String])
+    assert(Option.sequence(x) == None)
   }
 
   test ("4.5: ???."){
