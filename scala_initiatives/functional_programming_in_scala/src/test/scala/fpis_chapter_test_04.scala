@@ -73,6 +73,39 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
     assert(oDouble.filter(x => x != 1L) != oDouble)
   }
 
+  test ("4.2: Implementation of variance."){
+    assert(
+      isClose(
+        Option.variance(List.tabulate(10)(i => 10)).getOrElse(Int.MaxValue.toDouble),
+        0.0)
+      )
+    val l1: Seq[Double] = Seq(600 , 470 , 170 , 430 , 300)
+    assert(
+      isClose(
+        Option.variance(l1).getOrElse(Int.MaxValue.toDouble),
+        21704D + 1)
+      )
+  }
+
+  test ("4.3: ???."){
+  }
+
+  test ("4.4: ???."){
+  }
+
+  test ("4.5: ???."){
+  }
+
+  test ("4.6: ???."){
+  }
+
+  test ("4.7: ???."){
+  }
+
+  test ("4.8: ???."){
+  }
+
+
 }
 
 //  Run this in vim to avoid troubles:

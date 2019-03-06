@@ -49,6 +49,19 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
 
   }
 
+  object Option {
+
+    def variance(xs: Seq[Double]): Option[Double] = {
+      if (xs.length == 0) None else {
+        def mean(x: Seq[Double]): Double = x.sum / x.length
+        val xsMean = mean(xs)
+        val v = mean(xs.map(x => math.pow(x - xsMean, 2)))
+        Some(v)
+      }
+    }
+
+  }
+
   case class Some[+A](get: A) extends Option[A]
   // https://docs.scala-lang.org/tour/unified-types.html
   // Nothing is a subtype of all types, also called the bottom type. There is
