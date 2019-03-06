@@ -20,11 +20,11 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
   val nDouble: Option[Double] = None
   val nInt: Option[Int] = None
   val nString: Option[String] = None
-  val oDouble: Option[Double] = Some(1.0)
+  val oDoubleOne: Option[Double] = Some(1.0)
   val oDoubleTwo: Option[Double] = Some(2.0)
-  val oInt: Option[Int] = Some(1)
+  val oIntOne: Option[Int] = Some(1)
   val oIntTwo: Option[Int] = Some(2)
-  val oString: Option[String] = Some("1")
+  val oStringOne: Option[String] = Some("1")
   val oStringTwo: Option[String] = Some("2")
 
   test ("4.0: Basic tests on custom Op.") {
@@ -35,42 +35,42 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
   test ("4.1: Reimplement functions.") {
     // Reimplement the map function.
     assert(nDouble.map(_.toInt) == None)
-    assert(oString.map(_.toInt) == oInt)
+    assert(oStringOne.map(_.toInt) == oIntOne)
 
     // Reimplement the flatMap function.
     def toOneDouble(x: Double) = Some(1D)
     assert(nDouble == nDouble.flatMap(toOneDouble))
-    assert(oDouble != nDouble.flatMap(toOneDouble))
+    assert(oDoubleOne != nDouble.flatMap(toOneDouble))
     // Identity.
     def toOption(x: Double) = Some(x)
     assert(nDouble == nDouble.flatMap(toOption))
     assert(oDoubleTwo == oDoubleTwo.flatMap(toOption))
     // Map to single Some(3.0).
     def toThree(x: Double) = Some(3)
-    assert(Some(3) == oDouble.flatMap(toThree))
+    assert(Some(3) == oDoubleOne.flatMap(toThree))
 
     // Reimplement the getOrElse function.
-    assert(oDouble.getOrElse(2.0) == 1.0)
+    assert(oDoubleOne.getOrElse(2.0) == 1.0)
     assert(! (nDouble.getOrElse(2.0) == 1.0))
     assert(nDouble.getOrElse(2.0) == 2.0)
 
     // Reimplement the orElse function.
-    assert(oInt.orElse(oDouble) == oInt)
+    assert(oIntOne.orElse(oDoubleOne) == oIntOne)
     assert(nDouble.orElse(nInt) == nInt)
     // 'Type promotion' for assessing equality.
     assert(nDouble.orElse(nInt) == nDouble)
     nDouble.orElse(nString) should be theSameInstanceAs nString
-    nDouble.orElse(oString) should be theSameInstanceAs oString
+    nDouble.orElse(oStringOne) should be theSameInstanceAs oStringOne
 
     // Reimplement the filter function.
     def isGreaterThanFive: Double => Boolean = _ > 5
     def notIsGreaterThanFive: Double => Boolean = x => ! (x > 5)
     assert(nDouble.filter(isGreaterThanFive) == nDouble)
-    assert(oDouble.filter(isGreaterThanFive) == nDouble)
-    assert(oDouble.filter(notIsGreaterThanFive) != nDouble)
+    assert(oDoubleOne.filter(isGreaterThanFive) == nDouble)
+    assert(oDoubleOne.filter(notIsGreaterThanFive) != nDouble)
     assert(nDouble.filter(x => x > 5) == nDouble)
-    assert(oDouble.filter(x => x == 1L) == oDouble)
-    assert(oDouble.filter(x => x != 1L) != oDouble)
+    assert(oDoubleOne.filter(x => x == 1L) == oDoubleOne)
+    assert(oDoubleOne.filter(x => x != 1L) != oDoubleOne)
   }
 
   test ("4.2: Implementation of variance."){
@@ -89,7 +89,16 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
     assert(Option.variance(repeat) == Some(0D))
   }
 
-  test ("4.3: ???."){
+  test ("4.3: Implement map2."){
+    assert(Option.map2(
+      oDoubleOne,
+      oIntTwo)(_ + _) == Some(3D))
+    assert(Option.map2(
+      nDouble,
+      oIntTwo)(_ + _) == nDouble)
+    assert(Option.map2(
+      oDoubleOne,
+      nDouble)(_ + _) == nDouble)
   }
 
   test ("4.4: ???."){

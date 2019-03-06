@@ -11,9 +11,6 @@ import scalainitiatives.common.ScalaInitiativesExercise
 
 object FPISExerciseChapter04 extends ScalaInitiativesExercise {
 
-  // ???: These ones were left around here...
-  // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------| {
-
   sealed trait Option[+A] {
 
     val isCustomOption = true
@@ -40,8 +37,7 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
       case Some(a) => a
     }
 
-    def flatMap[B](f: A => Option[B]): Option[B] =
-      map(f) getOrElse None
+    def flatMap[B](f: A => Option[B]): Option[B] = map(f) getOrElse None
 
     def orElse[B>:A](ob: => Option[B]): Option[B] =
       this map (Some(_)) getOrElse ob
@@ -53,7 +49,6 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
     // Changed those to fpinscala to proceed with certainty of correctness -|
     // (despite using a lot of tests). -------------------------------------| }
-
 
   }
 
@@ -72,16 +67,23 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
         z => if (xs.length == 0) None else Some(vari(z)))
     }
 
+    def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = {
+      a match {
+        case None => None
+        case Some(x) => b match {
+          case None => None
+          case Some(y) => Some(f(x, y))
+        }
+      }
+    }
+
   }
 
-  case class Some[+A](get: A) extends Option[A]
-  // https://docs.scala-lang.org/tour/unified-types.html
-  // Nothing is a subtype of all types, also called the bottom type. There is
-  // no value that has type Nothing.
-  case object None extends Option[Nothing]
-
-  // ???: These ones were left around here...
-  // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------| }
+          case class Some[+A](get: A) extends Option[A]
+          // https://docs.scala-lang.org/tour/unified-types.html
+          // Nothing is a subtype of all types, also called the bottom type. There is
+          // no value that has type Nothing.
+          case object None extends Option[Nothing]
 
 }
 
