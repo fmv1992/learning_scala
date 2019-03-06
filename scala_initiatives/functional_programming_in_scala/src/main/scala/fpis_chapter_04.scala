@@ -11,41 +11,49 @@ import scalainitiatives.common.ScalaInitiativesExercise
 
 object FPISExerciseChapter04 extends ScalaInitiativesExercise {
 
+  // ???: These ones were left around here...
   // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------| {
 
   sealed trait Option[+A] {
 
     val isCustomOption = true
 
-    // Can use pattern matching.
+    // Introduced in commit '5b7ea48+1'.
+    // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
+    // Changed those to fpinscala to proceed with certainty of correctness -|
+    // (despite using a lot of tests). -------------------------------------| {
+    //
+    // Functions:
+    //    1. `map`.
+    //    2. `flatMap`.
+    //    3. `getOrElse`.
+    //    4. `orElse`.
+    //    5. `filter`.
+
     def map[B](f: A => B): Option[B] = this match {
-      case Some(x) => Some(f(x))
       case None => None
+      case Some(a) => Some(f(a))
     }
 
-    // NOTE: `flatMap` itself does not use pattern matching but it uses
-    // `map`... This is a bad hint on the authors' part.
-    def flatMap[B](f: A => Option[B]): Option[B] = {
-      this.map(f).getOrElse(None)
-    }
-
-    // Can use pattern matching.
-    def getOrElse[B >: A](default: => B): B = this match {
-      case Some(x) => x
+    def getOrElse[B>:A](default: => B): B = this match {
       case None => default
+      case Some(a) => a
     }
 
-    def orElse[B >: A](ob: => Option[B]): Option[B] = {
-      if (this == None) ob else this
-    }
+    def flatMap[B](f: A => Option[B]): Option[B] =
+      map(f) getOrElse None
 
-    // NOTE: Fpinscala: can be defined in terms of `flatMap`.
-    // `filter` itself does not use pattern matching but it uses `flatMap`
-    // which uses `map`... This is a bad hint on the authors' part.
-    def filter(f: A => Boolean): Option[A] = {
-      def newfunc(x: A): Option[A] = if (f(x)) Some(x) else None
-      this.flatMap(newfunc)
+    def orElse[B>:A](ob: => Option[B]): Option[B] =
+      this map (Some(_)) getOrElse ob
+
+    def filter(f: A => Boolean): Option[A] = this match {
+      case Some(a) if f(a) => this
+      case _ => None
     }
+    // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
+    // Changed those to fpinscala to proceed with certainty of correctness -|
+    // (despite using a lot of tests). -------------------------------------| }
+
 
   }
 
@@ -72,6 +80,7 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
   // no value that has type Nothing.
   case object None extends Option[Nothing]
 
+  // ???: These ones were left around here...
   // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------| }
 
 }
