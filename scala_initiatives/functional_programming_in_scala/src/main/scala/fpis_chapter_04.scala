@@ -83,6 +83,14 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
       }
     }
 
+    // ???: Inneficient. I guess there is a passage in the book where the
+    // authors comment just what happened here: foldLeft as a general solution
+    // but not very efficient.
+    //
+    // The passage is: "???".
+    //
+    // The problem here is that the list has to transverse it entirely even if
+    // the first value is None.
     def sequence[A](a: List[Option[A]]): Option[List[A]] = {
       val nilA: List[A] = Nil
       val oL: Option[List[A]] = Some(nilA)
