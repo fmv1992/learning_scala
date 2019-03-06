@@ -23,7 +23,7 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
       case None => None
     }
 
-    // Note: `flatMap` itself does not use pattern matching but it uses
+    // NOTE: `flatMap` itself does not use pattern matching but it uses
     // `map`... This is a bad hint on the authors' part.
     def flatMap[B](f: A => Option[B]): Option[B] = {
       this.map(f).getOrElse(None)
@@ -39,13 +39,13 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
       if (this == None) ob else this
     }
 
-    // // Fpinscala: can be defined in terms of flatMap.
-    // def filter(f: A => Boolean): Option[A] = ???
-    // if (this == None) None else {
-    // if (f(this.get)) this
-    // else None
-    // }
-    // }
+    // NOTE: Fpinscala: can be defined in terms of `flatMap`.
+    // `filter` itself does not use pattern matching but it uses `flatMap`
+    // which uses `map`... This is a bad hint on the authors' part.
+    def filter(f: A => Boolean): Option[A] = {
+      def newfunc(x: A): Option[A] = if (f(x)) Some(x) else None
+      this.flatMap(newfunc)
+    }
 
   }
 

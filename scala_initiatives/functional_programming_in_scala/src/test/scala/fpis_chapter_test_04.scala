@@ -63,7 +63,14 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
     nDouble.orElse(oString) should be theSameInstanceAs oString
 
     // Reimplement the filter function.
-    // ???
+    def isGreaterThanFive: Double => Boolean = _ > 5
+    def notIsGreaterThanFive: Double => Boolean = x => ! (x > 5)
+    assert(nDouble.filter(isGreaterThanFive) == nDouble)
+    assert(oDouble.filter(isGreaterThanFive) == nDouble)
+    assert(oDouble.filter(notIsGreaterThanFive) != nDouble)
+    assert(nDouble.filter(x => x > 5) == nDouble)
+    assert(oDouble.filter(x => x == 1L) == oDouble)
+    assert(oDouble.filter(x => x != 1L) != oDouble)
   }
 
 }
