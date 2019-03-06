@@ -108,6 +108,8 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
     assert(Option.sequence(threeNDoubleOne) == None)
     val x = List(None: Option[String])
     assert(Option.sequence(x) == None)
+    val longList = List(oDoubleTwo, nDouble) ++ List.fill(100)(oDoubleTwo)
+    assert(Option.sequence(longList) == None)
   }
 
   test ("4.5: ???."){

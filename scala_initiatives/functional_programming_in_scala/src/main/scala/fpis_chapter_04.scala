@@ -52,6 +52,9 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
       case Some(a) if f(a) => this
       case _ => None
     }
+
+    def lift[A, B](f: A => B): Option[A] => Option[B] = _ map f
+
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
     // Changed those to fpinscala to proceed with certainty of correctness -|
     // (despite using a lot of tests). -------------------------------------| }
@@ -92,17 +95,20 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
     // The problem here is that the list has to transverse it entirely even if
     // the first value is None.
     def sequence[A](a: List[Option[A]]): Option[List[A]] = {
-      val nilA: List[A] = Nil
-      val oL: Option[List[A]] = Some(nilA)
-      a.foldLeft(oL)(
-        (l: Option[List[A]], r: Option[A]) => r match {
-          case None => None
-          case Some(x) => l match {
-            case None => None
-            case Some(y) => Some(y ++ List(x))
+      def go(x: List[Option[A]], acc: Option[List[A]]): Option[List[A]] = {
+        println(x.length)
+        acc match {
+          case None => None                // Option[List[A]]: Stop recursion.
+          case Some(lacc) => x match {
+            case Nil => acc                  // Option[List[A]]
+            case h :: t => h match {
+              case None => None                // Option[List[A]]
+              case Some(y) => go(t, Some(y :: lacc))
+            }
           }
         }
-        )
+      }
+      go(a, Some(Nil))
     }
 
   }
