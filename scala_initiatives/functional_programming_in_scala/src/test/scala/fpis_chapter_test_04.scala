@@ -110,6 +110,21 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
     assert(Option.sequence(x) == None)
     val longList = List(oDoubleTwo, nDouble) ++ List.fill(100)(oDoubleTwo)
     assert(Option.sequence(longList) == None)
+    // Commit: '838c0a7'.
+    // This prints:
+    //
+    //    3 → from other tests
+    //    2 → from other tests
+    //    1 → from other tests
+    //    0 → from other tests
+    //    3 → from other tests
+    //    2 → from other tests
+    //    1 → from other tests
+    //    1 → from other tests
+    //    102 → From this test.
+    //    101 → From this test.
+    //
+    // The absence of more prints show that there is short circuit.
   }
 
   test ("4.5: ???."){

@@ -29,6 +29,8 @@ The following tags are used in this project:
     import org.scalatest.{FunSuite => FS}
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+*   `This prints:`: Show in comments what print statements do.
+
 *   `NOTE:`: Notes for exercise or code; these are not code comments.
 
 *   Special mixed natural language and code markers:
