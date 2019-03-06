@@ -96,7 +96,6 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
     // the first value is None.
     def sequence[A](a: List[Option[A]]): Option[List[A]] = {
       def go(x: List[Option[A]], acc: Option[List[A]]): Option[List[A]] = {
-        println(x.length)
         acc match {
           case None => None                // Option[List[A]]: Stop recursion.
           case Some(lacc) => x match {
@@ -109,6 +108,31 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
         }
       }
       go(a, Some(Nil))
+    }
+
+
+    def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = {
+      def go(x: List[A], acc: Option[List[B]]): Option[List[B]] = {
+        acc match {
+          case None => None
+          case Some(lacc) => x match {
+            case Nil => acc
+            case h :: t => {
+              val funcH = f(h)
+              funcH match {
+                case None => None
+                case Some(y) => go(t, Some(y :: lacc))
+              }
+            }
+          }
+        }
+      }
+      go(a, Some(Nil))
+    }
+
+    def sequenceUsingTraverse[A](a: List[Option[A]]): Option[List[A]] = {
+      val noneA: Option[A] = None
+      traverse(a)(_.orElse(noneA))
     }
 
   }

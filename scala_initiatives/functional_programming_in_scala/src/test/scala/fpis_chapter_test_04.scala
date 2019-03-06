@@ -127,7 +127,23 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
     // The absence of more prints show that there is short circuit.
   }
 
-  test ("4.5: ???."){
+  test ("4.5: implementation of traverse."){
+    val oneToFive: List[Int] = (1 to 5).toList
+    assert(
+      Option.traverse(oneToFive)(x => if (x == 3) None else Some(x))
+      == None)
+    assert(
+      Option.traverse(oneToFive)(x => if (x == 6) None else Some(x))
+      == Some(List(5, 4, 3, 2, 1)))
+
+    val threeODoubleOne = List(oDoubleOne, oDoubleOne, oDoubleOne)
+    assert(Option.sequence(threeODoubleOne) == Option.sequenceUsingTraverse(threeODoubleOne))
+    val threeNDoubleOne = List(oDoubleOne, oDoubleOne, nDouble)
+    assert(Option.sequence(threeNDoubleOne) == Option.sequenceUsingTraverse(threeNDoubleOne))
+    val x = List(None: Option[String])
+    assert(Option.sequence(x) == Option.sequenceUsingTraverse(x))
+    val longList = List(oDoubleTwo, nDouble) ++ List.fill(100)(oDoubleTwo)
+    assert(Option.sequence(longList) == Option.sequenceUsingTraverse(longList))
   }
 
   test ("4.6: ???."){
