@@ -51,13 +51,17 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
 
   object Option {
 
+    // IMPROVEMENT: After reading the authors' code mean itself should return an
+    // option which is then flatmapped:
+    // mean(xs) flatMap (m => mean(xs.map(x => math.pow(x - m, 2))))
+    def mean(x: Seq[Double]): Double = x.sum / x.length
+    def vari(x: Seq[Double]): Double = {
+      val xsMean = mean(x)
+      mean(x.map(z => math.pow(z - xsMean, 2)))
+    }
     def variance(xs: Seq[Double]): Option[Double] = {
-      if (xs.length == 0) None else {
-        def mean(x: Seq[Double]): Double = x.sum / x.length
-        val xsMean = mean(xs)
-        val v = mean(xs.map(x => math.pow(x - xsMean, 2)))
-        Some(v)
-      }
+      Some(xs).flatMap(
+        z => if (xs.length == 0) None else Some(vari(z)))
     }
 
   }

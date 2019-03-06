@@ -37,6 +37,8 @@ The following tags are used in this project:
 
     *   `Commit: 'cfe6164'` or `commit: 'cfe6164'` (it has to have 7 chars): Reference to a commit inside the source files.
 
+*   `IMPROVEMENT:`: Notes for exercise or code; these are not code comments.
+
 ## Resources
 
 ### Functional Programming in Scala ("The Red Book")

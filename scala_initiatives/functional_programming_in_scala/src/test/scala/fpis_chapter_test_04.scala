@@ -74,17 +74,19 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
   }
 
   test ("4.2: Implementation of variance."){
+    val repeat = Seq.tabulate(10)(i => 10D)
     assert(
       isClose(
-        Option.variance(List.tabulate(10)(i => 10)).getOrElse(Int.MaxValue.toDouble),
+        Option.variance(repeat).getOrElse(Int.MaxValue.toDouble),
         0.0)
       )
     val l1: Seq[Double] = Seq(600 , 470 , 170 , 430 , 300)
     assert(
       isClose(
         Option.variance(l1).getOrElse(Int.MaxValue.toDouble),
-        21704D + 1)
+        21704D)
       )
+    assert(Option.variance(repeat) == Some(0D))
   }
 
   test ("4.3: ???."){
