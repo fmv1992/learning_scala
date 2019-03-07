@@ -174,35 +174,47 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
 
     val isCustomEither = true
 
+    // def getOrElse(a: A): A = {
+    // this match {
+    // case Left(x) => a
+    // case Right(x) => x
+    // }
+    // }
+
     def map[B](f: A => B): Either[E, B] = {
       this match {
         case Left(x) => Left(x)
-        case Right(x) => Either.Try(f(x))
+        case Right(x) => Right(f(x))
       }
     }
+
     def flatMap[EE >: E, B](f: A => Either[EE, B]): Either[EE, B] = {
-      ???
+      this match {
+        case Left(x) => Left(x)
+        case Right(x) => f(x)
+      }
     }
+
     def orElse[EE >: E,B >: A](b: => Either[EE, B]): Either[EE, B] = {
-      ???
+      this match {
+        case Left(x) => b
+        case Right(x) => Right(x)
+      }
     }
+
     def map2[EE >: E, B, C](b: Either[EE, B])(f: (A, B) => C): Either[EE, C] = {
-      ???
+      this.flatMap(aa =>
+          b.map(bb => f(aa, bb)))
     }
   }
+
   case class Left[+E](value: E) extends Either[E, Nothing]
   case class Right[+A](value: A) extends Either[Nothing, A]
 
-  object Either {
-    def Try[GOOD, BAD<:Exception](a: => GOOD): Either[BAD, GOOD] =
-      try Right(a)
-      catch { case e: Exception => Left(e) }
-  }
-
-  // def Try[A](a: => A): FPISExerciseChapter04.Either[Exception, A] = {
-  //   // require(FPISExerciseChapter04.Either.isCustomEither)
-  //   try Right(a)
-  //   catch { case e: Exception => Left(e) }
+  // object Either {
+  // def Try[A](a: => A): Either[Exception, A] =
+  // try Right(a)
+  // catch { case e: Exception => Left(e) }
   // }
 
 

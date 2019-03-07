@@ -174,7 +174,20 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
     // println(r1.map(_ / 0))
     // // assert(r1.map(_ / 0))
     // assert(r1.map(_ / 0) == Try(1 / 0))
-    //
+
+    assert(r1.map(_ + 1) == r2)
+    assert(l1.map(identity) == l1)
+    assert(l1.map(x => Left(3)) == l1)  // Is unchanged.
+
+    assert(r1.flatMap((x: Int) => Right((x + 3).toDouble)) == Right(4D))
+    assert(l1.flatMap((x: Int) => Right((x + 3).toDouble)) == l1)
+
+    assert(l1.orElse(r1) == r1)
+    assert(r1.orElse(l1) == r1)
+
+    assert(r1.map2(r1)(_ + _) == Right(2))
+    assert(l1.map2(r1)((x, y) => y) == l1)
+    assert(r1.map2(l1)((x, y) => y) == l1)
   }
 
   test ("4.7: ???."){
