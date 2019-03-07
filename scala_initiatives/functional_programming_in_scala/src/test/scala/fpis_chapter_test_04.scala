@@ -1,8 +1,11 @@
 package scalainitiatives.functional_programming_in_scala
 
-import scala.{Option => _, _}
-import scala.{Some => _, _}
+import scala.{Either => _, _}
+import scala.{Left => _, _}
 import scala.{None => _, _}
+import scala.{Option => _, _}
+import scala.{Right => _, _}
+import scala.{Some => _, _}
 
 import org.scalatest.Matchers
 
@@ -11,6 +14,10 @@ import scalainitiatives.common.ScalaInitiativesTest
 import FPISExerciseChapter04.{Option => Option}
 import FPISExerciseChapter04.{Some => Some}
 import FPISExerciseChapter04.{None => None}
+import FPISExerciseChapter04.{Either => Either}
+import FPISExerciseChapter04.{Left => Left}
+import FPISExerciseChapter04.{Right => Right}
+// import FPISExerciseChapter04.{Try => Try}
 
 // Se matchers here:
 // http://www.scalatest.org/user_guide/using_matchers#checkingObjectIdentity
@@ -146,7 +153,28 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
     assert(Option.sequence(longList) == Option.sequenceUsingTraverse(longList))
   }
 
-  test ("4.6: ???."){
+  val l1 = Left(1)
+  val r1 = Right(1)
+  val l2 = Left(2)
+  val r2 = Right(2)
+  test ("4.x: Basic tests on custom Either.") {
+    assert(l1.isCustomEither)
+    assert(r1.isCustomEither)
+  }
+
+  test ("4.6: implementation of Either."){
+    // NOTE: All the implementations are without try... So using the tests like
+    // below get us nothing since we cannot make E related to any Exception...
+    // In other words, these exercises are barely useful.
+    //
+    // assert(l1.map(x => x + 1) == l1)
+    // Does not compile with:
+    // "value + is not a member of Nothing"
+    // assert(r1.map(_ + 1) == r2)
+    // println(r1.map(_ / 0))
+    // // assert(r1.map(_ / 0))
+    // assert(r1.map(_ / 0) == Try(1 / 0))
+    //
   }
 
   test ("4.7: ???."){

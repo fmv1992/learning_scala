@@ -1,6 +1,12 @@
 package scalainitiatives.functional_programming_in_scala
 
+import scala.{Either => _, _}
+import scala.{Left => _, _}
+import scala.{None => _, _}
 import scala.{Option => _, _}
+import scala.{Right => _, _}
+import scala.{Some => _, _}
+
 
 import scalainitiatives.common.ScalaInitiativesExercise
 
@@ -8,6 +14,14 @@ import scalainitiatives.common.ScalaInitiativesExercise
 // |    $ sbt
 // |    sbt:LearningScala> project fpis
 // |    import scalainitiatives.functional_programming_in_scala.FPISExerciseChapter04
+
+// object CheckImport {
+// try {
+// println(Either)
+// }
+// catch { case e: Exception => throw e }
+// throw new Exception()
+// }
 
 object FPISExerciseChapter04 extends ScalaInitiativesExercise {
 
@@ -38,6 +52,7 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
       case Some(a) => Some(f(a))
     }
 
+    // ???: Supertype.
     def getOrElse[B>:A](default: => B): B = this match {
       case None => default
       case Some(a) => a
@@ -76,6 +91,8 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
         z => if (xs.length == 0) None else Some(vari(z)))
     }
 
+    // IMPROVEMENT: can be done in terms of flatmap. Notice that these pattern
+    // matches are part of map (which is part of flatmap).
     def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = {
       a match {
         case None => None
@@ -136,6 +153,57 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
     }
 
   }
+
+
+
+  // def Try[A](a: => A): Either[Exception, A] = {
+  // try Right(a)
+  // catch { case e: Exception => Left(e) }
+  // }
+
+  // def Try[GOOD, BAD](a: => GOOD): Either[BAD, GOOD] = {
+  // try Right(a)
+  // catch {
+  // // case e: Exception => Left(e)
+  // case e: Exception => Left(e)
+  // }
+  // }
+
+
+  trait Either[+E, +A] {
+
+    val isCustomEither = true
+
+    def map[B](f: A => B): Either[E, B] = {
+      this match {
+        case Left(x) => Left(x)
+        case Right(x) => Either.Try(f(x))
+      }
+    }
+    def flatMap[EE >: E, B](f: A => Either[EE, B]): Either[EE, B] = {
+      ???
+    }
+    def orElse[EE >: E,B >: A](b: => Either[EE, B]): Either[EE, B] = {
+      ???
+    }
+    def map2[EE >: E, B, C](b: Either[EE, B])(f: (A, B) => C): Either[EE, C] = {
+      ???
+    }
+  }
+  case class Left[+E](value: E) extends Either[E, Nothing]
+  case class Right[+A](value: A) extends Either[Nothing, A]
+
+  object Either {
+    def Try[GOOD, BAD<:Exception](a: => GOOD): Either[BAD, GOOD] =
+      try Right(a)
+      catch { case e: Exception => Left(e) }
+  }
+
+  // def Try[A](a: => A): FPISExerciseChapter04.Either[Exception, A] = {
+  //   // require(FPISExerciseChapter04.Either.isCustomEither)
+  //   try Right(a)
+  //   catch { case e: Exception => Left(e) }
+  // }
 
 
 }
