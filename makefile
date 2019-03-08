@@ -21,7 +21,7 @@ all: test
 
 clean_fpis_chapter:
 ifdef LEARNING_SCALA_CHAPTER
-	find . -path '*/target/*FPIS*Chapter$(LEARNING_SCALA_CHAPTER)*.class' -type f -print0 | xargs -0 rm
+	(find . -path '*/target/*FPIS*Chapter$(LEARNING_SCALA_CHAPTER)*.class' -type f -print0 | xargs -0 rm) || true
 else
 	echo "Env var LEARNING_SCALA_CHAPTER not defined."
 	exit 1
