@@ -17,12 +17,18 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   // Declare constants.
   val s1: Stream[Int] = Stream(1)
 
-  test ("5.0: Basic tests.") {
+  test ("5.0.0: Basic tests.") {
     assert(s1.isCustomStream)
   }
 
-  test("5.1: ???.") {
+  test("5.0.1: Test memoization.") {
+    // ???: Mark as slow. Test lazy momoization.
+  }
 
+  test("5.1: toList.") {
+    assert(Stream(1, 2, 3, 4, 5).toList == oneToFive)
+    assert(Stream().toList == Nil)
+    assert(Stream(1).toList == List(1))
   }
 
   test("5.2: ???.") {
