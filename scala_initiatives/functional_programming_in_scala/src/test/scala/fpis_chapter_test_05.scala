@@ -15,7 +15,14 @@ import scalainitiatives.common.ScalaInitiativesTest
 class FPISTestChapter05 extends ScalaInitiativesTest {
 
   // Declare constants.
+  val _minus10to10 = (-10 to 10).toList
   val s1: Stream[Int] = Stream(1)
+  val minus10to10 = Stream(_minus10to10: _*)
+  val s2 = Stream(1, 2, 3)
+
+  // val minus10to10WithError = (
+  //   Stream(_minus10to10: _*)
+  // ++ Stream({throw new Exception() ; 11}))
 
   test ("5.0.0: Basic tests.") {
     assert(s1.isCustomStream)
@@ -26,16 +33,29 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   }
 
   test("5.1: toList.") {
+    // NOTE: At first it seems that the mere adding of `lazy` would not change
+    // or rather would not cache the results of Cons. However we should notice
+    // that these are object themselves and as such they hold data.
+    // The trick is achieved through `cons` which create the intermediary
+    // variables with `lazy` and provide an object/name/reference (?) which
+    // will hold the non-strict mechanism of evaluation. Then those mecanisms
+    // are passed to Cons.
     assert(Stream(1, 2, 3, 4, 5).toList == oneToFive)
     assert(Stream().toList == Nil)
     assert(Stream(1).toList == List(1))
   }
 
-  test("5.2: ???.") {
+  namedTest("5.a: Test ++.") {
+    // println(s2)
+    // assert((s2 ++ s2).toList == Stream(1, 2, 3, 1, 2, 3).toList)
+    s2 ++ s2 ++ s2
+  }
+
+  test("5.2: Implementation of take and drop.") {
 
   }
 
-  test("5.3: ???.") {
+  test("5.3: Implementation of takeWhile.") {
 
   }
 
