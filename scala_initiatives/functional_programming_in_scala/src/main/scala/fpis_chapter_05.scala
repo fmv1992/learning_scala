@@ -23,8 +23,8 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
   object Stream {
 
     def cons[A](hd: => A, tl: => Stream[A]): Stream[A] = {
-      lazy val head = {println("evalhead"); hd}
-      lazy val tail = {println("evaltail"); tl}
+      lazy val head = hd
+      lazy val tail = tl
       Cons(() => head, () => tail)
     }
 
@@ -33,6 +33,10 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     def apply[A](as: A*): Stream[A] =
       if (as.isEmpty) empty else cons(as.head, apply(as.tail: _*))
   }
+
+  // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------|
+  // Changed those to fpinscala to proceed with certainty of correctness ---|
+  // (despite using a lot of tests). ---------------------------------------| }
 
   // ???: Inverted position because of vim poor indenting... It should come
   // before Empty and Cons.
@@ -58,10 +62,6 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     }
 
   }
-
-  // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------|
-  // Changed those to fpinscala to proceed with certainty of correctness ---|
-  // (despite using a lot of tests). ---------------------------------------| }
 
 }
 

@@ -45,7 +45,7 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     assert(Stream(1).toList == List(1))
   }
 
-  namedTest("5.a: Test ++.") {
+  test("5.a: Test ++.") {
     assert((s2 ++ s2).toList == Stream(1, 2, 3, 1, 2, 3).toList)
     // Considering the commit '2ac328b', the command `make clean && make` gives
     // us the following relevant portion of the code:
@@ -84,7 +84,14 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     //
     // Stream(v1, v2, ..., {throw new Exception(); v3})
     //
-    // This Stream will certainly help us in testing the lazy evaluation of our object at all times.
+    // This Stream will certainly help us in testing the lazy evaluation of our
+    // object at all times.
+
+    assert((s2 ++ Stream(10)).toList == Stream(1, 2, 3, 10).toList)
+    assert((Stream() ++ s1) == s1)
+
+    val randList = List.tabulate(10)(x ⇒ scala.util.Random.nextInt)
+    assert(Stream(randList: _*).toList == Stream(randList: _*).toList)
   }
 
   test("5.2: Implementation of take and drop.") {
