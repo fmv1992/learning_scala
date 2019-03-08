@@ -19,6 +19,14 @@ SCALAC_CFLAGS = -cp $$PWD:$(ROOT_DIR)/code/my_scala_project/
 
 all: test
 
+clean_fpis_chapter:
+ifdef LEARNING_SCALA_CHAPTER
+	find . -path '*/target/*FPIS*Chapter$(LEARNING_SCALA_CHAPTER)*.class' -type f -print0 | xargs -0 rm
+else
+	echo "Env var LEARNING_SCALA_CHAPTER not defined."
+	exit 1
+endif
+
 clean:
 	find . -iname '*.class' -print0 | xargs -0 rm -rf
 	find . -path '*/project/*' -type d -prune -print0 | xargs -0 rm -rf
@@ -32,8 +40,8 @@ tmp/.testcomplete:
 	touch $@
 
 $(SBT_FILES): $(shell find $(dir $@) -iname '*.scala') ./tmp/.testcomplete
-	cd $(dir $@) && sbt -feature compile
-	cd $(dir $@) && sbt -feature test
+	cd $(dir $@) && sbt compile
+	cd $(dir $@) && sbt test
 	touch $@
 
 .FORCE:
