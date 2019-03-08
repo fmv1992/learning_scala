@@ -15,14 +15,6 @@ import scalainitiatives.common.ScalaInitiativesExercise
 // |    sbt:LearningScala> project fpis
 // |    import scalainitiatives.functional_programming_in_scala.FPISExerciseChapter04
 
-// object CheckImport {
-// try {
-// println(Either)
-// }
-// catch { case e: Exception => throw e }
-// throw new Exception()
-// }
-
 object FPISExerciseChapter04 extends ScalaInitiativesExercise {
 
   case class Some[+A](get: A) extends Option[A]
@@ -206,16 +198,35 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
       this.flatMap(aa =>
           b.map(bb => f(aa, bb)))
     }
+
   }
 
-  case class Left[+E](value: E) extends Either[E, Nothing]
-  case class Right[+A](value: A) extends Either[Nothing, A]
+  object Either {
 
-  // object Either {
-  // def Try[A](a: => A): Either[Exception, A] =
-  // try Right(a)
-  // catch { case e: Exception => Left(e) }
-  // }
+    def sequence[E, A](es: List[Either[E, A]]): Either[E, List[A]] = {
+      def go(l: List[Either[E, A]], acc: Either[E, List[A]]): Either[E, List[A]] = {
+        l match {
+          case Nil ⇒ acc
+          case h :: t ⇒ h match {
+            case Left(x) ⇒ Left(x)
+            case Right(x) ⇒ go(t, acc.map(z => List(x) ++ z))
+          }
+        }
+      }
+      // go(es.reverse, Right(Nil)).flatMap(x => Right(x.reverse))
+      go(es.reverse, Right(Nil))
+    }
+
+  }
+
+            case class Left[+E](value: E) extends Either[E, Nothing]
+            case class Right[+A](value: A) extends Either[Nothing, A]
+
+            // object Either {
+            // def Try[A](a: => A): Either[Exception, A] =
+            // try Right(a)
+            // catch { case e: Exception => Left(e) }
+            // }
 
 
 }
