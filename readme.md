@@ -49,7 +49,11 @@ Website: <https://www.manning.com/books/functional-programming-in-scala>.
 
 Each chapter will have its own "take-aways" in the corresponding "readme.md" files.
 
-There is a corrisponding git page here: <https://github.com/fpinscala/fpinscala>.
+There is a corresponding git page here: <https://github.com/fpinscala/fpinscala>.
+
+#### TODO
+
+*   `???`: maybe the original fpinscala has tests; copy and paste those (use the same header for credit) and expand on existing tests.
 
 <!--
 #### Notes on the book
