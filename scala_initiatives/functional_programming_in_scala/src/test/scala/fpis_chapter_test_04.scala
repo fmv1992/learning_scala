@@ -211,16 +211,75 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
       == Right(oneToFive.map(_ * 2)))
   }
 
-  test ("4.8: ???."){
-  }
+  test ("4.8: Answer to map2 reporting only one error.") {
+    // In this implementation, map2 is only able to report one error, even if
+    // both the name and the age are invalid.
+    // (1) What would you need to change in order to report both errors?
+    // (2) Would you change map2 or the signature of mkPerson ?
+    // (3) Or could you create a new data type that captures this requirement
+    // better than Either does, with some additional structure?
+    // (4) How would orElse , traverse , and sequence behave differently for
+    // that data type?
+    //
+    case class Person(name: Name, age: Age)
+    sealed class Name(val value: String)
+    sealed class Age(val value: Int)
 
+    def mkName(name: String): Either[String, Name] = {
+      if (name == "" || name == null) Left("Name is empty.") else Right(new Name(name))
+    }
+
+    def mkAge(age: Int): Either[String, Age] = {
+      if (age < 0) Left("Age is out of range.") else Right(new Age(age))
+    }
+
+    def mkPerson(name: String, age: Int): Either[String, Person] = {
+      mkName(name).map2(mkAge(age))(Person(_, _))
+    }
+
+    //
+    // Written answer:
+    //
+    // println(mkPerson("", -1))
+    //
+    // This prints:
+    //
+    // Left(Name is empty.)
+    //
+    // Which makes sense because `mkName(name)` is executed first. From the
+    // substitution model:
+    //
+    //  1| mkName(name).           map2 (mkAge(age))(Person(_, _))
+    //  2| mkName("").             map2 (mkAge(age))(Person(_, _))
+    //  3| Left("Name is empty."). map2 (Left("Age is out of range."))(Person(_, _))
+    //  4| Left("Name is empty."). flatMap(aa => Left("Age is out of range.").map(bb => f(aa, bb)))
+    //  flatMap then matches aa/this/Left("Name is empty."). to Left("Name is empty.").
+    //
+    // (1): In order to report both errors one could either group them in
+    // Either[List[E], A] or create a 3-valued-either: Either[E1, E2, A]. None
+    // seem elegant.
+    //
+    // (2): It doesn't make sense to change the function in one place in order to
+    // capture 2 or more errors. On the other hand it feels hackish and non
+    // scalable to create a 3-valued-either.
+    //
+    // (3): See above.
+    //
+    // (4): 1.  orElse: if the list of errors had one error get orElse(x).
+    //
+    //      2.  traverse: if the function generates one or more errors, or the
+    //      list contains at least one, return them.
+    //
+    //      3.  sequence: if the list of errors had one error return those,
+    //      otherwise return the list.
+  }
 
 }
 
 //  Run this in vim to avoid troubles:
 //
 // vim source: call matchadd("ErrorXXX", '\<List\>', 2)
-// vim source: iabbrev a assert
+// vim source: iabbrev aa assert
 // vim source: call matchadd("ErrorXXX", '\<Option(.\{-})\>', 2)
 //
 // vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:
