@@ -20,9 +20,9 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   val minus10to10 = Stream(_minus10to10: _*)
   val s2 = Stream(1, 2, 3)
 
-  // val minus10to10WithError = (
-  //   Stream(_minus10to10: _*)
-  // ++ Stream({throw new Exception() ; 11}))
+  val minus10to10WithError = (
+    Stream(_minus10to10: _*)
+  ++ Cons(() ⇒ {throw new Exception() ; 11}, () ⇒ Empty))
 
   test ("5.0.0: Basic tests.") {
     assert(s1.isCustomStream)
@@ -30,6 +30,13 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
 
   test("5.0.1: Test memoization.") {
     // ???: Mark as slow. Test lazy momoization.
+  }
+
+  test("5.0.2: Test lazyness.") {
+    assertThrows[Exception](minus10to10WithError.toList)
+    assert(minus10to10WithError.take(21).length == 21
+      && minus10to10WithError.take(21).sum == 0)
+    assertThrows[Exception](minus10to10WithError.take(22))
   }
 
   test("5.1: toList.") {
