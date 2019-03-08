@@ -217,16 +217,32 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
       go(es.reverse, Right(Nil))
     }
 
+    def traverse[E, A, B](as: List[A])(f: A => Either[E, B]): Either[E, List[B]] = {
+      def go(l: List[A], acc: Either[E, List[B]]): Either[E, List[B]] = {
+        l match {
+          case Nil ⇒ acc
+          case h :: t ⇒ {
+            val fHead = f(h)
+            fHead match {
+              case Left(x) ⇒ Left(x)
+              case Right(x) ⇒ go(t, acc.map(z => List(x) ++ z))
+            }
+          }
+        }
+      }
+      go(as.reverse, Right(Nil))
+    }
+
   }
 
-            case class Left[+E](value: E) extends Either[E, Nothing]
-            case class Right[+A](value: A) extends Either[Nothing, A]
+              case class Left[+E](value: E) extends Either[E, Nothing]
+              case class Right[+A](value: A) extends Either[Nothing, A]
 
-            // object Either {
-            // def Try[A](a: => A): Either[Exception, A] =
-            // try Right(a)
-            // catch { case e: Exception => Left(e) }
-            // }
+              // object Either {
+              // def Try[A](a: => A): Either[Exception, A] =
+              // try Right(a)
+              // catch { case e: Exception => Left(e) }
+              // }
 
 
 }

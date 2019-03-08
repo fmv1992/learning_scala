@@ -191,14 +191,24 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
   }
 
   test ("4.7: implementation of sequence and traverse."){
+    // Test sequence.
     val threeRightsOnes = List.fill(3)(r1)
     val threeRightsMixed = List(r1, r2, r1, r2)
     assert(Either.sequence(threeRightsOnes) == Right(List(1, 1, 1)))
     assert(Either.sequence(threeRightsMixed) == Right(List(1, 2, 1, 2)))
     val oneLeft = List(r1, r1, l1)
     // NOTE: Something interesting happens here: l1 is a Left(1). Even though
-    // sequence returns a Either[E, List[A]] the List[A] in this case matters not for comparison.
+    // sequence returns a Either[E, List[A]] the List[A] in this case matters
+    // not for comparison.
     assert(Either.sequence(oneLeft) == l1)
+
+    // Test traverse.
+    val oneToFive: List[Int] = (1 to 5).toList
+    assert(
+      Either.traverse(oneToFive)(x => if (x == 3) l1 else Right(x)) == l1)
+    assert(
+      Either.traverse(oneToFive)(x => if (x == 6) l1 else Right(2 * x))
+      == Right(oneToFive.map(_ * 2)))
   }
 
   test ("4.8: ???."){
