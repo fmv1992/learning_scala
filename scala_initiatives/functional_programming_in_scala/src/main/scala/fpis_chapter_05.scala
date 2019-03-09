@@ -66,15 +66,22 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
       go(this, Nil)
     }
 
-    def ++[B >: A](that: Stream[B]): Stream[B] = {
-      this match {
-        case Empty ⇒ that
-        case Cons(h, t) ⇒ Cons(h, () ⇒ t() ++ that)
-      }
+    // def ++(that: Stream[A]): Stream[A] =
+    def ++[B>:A](that: Stream[B]): Stream[B] = {
+      // def go: recurse through this forming a Stream.
+      // When the end is reached return that.
+      // this match {
+      //   case Empty ⇒ that
+      //   case Cons(h, t) ⇒ Stream.cons(h(), t()) ++ that
+      // }
+      ???
     }
-
   }
 
 }
 
+//  Run this in vim:
+//
+// vim source: call matchadd("ErrorXXX", '\<Cons\>', 2)
+//
 // vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:

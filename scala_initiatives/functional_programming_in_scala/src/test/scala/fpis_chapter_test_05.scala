@@ -22,7 +22,9 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
 
   val minus10to10WithError = (
     Stream(_minus10to10: _*)
-  ++ Cons(() ⇒ {println("tne"); throw new Exception() ; 11}, () ⇒ Empty))
+  ++ Stream.cons(
+  {println("tne"); throw new Exception() ; 11},
+  Empty))
 
   test ("5.0.0: Basic tests.") {
     assert(s1.isCustomStream)
@@ -103,8 +105,8 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     // This Stream will certainly help us in testing the lazy evaluation of our
     // object at all times.
 
-    assert((s2 ++ Stream(10)).toList == Stream(1, 2, 3, 10).toList)
-    assert((Stream() ++ s1) == s1)
+    // assert((s2 ++ Stream(10)).toList == Stream(1, 2, 3, 10).toList)
+    // assert((Stream() ++ s1) == s1)
 
     val randList = List.tabulate(10)(x ⇒ scala.util.Random.nextInt)
     assert(Stream(randList: _*).toList == Stream(randList: _*).toList)
@@ -139,7 +141,6 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   }
 
   test("5.9: ???.") {
-
   }
 
 
@@ -148,5 +149,6 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
 //  Run this in vim:
 //
 // vim source: iabbrev aa assert("5.x: ???.")
+// vim source: call matchadd("ErrorXXX", '\<Cons\>', 2)
 //
 // vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:
