@@ -19,11 +19,12 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   val s1: Stream[Int] = Stream(1)
   val minus10to10 = Stream(_minus10to10: _*)
   val s2 = Stream(1, 2, 3)
-  val error: Stream[Int] = Stream.cons({
-    // throw new Exception()
-    println('-')
-    11
-  }, Empty)
+
+  // val error: Stream[Int] = Stream.cons({
+  // // throw new Exception()
+  // println('-')
+  // 11
+  // }, Empty)
 
   test ("5.0.0: Basic tests.") {
     assert(s1.isCustomStream)
@@ -167,7 +168,11 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   }
 
   test("5.3: Implementation of takeWhile.") {
-
+    assert(minus10to10.takeWhile(_ < -5).toList
+      == List(-10, -9, -8, -7, -6))
+    assert(s1.takeWhile(x ⇒ false).toList == Nil)
+    assert(Empty.takeWhile(Nothing ⇒ true) == Empty)
+    assert(s2.takeWhile(_ != 3).toList == List(1, 2))
   }
 
   test("5.4: ???.") {
