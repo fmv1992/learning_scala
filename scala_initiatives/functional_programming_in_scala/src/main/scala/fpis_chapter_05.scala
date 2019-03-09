@@ -57,6 +57,18 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
       go(n, this)
     }
 
+    def drop(n: Int): Stream[A] = {
+      def go(ngo: Int, newS: Stream[A]): Stream[A] = {
+        if (ngo > 0) {
+          newS match {
+            case Empty ⇒ Empty
+            case Cons(h, t) ⇒ go(ngo - 1, t())
+          }
+        } else newS
+      }
+      go(n, this)
+    }
+
     def toList: List[A] = {
       def go(s: Stream[A], acc: List[A]): List[A] = {
         s match {
