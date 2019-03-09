@@ -22,7 +22,7 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
 
   val minus10to10WithError = (
     Stream(_minus10to10: _*)
-  ++ Cons(() ⇒ {throw new Exception() ; 11}, () ⇒ Empty))
+  ++ Cons(() ⇒ {println("tne"); throw new Exception() ; 11}, () ⇒ Empty))
 
   test ("5.0.0: Basic tests.") {
     assert(s1.isCustomStream)
@@ -33,10 +33,19 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   }
 
   test("5.0.2: Test lazyness.") {
-    assertThrows[Exception](minus10to10WithError.toList)
-    assert(minus10to10WithError.take(21).length == 21
-      && minus10to10WithError.take(21).sum == 0)
-    assertThrows[Exception](minus10to10WithError.take(22))
+    // NOTE: It is important to notice how this code fails in a way. See the
+    // two assertions below. They actually happen. After some inspection I
+    // noticed how the Cons (upper case C) is being used. It does not use lazy
+    // values. Therefore it is not as efficient as Stream.cons. An idea is to
+    // not expose that constructor and just Stream.cons.
+    assertThrows[Exception](minus10to10WithError.take(22).toList)
+    assertThrows[Exception](minus10to10WithError.take(22).toList)
+    // Lazy evaluation caches the result of the error expression above so that
+    // posterior invocations do not trigger the exception.
+    // minus10to10WithError.toList
+
+    // assert(minus10to10WithError.take(21).toList.length == 21
+    // && minus10to10WithError.take(21).toList.sum == 0)
   }
 
   test("5.1: toList.") {

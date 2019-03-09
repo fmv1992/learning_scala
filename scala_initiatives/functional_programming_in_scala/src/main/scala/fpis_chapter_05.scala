@@ -44,6 +44,18 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
 
     val isCustomStream = true
 
+    def take(n: Int): Stream[A] = {
+      def go(ngo: Int, newS: Stream[A], acc: Stream[A]): Stream[A] = {
+        if (ngo >= 0) newS match {
+          // case Cons(h, t) ⇒ go(ngo - 1, t, Cons(h, () ⇒ acc))
+          case Cons(h, t) ⇒ go(ngo - 1, t(), Stream.cons(h(), acc))
+          case Empty ⇒ acc
+        }
+        else acc
+      }
+      go(n, this, Empty)
+    }
+
     def toList: List[A] = {
       def go(s: Stream[A], acc: List[A]): List[A] = {
         s match {
