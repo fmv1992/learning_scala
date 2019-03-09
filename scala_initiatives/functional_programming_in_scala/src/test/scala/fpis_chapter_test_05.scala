@@ -152,6 +152,11 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   // }
 
   test("5.2: Implementation of take and drop.") {
+    assert(minus10to10.take(5).toList == List(-10, -9, -8, -7, -6))
+    // IMPROVEMENT: See strange case below. Alternative:
+    // throw an exception → or even better: return an option :)
+    assert(Stream().take(5).toList == Nil)
+    assert(Stream(1).take(1).toList == List(1))
   }
 
   test("5.3: Implementation of takeWhile.") {
