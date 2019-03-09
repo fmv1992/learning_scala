@@ -66,16 +66,29 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
       go(this, Nil)
     }
 
-    // def ++(that: Stream[A]): Stream[A] =
-    def ++[B>:A](that: Stream[B]): Stream[B] = {
-      // def go: recurse through this forming a Stream.
-      // When the end is reached return that.
-      // this match {
-      //   case Empty ⇒ that
-      //   case Cons(h, t) ⇒ Stream.cons(h(), t()) ++ that
-      // }
-      ???
-    }
+    // ???: Implement this.
+    // def ==[B>:A](that: Stream[B]): Boolean = {
+    // val a: List[A] = this.toList
+    // val b: List[B] = that.toList
+    // a == b
+    // }
+
+    // ???: Implement this.
+    // def !=[B>:A](that: Stream[B]): Boolean = {
+    // ! (this == that)
+    // }
+
+    // ???: Implement this.
+    // def ++[B>:A](that: Stream[B]): Stream[B] = {
+    // def go: recurse through this forming a Stream.
+    // When the end is reached return that.
+    // this match {
+    // case Empty ⇒ that
+    // case Cons(h, t) ⇒ Stream.cons(h(), t()) ++ that
+    // }
+    // ???
+    // }
+
   }
 
 }

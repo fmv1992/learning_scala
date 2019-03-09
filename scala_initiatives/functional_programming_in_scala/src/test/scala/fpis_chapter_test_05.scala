@@ -93,58 +93,65 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     assert(Stream(1).toList == List(1))
   }
 
-  test("5.a: Test ++.") {
-    // //  ???: Re enable this test.
-    // assert((s2 ++ s2).toList == Stream(1, 2, 3, 1, 2, 3).toList)
-    // // Considering the commit '2ac328b', the command `make clean && make` gives
-    // // us the following relevant portion of the code:
-    // //
-    // // [info] Done compiling.
-    // // evalhead
-    // // evaltail
-    // // evalhead
-    // // evaltail
-    // // evalhead
-    // // evaltail
-    // // evalhead
-    // // evaltail
-    // // evalhead
-    // // evaltail
-    // // evalhead
-    // // evaltail
-    // // Starting: 5.a: Test ++. 25732014735933
-    // // Ended:    5.a: Test ++. 25732015535532
-    // // [info] FPISTestChapter05:
-    // // [info] - 5.0.0: Basic tests.
-    // // [info] - 5.0.1: Test memoization.
-    // // [info] - 5.1: toList.
-    // // [info] - 5.a: Test ++.
-    // // [info] - 5.2: Implementation of take and drop.
-    // // [info] - 5.3: Implementation of takeWhile.
-    // // [info] - 5.4: ???.
-    // // [info] - 5.5: ???.
-    // // [info] - 5.6: ???.
-    // // [info] - 5.7: ???.
-    // // [info] - 5.8: ???.
-    // // [info] - 5.9: ???.
-    // //
-    // // This shows us that the operator `++` keeps the lazyness of our Stream
-    // // object. It thus helps us tremendously to define a Stream such as this:
-    // //
-    // // Stream(v1, v2, ..., {throw new Exception(); v3})
-    // //
-    // // This Stream will certainly help us in testing the lazy evaluation of our
-    // // object at all times.
+  // ???: Implement this.
+  // test("5.a: Test ++.") {
+  //   //  ???: Re enable this test.
+  //   assert((s2 ++ s2).toList == Stream(1, 2, 3, 1, 2, 3).toList)
+  //   // Considering the commit '2ac328b', the command `make clean && make` gives
+  //   // us the following relevant portion of the code:
+  //   //
+  //   // [info] Done compiling.
+  //   // evalhead
+  //   // evaltail
+  //   // evalhead
+  //   // evaltail
+  //   // evalhead
+  //   // evaltail
+  //   // evalhead
+  //   // evaltail
+  //   // evalhead
+  //   // evaltail
+  //   // evalhead
+  //   // evaltail
+  //   // Starting: 5.a: Test ++. 25732014735933
+  //   // Ended:    5.a: Test ++. 25732015535532
+  //   // [info] FPISTestChapter05:
+  //   // [info] - 5.0.0: Basic tests.
+  //   // [info] - 5.0.1: Test memoization.
+  //   // [info] - 5.1: toList.
+  //   // [info] - 5.a: Test ++.
+  //   // [info] - 5.2: Implementation of take and drop.
+  //   // [info] - 5.3: Implementation of takeWhile.
+  //   // [info] - 5.4: ???.
+  //   // [info] - 5.5: ???.
+  //   // [info] - 5.6: ???.
+  //   // [info] - 5.7: ???.
+  //   // [info] - 5.8: ???.
+  //   // [info] - 5.9: ???.
+  //   //
+  //   // This shows us that the operator `++` keeps the lazyness of our Stream
+  //   // object. It thus helps us tremendously to define a Stream such as this:
+  //   //
+  //   // Stream(v1, v2, ..., {throw new Exception(); v3})
+  //   //
+  //   // This Stream will certainly help us in testing the lazy evaluation of our
+  //   // object at all times.
 
-    // // assert((s2 ++ Stream(10)).toList == Stream(1, 2, 3, 10).toList)
-    // // assert((Stream() ++ s1) == s1)
+  //   // assert((s2 ++ Stream(10)).toList == Stream(1, 2, 3, 10).toList)
+  //   // assert((Stream() ++ s1) == s1)
 
-    // val randList = List.tabulate(10)(x ⇒ scala.util.Random.nextInt)
-    // assert(Stream(randList: _*).toList == Stream(randList: _*).toList)
-  }
+  //   val randList = List.tabulate(10)(x ⇒ scala.util.Random.nextInt)
+  //   assert(Stream(randList: _*).toList == Stream(randList: _*).toList)
+  // }
+
+  // ???: Implement this.
+  // test("5.b: Test == and !=.") {
+  // assert(s1 == Stream(1))
+  // assert(minus10to10 == minus10to10)
+  // // assert(s1 != minus10to10)
+  // }
 
   test("5.2: Implementation of take and drop.") {
-
   }
 
   test("5.3: Implementation of takeWhile.") {
