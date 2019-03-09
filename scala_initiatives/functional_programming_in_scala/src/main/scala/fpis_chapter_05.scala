@@ -3,7 +3,7 @@ package scalainitiatives.functional_programming_in_scala
 import scala.{Stream => _, _}
 
 import scalainitiatives.common.ScalaInitiativesExercise
-//
+
 // In order to use this interactively do:
 // |    $ sbt
 // |    sbt:LearningScala> project fpis
