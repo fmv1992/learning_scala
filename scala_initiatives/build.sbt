@@ -3,6 +3,7 @@ name := "LearningScala"
 lazy val commonSettings = Seq(
     version := "0.0.1-SNAPSHOT",
     scalaVersion := "2.12.8",
+    pollInterval := scala.concurrent.duration.FiniteDuration(50L, "ms"),
 
     // This final part makes test artifacts being only importable by the test files
     // libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % Test,
