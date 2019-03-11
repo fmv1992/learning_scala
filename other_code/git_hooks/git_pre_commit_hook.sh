@@ -10,8 +10,12 @@ set -x
 
 # Go to execution directory.
 # cd $(dirname $0)
-(cd ./scala_initiatives/ && sbt clean)
-make clean
+if [ -z "$LEARNING_SCALA_CHAPTER" ];
+then
+    make clean
+else
+    make clean_fpis_chapter
+fi
 
 # https://stackoverflow.com/questions/3466166/how-to-check-if-running-in-cygwin-mac-or-linux
 cd ./scala_initiatives/

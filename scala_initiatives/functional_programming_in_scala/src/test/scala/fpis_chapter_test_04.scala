@@ -135,7 +135,7 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
   }
 
   test ("4.5: implementation of traverse."){
-    val oneToFive: List[Int] = (1 to 5).toList
+    // val oneToFive: List[Int] = (1 to 5).toList
     assert(
       Option.traverse(oneToFive)(x => if (x == 3) None else Some(x))
       == None)
@@ -203,7 +203,7 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
     assert(Either.sequence(oneLeft) == l1)
 
     // Test traverse.
-    val oneToFive: List[Int] = (1 to 5).toList
+    // val oneToFive: List[Int] = (1 to 5).toList
     assert(
       Either.traverse(oneToFive)(x => if (x == 3) l1 else Right(x)) == l1)
     assert(

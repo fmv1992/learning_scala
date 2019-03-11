@@ -21,6 +21,9 @@ trait ScalaInitiativesUtilities {
 
 trait ScalaInitiativesTest extends FunSuite {
 
+  // Declare very common variables to all the tests.
+  val oneToFive = (1 to 5).toList
+
   // // https://jaytaylor.com/notes/node/1348628729000.html
   // def tupleize[A, B](f: A => B => C) = {
 
