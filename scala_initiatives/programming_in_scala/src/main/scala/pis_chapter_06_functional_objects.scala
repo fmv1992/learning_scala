@@ -50,7 +50,6 @@ case class Rational(private val n: Int, private val d: Int) {
     case _ =>
       false
   }
-
   def canEqual(other: Any) = other.isInstanceOf[Rational]
   // Chapter 30 ------------------------------------------------------------ >8
 

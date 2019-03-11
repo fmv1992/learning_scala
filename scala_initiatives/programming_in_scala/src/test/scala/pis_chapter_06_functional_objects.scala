@@ -10,17 +10,14 @@ class PISChapter06FunctionalObjectsTest extends FunSuite with DiagrammedAssertio
   // rationals can go beyond it.
   private val squaredRootOfMaxInt = math.sqrt(Int.MaxValue).toInt - 1
 
-  private val zero = new Rational(0)
-  private val one = new Rational(1)
-
-  private def getNRandomInts(n: Int): List[Int] = {
+  def getNRandomInts(n: Int): List[Int] = {
     val x = Range(0, n).map(x =>
         squaredRootOfMaxInt
         / 2 - scala.util.Random.nextInt(squaredRootOfMaxInt))
     x.toList
   }
 
-  private def getNRandomRationals(n: Int): List[Rational] = {
+  def getNRandomRationals(n: Int): List[Rational] = {
     val numerators = 0 :: getNRandomInts(n)
     val denominators = getNRandomInts(n).filter(_ != 0)
     val rationals = (
@@ -28,6 +25,10 @@ class PISChapter06FunctionalObjectsTest extends FunSuite with DiagrammedAssertio
     assert(rationals.contains(new Rational(0)))
     rationals
   }
+
+  val zero = new Rational(0)
+  val one = new Rational(1)
+
 
   test("Test instantiation of rationals.") {
     // Random values.
@@ -44,6 +45,7 @@ class PISChapter06FunctionalObjectsTest extends FunSuite with DiagrammedAssertio
   }
 
   test("Test operations of rationals.") {
+
     // Identity operations.
     assert(new Rational(-1, -1) == new Rational(1, 1))
     assert(new Rational(1, 1) == new Rational(2, 2))
@@ -73,9 +75,11 @@ class PISChapter06FunctionalObjectsTest extends FunSuite with DiagrammedAssertio
     assert(one + 1 == new Rational(2))
     assert(one - 1 == new Rational(0))
     assert(new Rational(3, 5) * 10 == new Rational(30, 5))
+
   }
 
   test("Test get 100% test coverage.") {
+
     assert(one.hashCode == one.hashCode)
     assert(new Rational(10, 2).hashCode == new Rational(5, 1).hashCode)
     assert(one != 1)
@@ -83,6 +87,7 @@ class PISChapter06FunctionalObjectsTest extends FunSuite with DiagrammedAssertio
     assert(zero.toString == "0/1")
     getNRandomRationals(nTests).foreach(
       x => assert(x.toString == x.numer + "/" + x.denom))
+
   }
 
 }
