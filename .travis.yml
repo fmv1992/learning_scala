@@ -1,7 +1,16 @@
+language: scala
+
+scala:
+   - 2.9.3
+   - 2.10.6
+   - 2.11.11
+   - 2.12.8
+
 branches:
   only:
     - master
     - dev
+
 script: cd ./scala_initiatives/ && sbt compile && sbt test
 
 # vim: set fileformat=unix filetype=yaml nowrap nospell :

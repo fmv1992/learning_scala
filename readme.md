@@ -1,14 +1,5 @@
 ![](https://travis-ci.org/fmv1992/learning_scala.svg?branch=dev)
 
-<p align="center">
-  <img width="150" height="150" src="https://vignette.wikia.nocookie.net/sqmegapolis/images/4/42/Warning-2-256.png/revision/latest?cb=20130403220740">
-</p>
-
-This project is under redesign. The problem with the current design is that scala scripts were developed but they lack a "Scala-structure" and testability. This code is under `./legacy_code`.  
-The new code is placed under `./scala_initiatives` and they will be packaged and tested with [SBT](https://www.scala-sbt.org). The benefits are: organization, improved reproducibility and that it forces me to learn SBT about as well.
-
-* * *
-
 # My journey in learning Scala
 
 This is my progress checker in my journey of learning Scala.
@@ -17,8 +8,57 @@ I'll be using the recommended book from the Scala [website](http://docs.scala-la
 
 I'll also try to stick to the [functional programming](https://en.wikipedia.org/wiki/Functional_programming) style to challenge myself along the way.
 
+## Project conventions
+
+The following tags are used in this project:
+
+*   `???`: Errors to be fixed at a later point.
+
+*   `??!`: Answers to these errors. Should be of the format:
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ???: How to import with the namespace?
+    import org.scalatest._
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    Gets answered into:
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ??!: How to import with the namespace?
+    // ??!: Scala gets around this with alising:
+    import org.scalatest.{FunSuite => FS}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*   `This prints:`: Show in comments what print statements do.
+
+*   `NOTE:`: Notes for exercise or code; these are not code comments.
+
+*   Special mixed natural language and code markers:
+
+    *   `Written answer:`: Written answer to the question in case tests are not enough.
+
+    *   `Commit: 'cfe6164'` or `commit: 'cfe6164'` (it has to have 7 chars): Reference to a commit inside the source files.
+
+*   `IMPROVEMENT:`: Notes for exercise or code; these are not code comments.
+
 ## Resources
 
+### Functional Programming in Scala ("The Red Book")
+
+Website: <https://www.manning.com/books/functional-programming-in-scala>.
+
+Each chapter will have its own "take-aways" in the corresponding "readme.md" files.
+
+There is a corrisponding git page here: <https://github.com/fpinscala/fpinscala>.
+
+<!--
+#### Notes on the book
+
+#### Discussion points
+
+-->
+
+<!-- -->
 ### Programming in Scala (book)
 
 Website: <https://booksites.artima.com/programming_in_scala_3ed>.
@@ -39,22 +79,6 @@ As the author says the book is not an introduction to programming. Some programm
 
 (Each chapter has its own detailed `readme.md`).
 * In chapter 04 the part about `singleton` and `classes` was not clear. Specifically on why would one use a `object` (for the singleton) and not package everything up inside a `class`. The apparent advantage was one of not having to instantiate any `ChecksumAccumulator` object.
-
-<!-- -->
-### Functional Programming in Scala ("The Red Book")
-
-Website: <https://www.manning.com/books/functional-programming-in-scala>.
-
-Each chapter will have its own "take-aways" in the corresponding "readme.md" files.
-
-There is a corrisponding git page here: <https://github.com/fpinscala/fpinscala>.
-
-<!--
-#### Notes on the book
-
-#### Discussion points
-
--->
 
 <!-- -->
 ### Project Euler (website)
@@ -127,3 +151,5 @@ Website: <http://aperiodic.net/phil/scala/s-99/>.
 
 * http://twitter.github.io/effectivescala/
 -->
+
+[comment]: # ( vim: set filetype=markdown fileformat=unix wrap spell spelllang=en: )
