@@ -6,6 +6,8 @@ import FPISExerciseChapter05.Stream
 import FPISExerciseChapter05.Cons
 import FPISExerciseChapter05.Empty
 
+import FPISExerciseChapter02.Exercise2Dot1Fib
+
 // import org.scalatest.Matchers
 
 import scalainitiatives.common.ScalaInitiativesTest
@@ -225,8 +227,9 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     assert(Stream.from(1).take(4).toList != s2.toList)
   }
 
-  test("5.10: ???.") {
-
+  test("5.10: Implementation of fibonacci sequence using Stream.") {
+    assert(List.tabulate(10)(Exercise2Dot1Fib) == Stream.fib.take(10).toList)
+    assert(List.tabulate(10)(Exercise2Dot1Fib) == Stream.fib.take(10).toList)
   }
 
   test("5.11: ???.") {

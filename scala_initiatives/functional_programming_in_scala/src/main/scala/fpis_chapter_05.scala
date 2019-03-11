@@ -44,6 +44,18 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
       s
     }
 
+    def fib: Stream[Int] = {
+      def go(i: Int, j: Int): Stream[Int] = {
+        lazy val newf = i + j
+        Stream.cons(newf, go(j, newf))
+      }
+      lazy val fib0 = 0
+      lazy val fib1 = 1
+      Stream.cons(
+        fib0,
+        Stream.cons(fib1, go(fib0, fib1)))
+    }
+
   }
 
   // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------|
