@@ -196,12 +196,21 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     assert(s2.headOptionUsingFoldRight == Some(1))
   }
 
-  test("5.7: ???.") {
+  test("5.7: Implementation of map, filter, append and flatMap.") {
+    // Assert map.
+    assert(s2.map(_ * 2).toList == Stream(2, 4, 6).toList)
+    assert(s1.map("" + _ + "|").toList == Stream("1|").toList)
 
+    // Assert filter.
+    assert(s2.filter(_ % 2 == 1).toList == Stream(1, 3).toList)
+    assert(s2.filter(_ % 2 != 1).toList == Stream(2).toList)
+
+    // Assert append.
+    assert(s2.append(s2).toList == Stream(1,2,3,1,2,3).toList)
+    assert(s2.append(4).toList == Stream(1,2,3,4).toList)
   }
 
   test("5.8: ???.") {
-
   }
 
   test("5.9: ???.") {

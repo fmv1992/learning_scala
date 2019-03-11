@@ -122,6 +122,44 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
 
     }
 
+    def map[B](f: A ⇒ B): Stream[B] = {
+
+      def g(a: A, s: ⇒ Stream[B]): Stream[B] = {
+        Stream.cons(f(a), s)
+      }
+
+      val emptyB: Stream[B] = Empty
+      this.foldRight(emptyB)(g)
+
+    }
+
+    def filter(f: A ⇒ Boolean): Stream[A] = {
+
+      def g(a: A, s: ⇒ Stream[A]): Stream[A] = {
+        if (f(a)) Stream.cons(a, s) else s
+      }
+
+      val emptyA: Stream[A] = Empty
+      this.foldRight(emptyA)(g)
+
+    }
+
+    // implicit def x(
+
+    def append[B>:A](s1: ⇒ Stream[B]): Stream[B] = {
+
+      // def f(el: A, s2: ⇒ Stream[A]): Stream[A] = Stream.cons(el, s)
+
+      this.foldRight(s1)(Stream.cons(_, _))
+
+    }
+
+    def append[C>:A](e: ⇒ C): Stream[C] = {
+
+      this.append(Stream.cons(e, Empty))
+
+    }
+
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
     // Changed those to fpinscala to proceed with certainty of correctness -|
     // (despite using a lot of tests). -------------------------------------| {
