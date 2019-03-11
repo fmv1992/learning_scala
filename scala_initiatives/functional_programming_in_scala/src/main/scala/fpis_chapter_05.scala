@@ -90,6 +90,26 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
       foldRight(true)((p(_) && _))
     }
 
+    def takeWhileUsingFoldRight(p: A => Boolean): Stream[A] = {
+
+      val e: Stream[A] = Stream.empty
+
+      // ???: How to implement f with a lambda keeping non-strictness?
+      def f(a: A, s: ⇒ Stream[A]) = {
+        if (p(a)) Stream.cons(a, s.takeWhileUsingFoldRight(p))
+        else Empty
+      }
+
+      foldRight(e)(f)
+      // foldRight(null)(
+      // (a: A, s: Stream[A]) ⇒
+      // s match {
+      // case Empty ⇒ Empty
+      // case Cons(h, t) ⇒ if (p(a)) Stream.cons(a, s) else s
+      // }
+      // )
+    }
+
 
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
     // Changed those to fpinscala to proceed with certainty of correctness -|

@@ -181,8 +181,12 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     assert(! getErrorStream().forAll(_ != -12))
   }
 
-  test("5.5: ???.") {
-
+  test("5.5: Implementation of takeWhileUsingFoldRight.") {
+    assert(minus10to10.takeWhileUsingFoldRight(_ < -5).toList
+      == List(-10, -9, -8, -7, -6))
+    assert(s1.takeWhileUsingFoldRight(x ⇒ false).toList == Nil)
+    assert(Empty.takeWhileUsingFoldRight(Nothing ⇒ true) == Empty)
+    assert(s2.takeWhileUsingFoldRight(_ != 3).toList == List(1, 2))
   }
 
   test("5.6: ???.") {
