@@ -20,11 +20,9 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   val minus10to10 = Stream(_minus10to10: _*)
   val s2 = Stream(1, 2, 3)
 
-  // val error: Stream[Int] = Stream.cons({
-  // // throw new Exception()
-  // println('-')
-  // 11
-  // }, Empty)
+  def getErrorStream: () ⇒ Stream[Int] = () ⇒ Stream.cons(
+    -12,
+    Stream.cons({ throw new Exception(); -11 }, Stream(_minus10to10: _*)))
 
   test ("5.0.0: Basic tests.") {
     assert(s1.isCustomStream)
@@ -175,8 +173,12 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     assert(s2.takeWhile(_ != 3).toList == List(1, 2))
   }
 
-  test("5.4: ???.") {
-
+  test("5.4: Implementation of forAll.") {
+    assert(minus10to10.forAll(math.abs(_) < 11))
+    assert(! minus10to10.forAll(_ != 10))
+    assert(
+      Stream("sim", "sam", "sif").forAll(_.startsWith("s")))
+    assert(! getErrorStream().forAll(_ != -12))
   }
 
   test("5.5: ???.") {

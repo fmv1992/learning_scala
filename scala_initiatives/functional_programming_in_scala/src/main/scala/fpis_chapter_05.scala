@@ -86,18 +86,49 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
       }
     }
 
-    // ???: Implement this.
-    // def ==[B>:A](that: Stream[B]): Boolean = {
-    // val a: List[A] = this.toList
-    // val b: List[B] = that.toList
-    // a == b
-    // }
+    def forAll(p: A => Boolean): Boolean = {
+      foldRight(true)((p(_) && _))
+    }
 
+
+    // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
+    // Changed those to fpinscala to proceed with certainty of correctness -|
+    // (despite using a lot of tests). -------------------------------------| {
+
+    def foldRight[B](z: => B)(f: (A, => B) => B): B = {
+      this match {
+        case Cons(h,t) => f(h(), t().foldRight(z)(f))
+        case _ => z
+      }
+    }
+
+    def exists(p: A => Boolean): Boolean = foldRight(false)((a, b) => p(a) || b)
+
+    // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
+    // Changed those to fpinscala to proceed with certainty of correctness -|
+    // (despite using a lot of tests). -------------------------------------| }
+
+    // ??!: Implement this.
+    // ??!: Equal comparison, == is implemented through `equals`.
+    // ???: It is still not working...
+    // Discussions abound:
+    // <https://www.oreilly.com/library/view/scala-cookbook/9781449340292/ch04s16.html>
+    // def canEqual(a: Any) = a.isInstanceOf[Stream[A]]
+    //
+    // override def equals(that: Any): Boolean =
+    //   that match {
+    //     case that: Stream[A] => that.canEqual(this) && this.hashCode == that.hashCode
+    //     case _ => false
+    //   }
+    //
+    // override def hashCode: Int = {
+    //   this.toList.hashCode
+    // }
+    //
     // ???: Implement this.
     // def !=[B>:A](that: Stream[B]): Boolean = {
     // ! (this == that)
     // }
-
     // ???: Implement this.
     // def ++[B>:A](that: Stream[B]): Stream[B] = {
     // def go: recurse through this forming a Stream.
