@@ -229,11 +229,17 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
 
   test("5.10: Implementation of fibonacci sequence using Stream.") {
     assert(List.tabulate(10)(Exercise2Dot1Fib) == Stream.fib.take(10).toList)
-    assert(List.tabulate(10)(Exercise2Dot1Fib) == Stream.fib.take(10).toList)
   }
 
-  test("5.11: ???.") {
-
+  test("5.11: Implementation of unfold.") {
+    assert(
+      Stream.constant(0).take(100).toList
+      == Stream.unfold(0)(x ⇒ Option(x, x)).take(100).toList)
+    assert(
+      Stream.unfold(10)(x ⇒ if (x < 20) Option(x / 3, x + 1) else None).toList
+      == Stream(3,  3,  4,  4,  4,  5,  5,  5,  6, 6).toList)
+    //          10, 11, 12, 13, 14, 15, 16, 17, 18,19,
+    //          3,  3,  4,  4,  4,  5,  5,  5,  6, 6,
   }
 
   test("5.12: ???.") {
