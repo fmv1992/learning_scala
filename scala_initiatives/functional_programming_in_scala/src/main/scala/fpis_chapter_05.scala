@@ -32,6 +32,18 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
 
     def apply[A](as: A*): Stream[A] =
       if (as.isEmpty) empty else cons(as.head, apply(as.tail: _*))
+
+    def constant[A](a: A): Stream[A] = {
+      // NOTE: `lazy` here is crucial for compilation!
+      lazy val s: Stream[A] = Stream.cons(a, s)
+      s
+    }
+
+    def from(n: Int): Stream[Int] = {
+      lazy val s: Stream[Int] = Stream.cons(n, Stream.from(n+1))
+      s
+    }
+
   }
 
   // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------|

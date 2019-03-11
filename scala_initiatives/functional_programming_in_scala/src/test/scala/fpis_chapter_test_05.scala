@@ -213,11 +213,46 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     assert(minus10to10.flatMap(i ⇒ Stream(i)).toList == minus10to10.map(identity _).toList)
   }
 
-  test("5.8: ???.") {
+  test("5.8: Implementation of constant.") {
+    assert(Stream.constant(1).take(1).toList == s1.toList)
+    assert(Stream.constant('-').take(100).toList == List.fill(100)('-'))
   }
 
-  test("5.9: ???.") {
+  test("5.9: Implementation of from.") {
+    assert(Stream.from(-10).take(21).toList == minus10to10.toList)
+    assert(Stream.from(0).take(0).toList == Nil)
+    assert(Stream.from(1).take(3).toList == s2.toList)
+    assert(Stream.from(1).take(4).toList != s2.toList)
   }
+
+  test("5.10: ???.") {
+
+  }
+
+  test("5.11: ???.") {
+
+  }
+
+  test("5.12: ???.") {
+
+  }
+
+  test("5.13: ???.") {
+
+  }
+
+  test("5.14: ???.") {
+
+  }
+
+  test("5.15: ???.") {
+
+  }
+
+  test("5.16: ???.") {
+
+  }
+
 
 
 }
