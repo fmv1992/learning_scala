@@ -99,6 +99,8 @@ object Constants {
 
 object Reader {
 
+  // Completeness function: enable the program to read from stdin.
+  // Side effect function to be used with 'printFileToStdIn'.
   def readLines(path: String): List[String] = {
     val lines = if(new File(path).exists) {
       val src = io.Source.fromFile(path)
