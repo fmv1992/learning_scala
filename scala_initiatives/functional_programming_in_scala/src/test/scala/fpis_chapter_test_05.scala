@@ -207,7 +207,10 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
 
     // Assert append.
     assert(s2.append(s2).toList == Stream(1,2,3,1,2,3).toList)
-    assert(s2.append(4).toList == Stream(1,2,3,4).toList)
+
+    // Assert flatMap.
+    assert(s2.flatMap(i ⇒ Stream(i, i)).toList == Stream(1,1,2,2,3,3).toList)
+    assert(minus10to10.flatMap(i ⇒ Stream(i)).toList == minus10to10.map(identity _).toList)
   }
 
   test("5.8: ???.") {

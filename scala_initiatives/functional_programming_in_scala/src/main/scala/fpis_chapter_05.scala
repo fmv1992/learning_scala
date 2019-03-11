@@ -144,8 +144,6 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
 
     }
 
-    // implicit def x(
-
     def append[B>:A](s1: ⇒ Stream[B]): Stream[B] = {
 
       // def f(el: A, s2: ⇒ Stream[A]): Stream[A] = Stream.cons(el, s)
@@ -153,11 +151,22 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
       this.foldRight(s1)(Stream.cons(_, _))
 
     }
+    def ++[B>:A](s1: ⇒ Stream[B]): Stream[B] = {
+      this.append(s1)
+    }
+    // ???: Removed in favor of example of fpis.
+    // def append[B>:A](e: ⇒ B): Stream[B] = {
+    // this.append(Stream.cons(e, Empty))
+    // }
 
-    def append[C>:A](e: ⇒ C): Stream[C] = {
+    def flatMap[B](f: A ⇒ Stream[B]): Stream[B] = {
+      val emptyB: Stream[B] = Empty
 
-      this.append(Stream.cons(e, Empty))
+      def g(a: A, s: ⇒ Stream[B]): Stream[B] = {
+        f(a).append(s)
+      }
 
+      this.foldRight(emptyB)(g)
     }
 
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
