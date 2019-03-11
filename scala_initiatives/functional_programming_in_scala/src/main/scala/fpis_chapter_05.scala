@@ -39,6 +39,8 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
       s
     }
 
+    def ones: Stream[Int] = constant(1)
+
     def from(n: Int): Stream[Int] = {
       lazy val s: Stream[Int] = Stream.cons(n, Stream.from(n+1))
       s
@@ -62,6 +64,25 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
         case None ⇒ Empty
         case Some((a, s)) ⇒ Stream.cons(a, unfold(s)(f))
       }
+    }
+
+
+    def constantUsingUnfold[A](a: A): Stream[A] = {
+      unfold(a)((s ⇒ Option(a, a)))
+    }
+
+    def onesUsingUnfold: Stream[Int] = unfold(null)(s ⇒ Option(1, null))
+
+    def fromUsingUnfold(n: Int): Stream[Int] = {
+      unfold(n)((s ⇒ Option(s, s + 1)))
+    }
+
+    def fibUsingUnfold: Stream[Int] = {
+      unfold((0, 1))(s ⇒ {
+        lazy val newF = s._1 + s._2
+        Option(s._1, (s._2, newF))
+      }
+    )
     }
 
   }

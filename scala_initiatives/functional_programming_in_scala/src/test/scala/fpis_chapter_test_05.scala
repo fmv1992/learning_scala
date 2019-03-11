@@ -242,7 +242,22 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     //          3,  3,  4,  4,  4,  5,  5,  5,  6, 6,
   }
 
-  test("5.12: ???.") {
+  test("5.12: Implementation of fibs, from, constant, and ones using unfold.") {
+    val t1 = (
+      Stream.onesUsingUnfold.take(100),
+      Stream.ones.take(100))
+    val t2 = (
+      Stream.constantUsingUnfold(15).take(100),
+      Stream.constant(15).take(100))
+    val t3 = (
+      Stream.fromUsingUnfold(200).take(100),
+      Stream.from(200).take(100))
+    val t4 = (
+      Stream.fibUsingUnfold.take(20),
+      Stream.fib.take(20))
+    val l = List(t1, t2, t3, t4)
+
+    l.foreach(t ⇒ assert(t._1.toList == t._2.toList))
 
   }
 
