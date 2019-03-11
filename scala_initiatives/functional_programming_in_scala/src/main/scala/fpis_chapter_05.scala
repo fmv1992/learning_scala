@@ -110,6 +110,17 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
       // )
     }
 
+    def headOptionUsingFoldRight: Option[A] = {
+
+      val noneA: Option[A] = None
+
+      def f(a: A, o: ⇒ Option[A]) = {
+        if (a == noneA) noneA else Some(a)
+      }
+
+      foldRight(noneA)(f)
+
+    }
 
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
     // Changed those to fpinscala to proceed with certainty of correctness -|
@@ -123,6 +134,11 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     }
 
     def exists(p: A => Boolean): Boolean = foldRight(false)((a, b) => p(a) || b)
+
+    def headOption: Option[A] = this match {
+      case Empty => None
+      case Cons(h, t) => Some(h())
+    }
 
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
     // Changed those to fpinscala to proceed with certainty of correctness -|

@@ -189,8 +189,11 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     assert(s2.takeWhileUsingFoldRight(_ != 3).toList == List(1, 2))
   }
 
-  test("5.6: ???.") {
-
+  test("5.6: Implementation of headOption using foldRight.") {
+    assert(Stream().headOption == Stream().headOptionUsingFoldRight)
+    assert(Stream().headOption == None)
+    assert(s1.headOptionUsingFoldRight == Some(1))
+    assert(s2.headOptionUsingFoldRight == Some(1))
   }
 
   test("5.7: ???.") {
