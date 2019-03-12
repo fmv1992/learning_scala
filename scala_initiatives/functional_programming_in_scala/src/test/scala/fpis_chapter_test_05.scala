@@ -266,6 +266,15 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     assert(s2.map(_ * 2).toList == s2.mapUsingUnfold(_ * 2).toList)
     assert(s1.map("" + _ + "|").toList == s1.mapUsingUnfold("" + _ + "|").toList)
 
+    assert(minus10to10.take(5).toList == minus10to10.takeUsingUnfold(5).toList)
+    assert(Stream().take(5).toList == Stream().takeUsingUnfold(5).toList)
+    assert(Stream(1).take(1).toList == Stream(1).takeUsingUnfold(1).toList)
+
+    assert(minus10to10.takeWhile(_ < -5).toList == minus10to10.takeWhileUsingUnfold(_ < -5).toList)
+    assert(s1.takeWhile(x ⇒ false).toList == s1.takeWhileUsingUnfold(x ⇒ false).toList)
+    assert(Empty.takeWhile(Nothing ⇒ true) == Empty.takeWhileUsingUnfold(Nothing ⇒ true))
+    assert(s2.takeWhile(_ != 3).toList == s2.takeWhileUsingUnfold(_ != 3).toList)
+
   }
 
   test("5.14: ???.") {

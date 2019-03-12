@@ -154,13 +154,7 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
       }
 
       foldRight(e)(f)
-      // foldRight(null)(
-      // (a: A, s: Stream[A]) ⇒
-      // s match {
-      // case Empty ⇒ Empty
-      // case Cons(h, t) ⇒ if (p(a)) Stream.cons(a, s) else s
-      // }
-      // )
+
     }
 
     def headOptionUsingFoldRight: Option[A] = {
@@ -231,8 +225,39 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
       })
     }
 
-    def takeUsingUnfold = ???
-    def takeWhileUsingUnfold = ???
+    def takeUsingUnfold(n: Int): Stream[A] = {
+      unfold((this, n))(x ⇒ x._1 match {
+        case Cons(h, t) ⇒ if (x._2 > 0) Option((h(), (t(), x._2 - 1))) else None
+        case Empty ⇒ None
+      })
+    }
+
+    def takeWhileUsingUnfold(p: A => Boolean): Stream[A] = {
+      unfold(this)(s ⇒ s match {
+        case Cons(h, t) ⇒ if (p(h())) Option((h(), t())) else None
+        case Empty ⇒ None
+      })
+    }
+
+    def zipWith[A, B, C](that: Stream[B])(f: (A, B) => C): Stream[C] = {
+
+      def liftedF(f: (A, B) => C): (Option[A], Option[B]) ⇒ Option[C] = {
+        (a, b) ⇒ a.map(ax ⇒ b.map(bx ⇒ f(ax, bx)))
+      }
+
+      unfold(Option(this), Option(that))(
+        (state) ⇒ ({
+          val s1: Option[Stream[A]] = state._1
+          val s2: Option[Stream[B]] = state._2
+          val computed: Option[C] = liftedF(f)(s1.headOption, s2.headOption)
+          computed match {
+            case None ⇒ Empty
+            case Some(s) ⇒ Some(s, (s1.tailOption, s2.tailOption))
+          }
+        }): Option[C, Option[Stream[A]], Option[Stream[B]]]
+      )
+    }
+
     def zipWith = ???
     def zipAll = ???
 
@@ -252,6 +277,11 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     def headOption: Option[A] = this match {
       case Empty => None
       case Cons(h, t) => Some(h())
+    }
+
+    def tailOption: Option[Stream[A]] = this match {
+      case Empty => None
+      case Cons(h, t) => Some(t())
     }
 
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
