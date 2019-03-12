@@ -239,42 +239,33 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
       })
     }
 
-    // ???: Super complicated...
+    // ???: Super complicated... There must be an easier way.
     def zipWith[B, C](that: Stream[B])(f: (A, B) => C): Stream[C] = {
 
-      def liftedF(f: (A, B) => C): (Option[A], Option[B]) ⇒ Option[C] = {
+      def liftedF: (Option[A], Option[B]) ⇒ Option[C] = {
         (a: Option[A], b: Option[B]) ⇒ a.flatMap(
           (ax: A) ⇒ (
-            b.map(
-              (bx: B) ⇒ (f(ax, bx): C)): Option[C]
-            ): Option[C]
+            b.flatMap(
+              (bx: B) ⇒ (
+                (Try(f(ax, bx)).toOption: Option[C])): Option[C]
+              ): Option[C]
+            )
           )
       }
 
-      val stateBuilder1: Option[Stream[A]] = Some(this)
-      val stateBuilder2: Option[Stream[B]] = Some(that)
-      val state = (stateBuilder1, stateBuilder2)
+      unfold((this, that))(state ⇒ {
+        val s1 = state._1
+        val s2 = state._2
+        val computed = liftedF(s1.headOption, s2.headOption)
+        // println(s1.take(10).toList)
+        // println(s2.take(10).toList)
+        computed.map(x ⇒
+            (x,
+              (s1.tailOption.getOrElse(Empty),
+                s2.tailOption.getOrElse(Empty)))
+            )
+      })
 
-      // val state = (this, that)
-
-      unfold(state)(
-        (s) ⇒ ({
-          val s1: Option[Stream[A]] = state._1
-          val s2: Option[Stream[B]] = state._2
-
-          // val s1: Stream[A] = state._1
-          // val s2: Stream[B] = state._2
-
-          // println(("⇒" + s1.toList ) + s2.toList)
-          // if (scala.io.StdIn.readLine() == "1") throw new Exception()
-
-          val computed: Option[C] = liftedF(f)(s1.get.headOption, s2.get.headOption)
-          computed match {
-            case None ⇒ None
-            case Some(s) ⇒ Some(s, (s1.get.tailOption, s2.get.tailOption))
-          }
-        })
-      )
     }
 
     def zipWith = ???

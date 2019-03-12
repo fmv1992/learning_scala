@@ -277,7 +277,11 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
 
     assert(s2.tailOption.get.toList == s2.drop(1).toList)
     assert(s2.drop(100).tailOption == None)
-    // assert(s2.zipWith(s2)(_ + _).toList == s2.map(_ * 2).toList)
+    assert(s2.zipWith(s2)(_ + _).toList == s2.map(_ * 2).toList)
+    assert(Stream.ones.zipWith(
+      s2 ++ Stream(0))(_ / _).toList == Stream(1, 0, 0).toList)
+    assert((s2 ++ s2).zipWith(
+      s2)(_ / _).toList == Stream.ones.take(3).toList)
 
   }
 

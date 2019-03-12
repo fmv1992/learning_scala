@@ -81,9 +81,16 @@ trait ScalaInitiativesTest extends FunSuite {
 
   }
 
+
 }
 
 trait ScalaInitiativesExercise {
+
+  def Try[A](a: => A): Either[Exception, A] = {
+    try Right(a)
+    catch { case e: Exception => Left(e) }
+  }
+
 }
 
 object Constants {
