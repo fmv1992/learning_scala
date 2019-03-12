@@ -222,6 +222,20 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
       this.foldRight(emptyB)(g)
     }
 
+    import Stream.unfold
+
+    def mapUsingUnfold[B](f: A ⇒ B): Stream[B] = {
+      unfold(this)(_ match {
+        case Cons(h, t) ⇒ Option((f(h()), t()))
+        case Empty ⇒ None
+      })
+    }
+
+    def takeUsingUnfold = ???
+    def takeWhileUsingUnfold = ???
+    def zipWith = ???
+    def zipAll = ???
+
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
     // Changed those to fpinscala to proceed with certainty of correctness -|
     // (despite using a lot of tests). -------------------------------------| {

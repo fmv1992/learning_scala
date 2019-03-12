@@ -261,7 +261,10 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
 
   }
 
-  test("5.13: ???.") {
+  test("5.13: Implementation of mapUsingUnfold, takeUsingUnfold, takeWhileUsingUnfold, zipWith, zipAll.") {
+
+    assert(s2.map(_ * 2).toList == s2.mapUsingUnfold(_ * 2).toList)
+    assert(s1.map("" + _ + "|").toList == s1.mapUsingUnfold("" + _ + "|").toList)
 
   }
 
