@@ -275,6 +275,10 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     assert(Empty.takeWhile(Nothing ⇒ true) == Empty.takeWhileUsingUnfold(Nothing ⇒ true))
     assert(s2.takeWhile(_ != 3).toList == s2.takeWhileUsingUnfold(_ != 3).toList)
 
+    assert(s2.tailOption.get.toList == s2.drop(1).toList)
+    assert(s2.drop(100).tailOption == None)
+    // assert(s2.zipWith(s2)(_ + _).toList == s2.map(_ * 2).toList)
+
   }
 
   test("5.14: ???.") {
