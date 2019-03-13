@@ -304,6 +304,11 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
 
   test("5.15: Implementation of tails.") {
 
+    assert(Stream(1,2,3).tails.map(_.toList).toList
+      == Stream(Stream(1,2,3), Stream(2,3), Stream(3), Stream()).map(_.toList).toList)
+
+    assert(Stream().tails.toList == List(Empty))
+
   }
 
   test("5.16: ???.") {

@@ -191,16 +191,26 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
 
     }
 
-    def append[B>:A](s1: ⇒ Stream[B]): Stream[B] = {
+    def append[B>:A, X: scala.reflect.ClassTag](v: ⇒ B): Stream[B] = {
+      this.append(Stream(v))
+    }
+
+    def append[B>:A, X: scala.reflect.ClassTag, Y: scala.reflect.ClassTag](s1: ⇒ Stream[B]): Stream[B] = {
 
       // def f(el: A, s2: ⇒ Stream[A]): Stream[A] = Stream.cons(el, s)
 
       this.foldRight(s1)(Stream.cons(_, _))
 
     }
+
     def ++[B>:A](s1: ⇒ Stream[B]): Stream[B] = {
       this.append(s1)
     }
+
+    def :+[B>:A](s1: ⇒ B): Stream[B] = {
+      this.append(s1)
+    }
+
     // ???: Removed in favor of example of fpis.
     // def append[B>:A](e: ⇒ B): Stream[B] = {
     // this.append(Stream.cons(e, Empty))
@@ -292,8 +302,12 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     def tails: Stream[Stream[A]] = {
       unfold(this)((s: Stream[A]) ⇒ (s match {
         case Empty ⇒ None
-        case Cons(h, t) ⇒ Option((Stream(s), t()))
-      }): Option[(Stream[A], Stream[A])])
+        case Cons(h, t) ⇒ Option(
+          (s, t()))
+      }): Option[(Stream[A], Stream[A])]) :+ Stream()
+    // Another option could be to pass a new state of (Stream[A], Stream[A])
+    // and only terminate if both are empties (as a form of keeping the last
+    // element).
     }
 
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
