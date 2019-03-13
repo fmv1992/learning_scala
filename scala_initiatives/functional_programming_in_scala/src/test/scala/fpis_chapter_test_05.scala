@@ -153,7 +153,10 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   // }
 
   test("5.2: Implementation of take and drop.") {
-    assert(minus10to10.take(5).toList == List(-10, -9, -8, -7, -6))
+
+    val jazz = minus10to10.take(5) // :)
+
+    assert(jazz.toList == List(-10, -9, -8, -7, -6))
     // IMPROVEMENT: See strange cases below. Both take and drop go beyond the
     // end of the stream.
     // Alternative:
@@ -165,6 +168,7 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     assert(Stream().drop(5).toList == Nil)
     assert(Stream(1).drop(1).toList == Nil)
     assert(Stream(1, 2, 3).drop(1).toList == List(2, 3))
+
   }
 
   test("5.3: Implementation of takeWhile.") {
@@ -291,11 +295,14 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
 
   }
 
-  test("5.14: ???.") {
-
+  test("5.14: Implementation of startsWith.") {
+    // Much easier than the other exercise... :P
+    assert(Stream(1,2,3) startsWith Stream(1,2))
+    assert(Stream.fib.startsWith(
+      Stream(0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610)))
   }
 
-  test("5.15: ???.") {
+  test("5.15: Implementation of tails.") {
 
   }
 

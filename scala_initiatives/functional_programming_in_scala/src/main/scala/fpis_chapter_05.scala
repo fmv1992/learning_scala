@@ -58,8 +58,8 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
         Stream.cons(fib1, go(fib0, fib1)))
     }
 
-    def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = {
-      lazy val o: Option[(A, S)] = f(z)
+    def unfold[V, S](z: S)(f: S => Option[(V, S)]): Stream[V] = {
+      lazy val o: Option[(V, S)] = f(z)
       o match {
         case None ⇒ Empty
         case Some((a, s)) ⇒ Stream.cons(a, unfold(s)(f))
@@ -283,6 +283,17 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
         }
       }
     )
+    }
+
+    def startsWith[B](s: Stream[B]): Boolean = {
+      this.zipWith(s)((_, _)).forAll(z ⇒ z._1 == z._2)
+    }
+
+    def tails: Stream[Stream[A]] = {
+      unfold(this)((s: Stream[A]) ⇒ (s match {
+        case Empty ⇒ None
+        case Cons(h, t) ⇒ Option((Stream(s), t()))
+      }): Option[(Stream[A], Stream[A])])
     }
 
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
