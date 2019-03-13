@@ -305,9 +305,17 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
         case Cons(h, t) ⇒ Option(
           (s, t()))
       }): Option[(Stream[A], Stream[A])]) :+ Stream()
-    // Another option could be to pass a new state of (Stream[A], Stream[A])
-    // and only terminate if both are empties (as a form of keeping the last
-    // element).
+    //                                    ↑↑
+    // NOTE: Another option could be to pass a new state of (Stream[A],
+    // Stream[A]) and only terminate if both are empties (as a form of keeping
+    // the last element).
+    }
+
+    def scanRight[B>:A](z: ⇒ B)(f: (B, B) ⇒ B): Stream[B] = {
+      this match {
+        case Empty ⇒ Stream.cons(z, Empty)
+        case Cons(h, t) ⇒ Stream.cons(f(h(), z), t().scanRight(z)(f))
+      }
     }
 
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
