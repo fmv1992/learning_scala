@@ -58,8 +58,8 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
         Stream.cons(fib1, go(fib0, fib1)))
     }
 
-    def unfold[V, S](z: S)(f: S => Option[(V, S)]): Stream[V] = {
-      lazy val o: Option[(V, S)] = f(z)
+    def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = {
+      lazy val o: Option[(A, S)] = f(z)
       o match {
         case None ⇒ Empty
         case Some((a, s)) ⇒ Stream.cons(a, unfold(s)(f))
@@ -311,11 +311,24 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     // the last element).
     }
 
-    def scanRight[B>:A](z: ⇒ B)(f: (B, B) ⇒ B): Stream[B] = {
-      this match {
-        case Empty ⇒ Stream.cons(z, Empty)
-        case Cons(h, t) ⇒ Stream.cons(f(h(), z), t().scanRight(z)(f))
-      }
+    def scanRight[B>:A](z: ⇒ B)(f: (A, B) ⇒ B): Stream[B] = {
+      // def adaptedF(a: B, b: Tuple2[Stream[A], B]) = f(a, b._2)
+      // State: (Stream, current_element)
+      val initialState = (this, z)
+      unfold(initialState)(state ⇒ {
+        state._1 match {
+          // case Empty ⇒ Option(z, (state._1, z))
+          case Empty ⇒ Option(
+            (z,
+              (Stream.cons(z, Empty), z)))
+          case Cons(h, t) ⇒ {
+            val v: B = f(h(), state._2)
+            Option(
+              (v,
+                (Stream.cons(v, state._1), v)))
+          }
+        }
+      })
     }
 
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
