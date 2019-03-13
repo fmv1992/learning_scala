@@ -268,8 +268,22 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
 
     }
 
-    def zipWith = ???
-    def zipAll = ???
+    def zipAll[B](s2: Stream[B]): Stream[(Option[A],Option[B])] = {
+      unfold((this, s2))(state ⇒ {
+        val h1 = state._1.headOption
+        val h2 = state._2.headOption
+        // val (s1, s2) = state
+        if (h1.orElse(h2) == None) {
+          None
+        }
+        else {
+          Some(
+            (h1, h2),
+            (state._1.tailOption.getOrElse(Empty), state._2.tailOption.getOrElse(Empty)))
+        }
+      }
+    )
+    }
 
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
     // Changed those to fpinscala to proceed with certainty of correctness -|

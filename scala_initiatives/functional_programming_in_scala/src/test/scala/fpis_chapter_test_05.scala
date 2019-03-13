@@ -283,6 +283,12 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     assert((s2 ++ s2).zipWith(
       s2)(_ / _).toList == Stream.ones.take(3).toList)
 
+    assert((s2 ++ s2).zipAll(s2).toList
+      == List((Some(1),Some(1)), (Some(2),Some(2)), (Some(3),Some(3)), (Some(1),None), (Some(2),None), (Some(3),None)))
+
+    assert(Stream().zipAll(Stream()).toList == List())
+    assert(s1.zipAll(s2).toList == List((Some(1), Some(1)), (None, Some(2)), (None, Some(3))))
+
   }
 
   test("5.14: ???.") {
