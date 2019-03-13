@@ -350,6 +350,32 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     // The reasons for this are not entirely clear to me... If wre are
     // manipulating data only in the domain of type A, why should the compiler
     // complain?
+    //
+    // (2): ???.
+    //
+    // (3): The functions that we defined that return a different Stream type
+    // are (as of commit: 'f6ab100'):
+    //
+    // def ++[B>:A](s1: ⇒ Stream[B]): Stream[B] = {
+    // def :+[B>:A](s1: ⇒ B): Stream[B] = {
+    // def append[B>:A, X: scala.reflect.ClassTag, Y: scala.reflect.ClassTag](s1: ⇒ Stream[B]): Stream[B] = {
+    // def append[B>:A, X: scala.reflect.ClassTag](v: ⇒ B): Stream[B] = {
+    // def flatMap[B](f: A ⇒ Stream[B]): Stream[B] = {
+    // def mapUsingUnfold[B](f: A ⇒ B): Stream[B] = {
+    // def map[B](f: A ⇒ B): Stream[B] = {
+    // def scanRight[B>:A](z: ⇒ B)(f: (A, B) ⇒ B): Stream[B] = {
+    // def startsWith[B](s: Stream[B]): Boolean = {
+    // def zipAll[B](s2: Stream[B]): Stream[(Option[A],Option[B])] = {
+    // def zipWith[B, C](that: Stream[B])(f: (A, B) => C): Stream[C] = {
+    //
+    // The alternatives are:
+    //
+    // a. unfold followed by flatMap: looks like it would take O(n^2) time.
+    // b. unfold followed by map: a conversion from A to B must be readily
+    // present. I don't know how to do this yet.
+    // c. zipWith is not very helpful in this case since it does not help us
+    // 'accumulate' the values.
+
     }
 
     }
