@@ -23,7 +23,8 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   val s2 = Stream(1, 2, 3)
   val neverEndingStream = Stream.from(10).map(x ⇒ {
     // Thread.sleep(1e9.toLong);
-    throw new Exception() ;
+    // ???
+    throw new Exception()
   x})
 
   def getErrorStream: () ⇒ Stream[Int] = () ⇒ Stream.cons(

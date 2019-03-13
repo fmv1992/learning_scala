@@ -312,15 +312,17 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     }
 
     def scanRight[B>:A](z: ⇒ B)(f: (A, B) ⇒ B): Stream[B] = {
+      lazy val lazyZ = z
       def lazyF(x1: ⇒ A, x2: ⇒ B) = {
         lazy val r = f(x1, x2)
         println("†")
         r
       }
       def go(s: ⇒ Stream[A]): Tuple2[B, Stream[B]] = {
-        lazy val goRes = s match {
+        lazy val lazyS = s
+        lazy val goRes = lazyS match {
           case Empty ⇒ {
-            lazy val emptyBranchRes = (z, Stream.cons(z, Empty))
+            lazy val emptyBranchRes = (lazyZ, Stream.cons(lazyZ, Empty))
             emptyBranchRes
           }
           case Cons(h, t) ⇒ {
@@ -332,12 +334,10 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
             consBranchRes
           }
         }
-      goRes
+        goRes
       }
-      lazy val result = go(this)._2
-      println("x")
-      // println("RES" + result.toList)
-      println("y")
+      lazy val lazyThis = this
+      lazy val result = go(lazyThis)._2
       result
     }
 
