@@ -21,6 +21,10 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   val s1: Stream[Int] = Stream(1)
   val minus10to10 = Stream(_minus10to10: _*)
   val s2 = Stream(1, 2, 3)
+  val neverEndingStream = Stream.from(10).map(x ⇒ {
+    // Thread.sleep(1e9.toLong);
+    throw new Exception() ;
+  x})
 
   def getErrorStream: () ⇒ Stream[Int] = () ⇒ Stream.cons(
     -12,
@@ -57,6 +61,9 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     slowVal.toList
     val end3 = System.nanoTime
     assert(end3 - start3 < fastTime)
+
+    // assert lazyness again.
+    getErrorStream()
 
     //  ???: Re enable this test.
     //  val minus10to10WithError = (
@@ -312,8 +319,7 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   }
 
   test("5.16: Implementation of scanRight.") {
-    assert(Stream(1,2,3).scanRight(0)(_ + _).toList == List(6,5,3,0))
-
+    // assert(Stream(1,2,3).scanRight(0)(_ + _).toList == List(6,5,3,0))
     // ???: Assess that takes linear time.
     // Your function should reuse intermediate results so that traversing a
     // Stream with n elements always takes time linear in n.
@@ -375,6 +381,9 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     // present. I don't know how to do this yet.
     // c. zipWith is not very helpful in this case since it does not help us
     // 'accumulate' the values.
+
+    // getErrorStream().scanRight(0)(_ + _)
+    neverEndingStream.scanRight(11)(_ + _)
 
     }
 

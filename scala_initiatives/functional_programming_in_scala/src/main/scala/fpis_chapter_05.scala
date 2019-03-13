@@ -312,23 +312,33 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     }
 
     def scanRight[B>:A](z: ⇒ B)(f: (A, B) ⇒ B): Stream[B] = {
-      // def adaptedF(a: B, b: Tuple2[Stream[A], B]) = f(a, b._2)
-      // State: (Stream, current_element)
-      val initialState = (this, z)
-      unfold(initialState)(state ⇒ {
-        state._1 match {
-          // case Empty ⇒ Option(z, (state._1, z))
-          case Empty ⇒ Option(
-            (z,
-              (Stream.cons(z, Empty), z)))
+      def lazyF(x1: ⇒ A, x2: ⇒ B) = {
+        lazy val r = f(x1, x2)
+        println("†")
+        r
+      }
+      def go(s: ⇒ Stream[A]): Tuple2[B, Stream[B]] = {
+        lazy val goRes = s match {
+          case Empty ⇒ {
+            lazy val emptyBranchRes = (z, Stream.cons(z, Empty))
+            emptyBranchRes
+          }
           case Cons(h, t) ⇒ {
-            val v: B = f(h(), state._2)
-            Option(
-              (v,
-                (Stream.cons(v, state._1), v)))
+            lazy val state = go(t())
+            lazy val stateValue = state._1
+            lazy val stateTail = state._2
+            lazy val v: B = lazyF(h(), stateValue)
+            lazy val consBranchRes = (v, Stream.cons(v, stateTail))
+            consBranchRes
           }
         }
-      }).map((x: B) ⇒ (x: A))
+      goRes
+      }
+      lazy val result = go(this)._2
+      println("x")
+      // println("RES" + result.toList)
+      println("y")
+      result
     }
 
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
