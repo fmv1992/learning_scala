@@ -311,7 +311,8 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     // the last element).
     }
 
-    def scanRight[B>:A](z: ⇒ B)(f: (A, B) ⇒ B): Stream[B] = {
+    // def scanRight[B>:A](z: ⇒ B)(f: (A, B) ⇒ B): Stream[B] = {
+    def scanRight(z: ⇒ A)(f: (A, A) ⇒ A): Stream[A] = {
       // def adaptedF(a: B, b: Tuple2[Stream[A], B]) = f(a, b._2)
       // State: (Stream, current_element)
       val initialState = (this, z)
@@ -322,7 +323,7 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
             (z,
               (Stream.cons(z, Empty), z)))
           case Cons(h, t) ⇒ {
-            val v: B = f(h(), state._2)
+            val v: A = f(h(), state._2)
             Option(
               (v,
                 (Stream.cons(v, state._1), v)))
@@ -390,12 +391,12 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     // ???
     // }
 
+    }
+
   }
 
-}
-
-//  Run this in vim:
-//
-// vim source: call matchadd("ErrorXXX", '\<Cons\>', 2)
-//
-// vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:
+  //  Run this in vim:
+  //
+  // vim source: call matchadd("ErrorXXX", '\<Cons\>', 2)
+  //
+  // vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:

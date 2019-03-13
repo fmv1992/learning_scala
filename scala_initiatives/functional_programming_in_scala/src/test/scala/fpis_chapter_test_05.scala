@@ -315,14 +315,48 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     assert(Stream(1,2,3).scanRight(0)(_ + _).toList == List(6,5,3,0))
 
     // ???: Assess that takes linear time.
+    // Your function should reuse intermediate results so that traversing a
+    // Stream with n elements always takes time linear in n.
+    //
+    // (1): Can it be implemented using unfold?
+    //
+    // (2): How, or why not?
+    //
+    // (3): Could it be implemented using another function we’ve written?
+    //
+    // Written answer:
+    //
+    // (1): Consider the commit '03428a7'.
+    //
+    // It cannot be implemented using unfold because of unfold's
+    // signature:
+    //
+    // ```
+    // def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = {
+    // ```
+    //
+    // This returns a Stream[A]. However if we use:
+    //
+    // ```
+    // def scanRight(z: ⇒ A)(f: (A, A) ⇒ A): Stream[A] = {
+    // ```
+    //
+    // We get:
+    //
+    // [error] ⋯/learning_scala/scala_initiatives/functional_programming_in_scala/src/main/scala/fpis_chapter_05.scala:315:27: covariant type A occurs in contravariant position in type (A, A) => A of value f
+    // [error]     def scanRight(z: ⇒ A)(f: (A, A) ⇒ A): Stream[A] = {
+    // [error]                           ^
+    //
+    // The reasons for this are not entirely clear to me... If wre are
+    // manipulating data only in the domain of type A, why should the compiler
+    // complain?
+    }
 
-  }
+    }
 
-}
-
-//  Run this in vim:
-//
-// vim source: iabbrev aa assert("5.x: ???.")
-// vim source: call matchadd("ErrorXXX", '\<Cons\>', 2)
-//
-// vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:
+    //  Run this in vim:
+    //
+    // vim source: iabbrev aa assert("5.x: ???.")
+    // vim source: call matchadd("ErrorXXX", '\<Cons\>', 2)
+    //
+    // vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:

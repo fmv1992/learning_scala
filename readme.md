@@ -41,6 +41,18 @@ The following tags are used in this project:
 
 *   `IMPROVEMENT:`: Notes for exercise or code; these are not code comments.
 
+*   Code cited in comments/answers:
+
+        // Written answer:
+        //
+        // Deliberation...
+        //
+        // ```
+        // my code goes here without extra indent
+        // ```
+        //
+        // Deliberation...
+
 ## Resources
 
 ### Functional Programming in Scala ("The Red Book")
