@@ -35,9 +35,10 @@ else
     sbt testQuick
 fi
 
-Where the relevant vim code is:
-
+# Where the relevant vim code is:
+#
 # Commit: 'c61d068' from vim_scala_plugin.
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # augroup vim_scala_plugin
 #     autocmd!
@@ -114,5 +115,6 @@ Where the relevant vim code is:
 #     call setline(1, l:nobreak_as_list)
 #
 # endfunction
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # vim: set filetype=sh fileformat=unix wrap:

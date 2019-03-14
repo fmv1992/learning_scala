@@ -189,7 +189,7 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     }
 
     def append[B >: A, X: scala.reflect.ClassTag, Y: scala.reflect.ClassTag](
-      s1: ⇒ Stream[B]
+        s1: ⇒ Stream[B]
     ): Stream[B] = {
 
       // def f(el: A, s2: ⇒ Stream[A]): Stream[A] = Stream.cons(el, s)
@@ -233,19 +233,19 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     def takeUsingUnfold(n: Int): Stream[A] = {
       unfold((this, n))(
         x ⇒ x._1 match {
-          case Cons(h, t) ⇒ if (x._2 > 0) Option((h(), (t(), x._2 - 1))) else None
-          case Empty ⇒ None
-        }
-        )
+            case Cons(h, t) ⇒ if (x._2 > 0) Option((h(), (t(), x._2 - 1))) else None
+            case Empty ⇒ None
+          }
+      )
     }
 
     def takeWhileUsingUnfold(p: A ⇒ Boolean): Stream[A] = {
       unfold(this)(
         s ⇒ s match {
-          case Cons(h, t) ⇒ if (p(h())) Option((h(), t())) else None
-          case Empty ⇒ None
-        }
-        )
+            case Cons(h, t) ⇒ if (p(h())) Option((h(), t())) else None
+            case Empty ⇒ None
+          }
+      )
     }
 
     // ???: Super complicated... There must be an easier way.
@@ -253,12 +253,12 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
 
       def liftedF: (Option[A], Option[B]) ⇒ Option[C] = {
         (a: Option[A], b: Option[B]) ⇒ a.flatMap(
-          (ax: A) ⇒ (
-            b.flatMap(
-              (bx: B) ⇒ ((Try(f(ax, bx)).toOption: Option[C])): Option[C]
-            ): Option[C]
+            (ax: A) ⇒ (
+                b.flatMap(
+                  (bx: B) ⇒ ((Try(f(ax, bx)).toOption: Option[C])): Option[C]
+                ): Option[C]
+              )
           )
-        )
       }
 
       unfold((this, that))(state ⇒ {
@@ -269,9 +269,9 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
         // println(s2.take(10).toList)
         computed.map(
           x ⇒ (
-            x,
-            (s1.tailOption.getOrElse(Empty), s2.tailOption.getOrElse(Empty))
-          )
+              x,
+              (s1.tailOption.getOrElse(Empty), s2.tailOption.getOrElse(Empty))
+            )
         )
       })
 
@@ -303,9 +303,9 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     def tails: Stream[Stream[A]] = {
       unfold(this)(
         (s: Stream[A]) ⇒ (s match {
-          case Empty ⇒ None
-          case Cons(h, t) ⇒ Option((s, t()))
-        }): Option[(Stream[A], Stream[A])]
+            case Empty ⇒ None
+            case Cons(h, t) ⇒ Option((s, t()))
+          }): Option[(Stream[A], Stream[A])]
       ) :+ Stream()
       //                                    ↑↑
       // NOTE: Another option could be to pass a new state of (Stream[A],
@@ -313,20 +313,26 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
       // the last element).
     }
 
-    def scanRight[B >: A](z: ⇒ B)(f: (A, B) ⇒ B): Stream[B] = {
-      lazy val lazyZ = z
+    def scanRightNonLazy[B >: A](z: ⇒ B)(f: (A, B) ⇒ B): Stream[B] = {
+
       def lazyF(x1: ⇒ A, x2: ⇒ B) = {
         lazy val r = f(x1, x2)
         r
       }
+
+      lazy val lazyZ = z
+
       def go(s: ⇒ Stream[A]): Tuple2[B, Stream[B]] = {
         lazy val lazyS = s
+        // NOTE: This pattern matching is forcing the Stream to be evaluated.
         lazy val goRes = lazyS match {
           case Empty ⇒ {
             lazy val emptyBranchRes = (lazyZ, Stream.cons(lazyZ, Empty))
             emptyBranchRes
           }
           case Cons(h, t) ⇒ {
+            // NOTE: this recursion is forcing the entire Stream to be
+            // evaluated.
             lazy val state = go(t())
             lazy val stateValue = state._1
             lazy val stateTail = state._2
