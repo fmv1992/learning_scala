@@ -87,6 +87,9 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     //  // && minus10to10WithError.take(21).toList.sum == 0)
     // assertThrows[Exception](error.toList)
     // assertThrows[Exception](error.toList)
+
+    Exercise/Test 5.16 suscited
+    def x = {lazy val r = {throw new Exception() ; 1} ; r }
   }
 
   test("5.1: toList.") {

@@ -315,7 +315,6 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
       lazy val lazyZ = z
       def lazyF(x1: ⇒ A, x2: ⇒ B) = {
         lazy val r = f(x1, x2)
-        println("†")
         r
       }
       def go(s: ⇒ Stream[A]): Tuple2[B, Stream[B]] = {
