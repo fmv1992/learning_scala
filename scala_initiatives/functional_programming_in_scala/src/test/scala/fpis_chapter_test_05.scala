@@ -68,8 +68,23 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     val end3 = System.nanoTime
     assert(end3 - start3 < fastTime)
 
-    // assert lazyness again.
+    // Assert lazyness again for a lot of different functions..
     getErrorStream()
+    getErrorStream().append(s1)
+    getErrorStream().drop(100)
+    getErrorStream().filter(x ⇒ true)
+    getErrorStream().flatMap(x ⇒ Stream.cons(x, Empty))
+    getErrorStream().headOption
+    getErrorStream().map(x ⇒ x)
+    getErrorStream().mapUsingUnfold(x ⇒ x)
+    getErrorStream().tailOption
+    getErrorStream().tails
+    getErrorStream().take(100)
+    getErrorStream().takeUsingUnfold(100)
+    getErrorStream().takeWhile(x ⇒ true)
+    getErrorStream().takeWhileUsingFoldRight(x ⇒ true)
+    getErrorStream().takeWhileUsingUnfold(x ⇒ true)
+    getErrorStream().zipWith(getErrorStream())((x, y) ⇒ x + y)
 
     //  ???: Re enable this test.
     //  val minus10to10WithError = (
