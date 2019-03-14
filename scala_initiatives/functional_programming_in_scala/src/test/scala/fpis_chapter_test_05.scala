@@ -85,13 +85,11 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     getErrorStream().takeWhileUsingFoldRight(x ⇒ true)
     getErrorStream().takeWhileUsingUnfold(x ⇒ true)
     getErrorStream().zipWith(getErrorStream())((x, y) ⇒ x + y)
-
-    //  ???: Re enable this test.
-    //  val minus10to10WithError = (
-    //    Stream(_minus10to10: _*)
-    //  ++ Stream.cons(
-    //  {println("tne"); throw new Exception() ; 11},
-    //  Empty))
+    val minus10to10WithError = (Stream(_minus10to10: _*)
+      ++ Stream.cons({ println("tne"); throw new Exception(); 11 }, Empty))
+    minus10to10WithError ++ getErrorStream()
+    minus10to10WithError :+ 11
+    minus10to10.scanRight(0)(_ + _)
     //  // NOTE: It is important to notice how this code fails in a way. See the
     //  // two assertions below. They actually happen. After some inspection I
     //  // noticed how the Cons (upper case C) is being used. It does not use lazy
@@ -407,74 +405,76 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
 
   }
 
-  // test("5.16: Implementation of scanRight.") {
-  //   // assert(Stream(1,2,3).scanRight(0)(_ + _).toList == List(6,5,3,0))
-  //   // ???: Assess that takes linear time.
-  //   // Your function should reuse intermediate results so that traversing a
-  //   // Stream with n elements always takes time linear in n.
-  //   //
-  //   // (1): Can it be implemented using unfold?
-  //   //
-  //   // (2): How, or why not?
-  //   //
-  //   // (3): Could it be implemented using another function we’ve written?
-  //   //
-  //   // Written answer:
-  //   //
-  //   // (1): Consider the commit '03428a7'.
-  //   //
-  //   // It cannot be implemented using unfold because of unfold's
-  //   // signature:
-  //   //
-  //   // ```
-  //   // def unfold[A, S](z: S)(f: S ⇒ Option[(A, S)]): Stream[A] = †
-  //   // ```
-  //   //
-  //   // This returns a Stream[A]. However if we use:
-  //   //
-  //   // ```
-  //   // def scanRight(z: ⇒ A)(f: (A, A) ⇒ A): Stream[A] = †
-  //   // ```
-  //   //
-  //   // We get:
-  //   //
-  //   // [error] ⋯/learning_scala/scala_initiatives/functional_programming_in_scala/src/main/scala/fpis_chapter_05.scala:315:27: covariant type A occurs in contravariant position in type (A, A) ⇒ A of value f
-  //   // [error]     def scanRight(z: ⇒ A)(f: (A, A) ⇒ A): Stream[A] = †
-  //   // [error]                           ^
-  //   //
-  //   // The reasons for this are not entirely clear to me... If wre are
-  //   // manipulating data only in the domain of type A, why should the compiler
-  //   // complain?
-  //   //
-  //   // (2): ???.
-  //   //
-  //   // (3): The functions that we defined that return a different Stream type
-  //   // are (as of commit: 'f6ab100'):
-  //   //
-  //   // def ++[B>:A](s1: ⇒ Stream[B]): Stream[B] = †
-  //   // def :+[B>:A](s1: ⇒ B): Stream[B] = †
-  //   // def append[B>:A, X: scala.reflect.ClassTag, Y: scala.reflect.ClassTag](s1: ⇒ Stream[B]): Stream[B] = †
-  //   // def append[B>:A, X: scala.reflect.ClassTag](v: ⇒ B): Stream[B] = †
-  //   // def flatMap[B](f: A ⇒ Stream[B]): Stream[B] = †
-  //   // def mapUsingUnfold[B](f: A ⇒ B): Stream[B] = †
-  //   // def map[B](f: A ⇒ B): Stream[B] = †
-  //   // def scanRight[B>:A](z: ⇒ B)(f: (A, B) ⇒ B): Stream[B] = †
-  //   // def startsWith[B](s: Stream[B]): Boolean = †
-  //   // def zipAll[B](s2: Stream[B]): Stream[(Option[A],Option[B])] = †
-  //   // def zipWith[B, C](that: Stream[B])(f: (A, B) ⇒ C): Stream[C] = †
-  //   //
-  //   // The alternatives are:
-  //   //
-  //   // a. unfold followed by flatMap: looks like it would take O(n^2) time.
-  //   // b. unfold followed by map: a conversion from A to B must be readily
-  //   // present. I don't know how to do this yet.
-  //   // c. zipWith is not very helpful in this case since it does not help us
-  //   // 'accumulate' the values.
+  test("5.16: Implementation of scanRight.") {
 
-  //   // getErrorStream().scanRight(0)(_ + _)
-  //   neverEndingStream.scanRight(11)(_ + _)
+    assert(Stream(1, 2, 3).scanRight(0)(_ + _).toList == List(6, 5, 3, 0))
 
-  // }
+    // ???: Assess that takes linear time.
+    // Your function should reuse intermediate results so that traversing a
+    // Stream with n elements always takes time linear in n.
+    //
+    // (1): Can it be implemented using unfold?
+    //
+    // (2): How, or why not?
+    //
+    // (3): Could it be implemented using another function we’ve written?
+    //
+    // Written answer:
+    //
+    // (1): Consider the commit '03428a7'.
+    //
+    // It cannot be implemented using unfold because of unfold's
+    // signature:
+    //
+    // ```
+    // def unfold[A, S](z: S)(f: S ⇒ Option[(A, S)]): Stream[A] = †
+    // ```
+    //
+    // This returns a Stream[A]. However if we use:
+    //
+    // ```
+    // def scanRight(z: ⇒ A)(f: (A, A) ⇒ A): Stream[A] = †
+    // ```
+    //
+    // We get:
+    //
+    // [error] ⋯/learning_scala/scala_initiatives/functional_programming_in_scala/src/main/scala/fpis_chapter_05.scala:315:27: covariant type A occurs in contravariant position in type (A, A) ⇒ A of value f
+    // [error]     def scanRight(z: ⇒ A)(f: (A, A) ⇒ A): Stream[A] = †
+    // [error]                           ^
+    //
+    // The reasons for this are not entirely clear to me... If wre are
+    // manipulating data only in the domain of type A, why should the compiler
+    // complain?
+    //
+    // (2): ???.
+    //
+    // (3): The functions that we defined that return a different Stream type
+    // are (as of commit: 'f6ab100'):
+    //
+    // def ++[B>:A](s1: ⇒ Stream[B]): Stream[B] = †
+    // def :+[B>:A](s1: ⇒ B): Stream[B] = †
+    // def append[B>:A, X: scala.reflect.ClassTag, Y: scala.reflect.ClassTag](s1: ⇒ Stream[B]): Stream[B] = †
+    // def append[B>:A, X: scala.reflect.ClassTag](v: ⇒ B): Stream[B] = †
+    // def flatMap[B](f: A ⇒ Stream[B]): Stream[B] = †
+    // def mapUsingUnfold[B](f: A ⇒ B): Stream[B] = †
+    // def map[B](f: A ⇒ B): Stream[B] = †
+    // def scanRight[B>:A](z: ⇒ B)(f: (A, B) ⇒ B): Stream[B] = †
+    // def startsWith[B](s: Stream[B]): Boolean = †
+    // def zipAll[B](s2: Stream[B]): Stream[(Option[A],Option[B])] = †
+    // def zipWith[B, C](that: Stream[B])(f: (A, B) ⇒ C): Stream[C] = †
+    //
+    // The alternatives are:
+    //
+    // a. unfold followed by flatMap: looks like it would take O(n^2) time.
+    // b. unfold followed by map: a conversion from A to B must be readily
+    // present. I don't know how to do this yet.
+    // c. zipWith is not very helpful in this case since it does not help us
+    // 'accumulate' the values.
+
+    getErrorStream().scanRight(0)(_ + _)
+    neverEndingStream.scanRight(11)(_ + _)
+
+  }
 
 }
 

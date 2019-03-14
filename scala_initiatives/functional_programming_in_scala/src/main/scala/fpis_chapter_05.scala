@@ -348,6 +348,12 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
       result
     }
 
+    // ???: Assess that takes linear time.
+    def scanRight[B >: A](z: ⇒ B)(f: (A, B) ⇒ B): Stream[B] = {
+      def lazyF(a: A, b: ⇒ B) = f(a, b)
+      this.tails.map(x ⇒ x.foldRight(z)(lazyF))
+    }
+
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
     // Changed those to fpinscala to proceed with certainty of correctness -|
     // (despite using a lot of tests). -------------------------------------| {
