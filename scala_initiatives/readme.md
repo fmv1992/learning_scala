@@ -49,4 +49,5 @@ object Main extends ScalaInitiativesMainSPOJ {
 
   def main(args: Array[String]): Unit = {
 ```
+
 [comment]: # ( vim: set filetype=markdown fileformat=unix wrap: )

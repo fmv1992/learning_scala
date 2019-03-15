@@ -168,4 +168,12 @@ Website: <http://aperiodic.net/phil/scala/s-99/>.
 * http://twitter.github.io/effectivescala/
 -->
 
+## Miscellaneous
+
+*   Count the Scala tokens:
+
+    ```
+    cat **/*.scala | sed -E 's/[^a-zA-Z]+/\n/g' | sort | uniq -c | sort -n
+    ```
+
 [comment]: # ( vim: set filetype=markdown fileformat=unix wrap spell spelllang=en: )
