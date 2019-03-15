@@ -17,6 +17,20 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
   // Changed those to fpinscala to proceed with certainty of correctness ---|
   // (despite using a lot of tests). ---------------------------------------| {
 
+  trait RNG {
+    def nextInt: (Int, RNG)
+  }
+
+  case class SimpleRNG(seed: Long) extends RNG {
+
+    def nextInt: (Int, RNG) = {
+      val newSeed = (seed * 0X5DEECE66DL + 0XBL) & 0XFFFFFFFFFFFFL
+      val nextRNG = SimpleRNG(newSeed)
+      val n = (newSeed >>> 16).toInt
+      (n, nextRNG)
+    }
+  }
+
   // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------|
   // Changed those to fpinscala to proceed with certainty of correctness ---|
   // (despite using a lot of tests). ---------------------------------------| }

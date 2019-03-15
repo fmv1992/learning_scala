@@ -23,7 +23,7 @@ git diff --name-only --cached \
         -I % \
         --verbose \
         --jobs $((2*$(nproc))) \
-        "vim -i NONE -c 'VimScalafmt' -c 'noautocmd x!' %"
+        "vim -i NONE -n -c 'VimScalafmt' -c 'noautocmd x!' %"
 
 # https://stackoverflow.com/questions/3466166/how-to-check-if-running-in-cygwin-mac-or-linux
 cd ./scala_initiatives/
