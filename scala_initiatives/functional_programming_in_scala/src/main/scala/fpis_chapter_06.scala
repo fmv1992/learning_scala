@@ -21,6 +21,8 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
     def nextInt: (Int, RNG)
   }
 
+  type Rand[+A] = RNG ⇒ (A, RNG)
+
   trait LinearCongruentialGenerator extends RNG {}
 
   case class SimpleRNG(seed: Long) extends LinearCongruentialGenerator {
@@ -43,13 +45,33 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       (n, nextRNG)
     }
 
+  }
+
+  // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------|
+  // Changed those to fpinscala to proceed with certainty of correctness ---|
+  // (despite using a lot of tests). ---------------------------------------| }
+
+  object SimpleRNG {
+
+    // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------|
+    // Changed those to fpinscala to proceed with certainty of correctness ---|
+    // (despite using a lot of tests). ---------------------------------------| {
+
+    val int: Rand[Int] = _.nextInt
+
+    def unit[A](a: A): Rand[A] = rng ⇒ (a, rng)
+
+    def map[A, B](s: Rand[A])(f: A ⇒ B): Rand[B] =
+      rng ⇒ {
+        val (a, rng2) = s(rng)
+        (f(a), rng2)
+      }
+
+    def nonNegativeEven: Rand[Int] = map(nonNegativeInt)(i ⇒ i - i % 2)
+
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
     // Changed those to fpinscala to proceed with certainty of correctness -|
     // (despite using a lot of tests). -------------------------------------| }
-
-  }
-
-  object SimpleRNG {
 
     // NOTE: see (note6.1).
     def nonNegativeInt(rng: RNG): (Int, RNG) = {
