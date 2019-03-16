@@ -2,6 +2,8 @@ package scalainitiatives.functional_programming_in_scala
 
 // import scala.{Stream ⇒ _, _}
 
+import scalainitiatives.common.Statistics
+
 import FPISExerciseChapter06.SimpleRNG
 import FPISExerciseChapter06.RNG
 
@@ -14,7 +16,7 @@ import org.scalatest.Matchers
 class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
 
   // Declare constants.
-  val StreamOfRNGs = Stream
+  val StreamOfRNGs: Stream[SimpleRNG] = Stream
     .from(0)
     .take(100)
     .map(SimpleRNG(_))
@@ -25,6 +27,15 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
   test("6.0: Basic tests.") {
     // NOTE: Could not do it... See (note6.2).
     // assert(nextZeroRNG.nextInt._2.nextInt._1 == 0)
+    assert(
+      Statistics.mean(StreamOfRNGs.map(_.double._1).toList)
+        === 0.5 +- 0.1
+    )
+    assert(
+      Statistics
+        .mean(StreamOfRNGs.map(SimpleRNG.nonNegativeInt(_)._1.toDouble).toList)
+        === ((Int.MaxValue.toDouble / 2) +- 0.1 * Int.MaxValue)
+    )
   }
 
   test("6.1: Implementation of nonNegativeInt.") {
@@ -41,7 +52,7 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
   }
 
   test("6.2: Implementation of double.") {
-    val doubles: Stream[Double] = StreamOfRNGs.map(SimpleRNG.double(_)._1)
+    val doubles: Stream[Double] = StreamOfRNGs.map(_.double._1)
     assert(doubles.forall(x ⇒ (x >= 0) && (x < 1)))
     assert(doubles.toSet.size == doubles.length)
   }
@@ -79,12 +90,18 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
   test("6.5: Implementation of double using map.") {
     assert(SimpleRNG.double(rng1) == SimpleRNG.doubleUsingMap(rng1))
 
-    val doubles: Stream[Double] = StreamOfRNGs.map(SimpleRNG.doubleUsingMap(_)._1)
+    val doubles: Stream[Double] =
+      StreamOfRNGs.map(SimpleRNG.doubleUsingMap(_)._1)
     assert(doubles.forall(x ⇒ (x >= 0) && (x < 1)))
     assert(doubles.toSet.size == doubles.length)
   }
 
-  test("6.6: ???.") {}
+  test("6.6: Implementation of map2.") {
+    val intDoubleFromMap2 =
+      SimpleRNG.map2(_.nextInt, SimpleRNG.double(_))((_, _))(rng1)
+    val intDoubleFromFunction = SimpleRNG.intDouble(rng1)
+    assert(intDoubleFromMap2 === intDoubleFromFunction)
+  }
 
   test("6.7: ???.") {}
 

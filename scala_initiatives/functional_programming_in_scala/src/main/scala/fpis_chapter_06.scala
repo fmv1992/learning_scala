@@ -41,8 +41,17 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       //
       // scala> (0XFFFFFFFFFFFFL >>> 16) / Int.MaxValue.toDouble
       // res29: Double = 2.0000000004656613
-      val n = (newSeed >>> 16).toInt
+
+      // ERRATA: This is not part of a linear congruential generator.
+      // val n = (newSeed >>> 16).toInt
+      // Fix:
+      val n = newSeed.toInt
+
       (n, nextRNG)
+    }
+
+    def double: (Double, RNG) = {
+      SimpleRNG.double(this)
     }
 
   }
@@ -69,6 +78,14 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
         }
     }
 
+    def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = {
+      rng1 ⇒ {
+          val (a, rng2) = ra(rng1)
+          val (b, rng3) = rb(rng2)
+          (f(a, b), rng3)
+        }
+    }
+
     def nonNegativeEven: Rand[Int] = map(nonNegativeInt)(i ⇒ i - i % 2)
 
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
@@ -83,16 +100,18 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
     }
 
     def double(rng: RNG): (Double, RNG) = {
-      val (n, ns) = rng.nextInt
+      val (n, ns) = SimpleRNG.nonNegativeInt(rng)
       val res = n / Int.MaxValue.toDouble
+      // ???: Remove this.
+      require(res >= 0)
       if (res == 1) double(ns) else (res, ns)
     }
 
     // NOTE: Returns a function! :)
     def doubleUsingMap: Rand[Double] = {
-      map(_.nextInt)(i ⇒ {
+      map(SimpleRNG.nonNegativeInt(_))(i ⇒ {
         // ???: The 1 ratio may happen here.
-        val res = (i.toDouble / Int.MaxValue)
+        val res = (i / Int.MaxValue.toDouble)
         res
       })
     }
@@ -116,7 +135,7 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
     def intDouble(rng: RNG): ((Int, Double), RNG) = {
       val (nint, ns1) = rng.nextInt
-      val (ndouble, ns2) = ns1.nextInt
+      val (ndouble, ns2) = SimpleRNG.double(ns1)
       ((nint, ndouble), ns2)
     }
 
