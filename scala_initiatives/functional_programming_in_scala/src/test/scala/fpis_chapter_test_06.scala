@@ -70,7 +70,11 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     assert(d3._3.isInstanceOf[Double])
   }
 
-  test("6.4: ???.") {}
+  test("6.4: Implementation of ints.") {
+    val (li, ns) = SimpleRNG.ints(10)(rng1)
+    assert(li.toSet.size == li.length)
+    assert(ns != rng1)
+  }
 
   test("6.5: ???.") {}
 

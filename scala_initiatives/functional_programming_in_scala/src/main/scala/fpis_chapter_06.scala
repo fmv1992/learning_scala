@@ -82,8 +82,20 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       ((double1, double2, double3), rng4)
     }
 
-  }
+    def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
+      @annotation.tailrec
+      def go(countGo: Int, acc: List[Int], rngGo: RNG): (List[Int], RNG) = {
+        // ???: Optimization: this reverse transverses the list all over again.
+        if (countGo == 0) (acc.reverse, rngGo)
+        else {
+          val (n, ns) = rngGo.nextInt
+          go(countGo - 1, n :: acc, ns)
+        }
+      }
+      go(count, Nil, rng)
+    }
 
+  }
 }
 
 //  Run this in vim:
