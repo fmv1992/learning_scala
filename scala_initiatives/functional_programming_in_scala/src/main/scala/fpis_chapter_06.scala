@@ -61,11 +61,13 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
     def unit[A](a: A): Rand[A] = rng ⇒ (a, rng)
 
-    def map[A, B](s: Rand[A])(f: A ⇒ B): Rand[B] =
+    // NOTE: Returns a function!
+    def map[A, B](s: Rand[A])(f: A ⇒ B): Rand[B] = {
       rng ⇒ {
-        val (a, rng2) = s(rng)
-        (f(a), rng2)
-      }
+          val (a, rng2) = s(rng)
+          (f(a), rng2)
+        }
+    }
 
     def nonNegativeEven: Rand[Int] = map(nonNegativeInt)(i ⇒ i - i % 2)
 
@@ -82,9 +84,35 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
     def double(rng: RNG): (Double, RNG) = {
       val (n, ns) = rng.nextInt
-      val res = n / Int.MaxValue
+      val res = n / Int.MaxValue.toDouble
       if (res == 1) double(ns) else (res, ns)
     }
+
+    // NOTE: Returns a function! :)
+    def doubleUsingMap: Rand[Double] = {
+      map(_.nextInt)(i ⇒ {
+        // ???: The 1 ratio may happen here.
+        val res = (i.toDouble / Int.MaxValue)
+        res
+      })
+    }
+
+    // ERRATA: The book seems to be wrong in this case. The code:
+    //
+    // ```
+    // def nonNegativeEven: Rand[Int] =
+    // map(nonNegativeInt)(i => i - i % 2)
+    // ```
+    //
+    // But nonNegativeInt needs an argument!
+    //
+    // def doubleUsingMap: Rand[Double] = {
+    // map(nextInt)(i ⇒ {
+    // // ???: The 1 ratio may happen here.
+    // val res = (i.toDouble / Int.MaxValue)
+    // res
+    // })
+    // }
 
     def intDouble(rng: RNG): ((Int, Double), RNG) = {
       val (nint, ns1) = rng.nextInt

@@ -28,7 +28,6 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
   }
 
   test("6.1: Implementation of nonNegativeInt.") {
-    // ???
     // NOTE: (note6.1) There is no information regarding the range of return of
     // nextInt. Thus it is not clear how we should proceed in mapping the new
     // value.
@@ -44,6 +43,7 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
   test("6.2: Implementation of double.") {
     val doubles: Stream[Double] = StreamOfRNGs.map(SimpleRNG.double(_)._1)
     assert(doubles.forall(x ⇒ (x >= 0) && (x < 1)))
+    assert(doubles.toSet.size == doubles.length)
   }
 
   test("6.3: Implementation of intDouble, doubleInt, double3.") {
@@ -76,7 +76,13 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     assert(ns != rng1)
   }
 
-  test("6.5: ???.") {}
+  test("6.5: Implementation of double using map.") {
+    assert(SimpleRNG.double(rng1) == SimpleRNG.doubleUsingMap(rng1))
+
+    val doubles: Stream[Double] = StreamOfRNGs.map(SimpleRNG.doubleUsingMap(_)._1)
+    assert(doubles.forall(x ⇒ (x >= 0) && (x < 1)))
+    assert(doubles.toSet.size == doubles.length)
+  }
 
   test("6.6: ???.") {}
 
