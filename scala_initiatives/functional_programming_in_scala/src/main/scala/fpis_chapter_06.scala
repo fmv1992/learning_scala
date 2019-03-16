@@ -8,7 +8,7 @@ import scalainitiatives.common.ScalaInitiativesExercise
 // |    $ sbt
 // |    sbt:LearningScala> project fpis
 // |
-// |    import scala.{Stream ⇒ _, _}
+// |
 // |    import scalainitiatives.functional_programming_in_scala.FPISExerciseChapter06._
 
 object FPISExerciseChapter06 extends ScalaInitiativesExercise {
@@ -21,18 +21,18 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
     def nextInt: (Int, RNG)
   }
 
-  case class SimpleRNG(seed: Long) extends RNG {
+  trait LinearCongruentialGenerator extends RNG {
+  }
+
+  case class SimpleRNG(seed: Long) extends LinearCongruentialGenerator {
 
     def nextInt: (Int, RNG) = {
       // https://en.wikipedia.org/wiki/Linear_congruential_generator
-      // Ints are from  range:
+      // Ints are from  range: ???.
       val modulus = 0XFFFFFFFFFFFFL
       val multiplier = 0X5DEECE66DL
       val increment = 0XBL
       val newSeed = (seed * multiplier + increment) & modulus
-      //  ↑↑↑↑↑↑↑ → Max value of: 0XFFFFFFFFFFFFL - 1L = 281474976710654L
-      // scala> Int.MaxValue.toLong * 2 + 1L == 0XFFFFFFFFFFFFL >>> 16
-      // res35: Boolean = true
 
       val nextRNG = SimpleRNG(newSeed)
 
@@ -57,6 +57,10 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       val (n, ns) = rng.nextInt
       val nni = math.abs(n)
       if (nni < 0) nonNegativeInt(ns) else (nni, ns)
+    }
+
+    def double(rng: RNG): (Double, RNG) = {
+      ???
     }
 
   }
