@@ -21,8 +21,7 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
     def nextInt: (Int, RNG)
   }
 
-  trait LinearCongruentialGenerator extends RNG {
-  }
+  trait LinearCongruentialGenerator extends RNG {}
 
   case class SimpleRNG(seed: Long) extends LinearCongruentialGenerator {
 
@@ -55,12 +54,32 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
     // NOTE: see (note6.1).
     def nonNegativeInt(rng: RNG): (Int, RNG) = {
       val (n, ns) = rng.nextInt
-      val nni = math.abs(n)
-      if (nni < 0) nonNegativeInt(ns) else (nni, ns)
+      val res = math.abs(n)
+      if (res < 0) nonNegativeInt(ns) else (res, ns)
     }
 
     def double(rng: RNG): (Double, RNG) = {
-      ???
+      val (n, ns) = rng.nextInt
+      val res = n / Int.MaxValue
+      if (res == 1) double(ns) else (res, ns)
+    }
+
+    def intDouble(rng: RNG): ((Int, Double), RNG) = {
+      val (nint, ns1) = rng.nextInt
+      val (ndouble, ns2) = ns1.nextInt
+      ((nint, ndouble), ns2)
+    }
+
+    def doubleInt(rng: RNG): ((Double, Int), RNG) = {
+      val ((nint, ndouble), ns) = intDouble(rng)
+      ((ndouble, nint), ns)
+    }
+
+    def double3(rng: RNG): ((Double, Double, Double), RNG) = {
+      val (double1, rng2) = rng.nextInt
+      val (double2, rng3) = rng2.nextInt
+      val (double3, rng4) = rng3.nextInt
+      ((double1, double2, double3), rng4)
     }
 
   }
@@ -71,5 +90,8 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 //
 // ???: Why this is not automatic? It should be.
 // vim source: iabbrev t the
+//
+// vim source: iabbrev R RNG
+// vim source: iabbrev S SimpleRNG
 //
 // vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:

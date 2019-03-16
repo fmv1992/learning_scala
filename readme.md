@@ -12,6 +12,8 @@ I'll also try to stick to the [functional programming](https://en.wikipedia.org/
 
 The following tags are used in this project:
 
+*   `BUG`: Bugs found in different programs. Should be followed by an open issue on Github.
+
 *   `???`: Errors to be fixed at a later point.
 
 *   `??!`: Answers to these errors. Should be of the format:
