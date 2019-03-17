@@ -29,10 +29,12 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
     def nextInt: (Int, RNG) = {
       // https://en.wikipedia.org/wiki/Linear_congruential_generator
+      // 2019-03-16: "Java's java.util.Random, POSIX [ln]rand48, glibc
+      // [ln]rand48[_r]"
       // Ints are from  range: ???.
-      val modulus = 0XFFFFFFFFFFFFL
-      val multiplier = 0X5DEECE66DL
-      val increment = 0XBL
+      val modulus = 0xFFFFFFFFFFFFL
+      val multiplier = 0x5DEECE66DL
+      val increment = 0xBL
       val newSeed = (seed * multiplier + increment) & modulus
 
       val nextRNG = SimpleRNG(newSeed)
@@ -41,8 +43,37 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       //
       // scala> (0XFFFFFFFFFFFFL >>> 16) / Int.MaxValue.toDouble
       // res29: Double = 2.0000000004656613
-
-      // ERRATA: This is not part of a linear congruential generator.
+      //
+      // (this is not an errata): This is not part of a linear congruential
+      // generator.
+      //
+      // From: https://en.wikipedia.org/wiki/Linear_congruential_generator
+      //
+      // "Choosing m to be a power of 2, most often m = 232 or m = 264, produces a
+      // particularly efficient LCG, because this allows the modulus operation to be
+      // computed by simply truncating the binary representation".
+      //
+      // However we see that by using >>> the generated numbers increase and
+      // are of the same order. E.g. (without the fix):
+      //
+      // 0
+      // 384748
+      // 769497
+      // 1154246
+      // 1538995
+      // ...: 20 lines elided.
+      // 9618722
+      // 10003471
+      // ...: 70 lines elided.
+      // 37320643
+      // 37705392
+      // 38090141
+      // 0
+      // 384748
+      // 769497
+      // 1154246
+      // 1538995
+      //
       // val n = (newSeed >>> 16).toInt
       // Fix:
       val n = newSeed.toInt
