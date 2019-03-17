@@ -32,9 +32,9 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       // 2019-03-16: "Java's java.util.Random, POSIX [ln]rand48, glibc
       // [ln]rand48[_r]"
       // Ints are from  range: ???.
-      val modulus = 0xFFFFFFFFFFFFL
-      val multiplier = 0x5DEECE66DL
-      val increment = 0xBL
+      val modulus = 0XFFFFFFFFFFFFL
+      val multiplier = 0X5DEECE66DL
+      val increment = 0XBL
       val newSeed = (seed * multiplier + increment) & modulus
 
       val nextRNG = SimpleRNG(newSeed)
@@ -81,15 +81,15 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       (n, nextRNG)
     }
 
+    // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------|
+    // Changed those to fpinscala to proceed with certainty of correctness ---|
+    // (despite using a lot of tests). ---------------------------------------| }
+
     def double: (Double, RNG) = {
       SimpleRNG.double(this)
     }
 
   }
-
-  // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------|
-  // Changed those to fpinscala to proceed with certainty of correctness ---|
-  // (despite using a lot of tests). ---------------------------------------| }
 
   object SimpleRNG {
 
@@ -109,13 +109,13 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
         }
     }
 
-    def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = {
-      rng1 ⇒ {
-          val (a, rng2) = ra(rng1)
-          val (b, rng3) = rb(rng2)
-          (f(a, b), rng3)
-        }
+    def both[A, B](ra: Rand[A], rb: Rand[B]): Rand[(A, B)] = {
+      map2(ra, rb)((_, _))
     }
+
+    val randIntDouble: Rand[(Int, Double)] = both(int, double)
+
+    val randDoubleInt: Rand[(Double, Int)] = both(double, int)
 
     def nonNegativeEven: Rand[Int] = map(nonNegativeInt)(i ⇒ i - i % 2)
 
@@ -193,6 +193,14 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
         }
       }
       go(count, Nil, rng)
+    }
+
+    def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = {
+      rng1 ⇒ {
+          val (a, rng2) = ra(rng1)
+          val (b, rng3) = rb(rng2)
+          (f(a, b), rng3)
+        }
     }
 
   }
