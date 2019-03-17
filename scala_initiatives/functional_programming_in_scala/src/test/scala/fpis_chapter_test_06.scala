@@ -110,12 +110,35 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
 
   test("6.7: Implementation of sequence and intsUsingSequence.") {
     val (a, rng2) = rng1.nextInt
+    val seqFunc1 = SimpleRNG.sequence(List.fill(1)((x: RNG) ⇒ x.nextInt))
+    val seqRes1 = seqFunc1(rng1)
+    assert(rng2 === seqRes1._2)
+    assert(List(a) === seqRes1._1)
+
     val (b, rng3) = rng2.nextInt
-    val (c, rng4) = rng3.nextInt
-    val seqFunc = SimpleRNG.sequence(List.fill(3)((x: RNG) ⇒ x.nextInt))
-    val seqRes = seqFunc(rng1)
-    assert(rng4 === seqRes._2)
-    assert(List(a, b, c) === seqRes._1)
+    val seqFunc2 = SimpleRNG.sequence(List.fill(2)((x: RNG) ⇒ x.nextInt))
+    val seqRes2 = seqFunc2(rng1)
+    assert(rng3 === seqRes2._2)
+    assert(List(a, b) === seqRes2._1)
+
+    val (c, rng4) = SimpleRNG.double(rng3)
+    val seqFunc3 = SimpleRNG.sequence(
+      List(
+        (x: RNG) ⇒ x.nextInt,
+        (y: RNG) ⇒ y.nextInt,
+        (z: RNG) ⇒ SimpleRNG.double(z)
+      )
+    )
+    val seqRes3 = seqFunc3(rng1)
+    assert(rng4 === seqRes3._2)
+    assert(List(a, b, c) === seqRes3._1)
+
+    val (li, ns) = SimpleRNG.ints(10)(rng1)
+    val (lius, nsus) = SimpleRNG.intsUsingSequence(10)(rng1)
+    assert(li === lius)
+    assert(ns === nsus)
+    assert(lius.toSet.size == lius.length)
+    assert(ns != rng1)
   }
 
   test("6.8: ???.") {}

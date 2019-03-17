@@ -205,16 +205,24 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
     def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = {
       val nilA: List[A] = Nil
-      rng ⇒ fs.foldRight((nilA, rng))(
-        (func: Rand[A], acc: Tuple2[List[A], RNG]) ⇒ {
-          val (res, ns) = func(acc._2)
-          (res :: acc._1, ns)
-    })
+      rng ⇒ {
+        val folded = fs.foldLeft((nilA, rng))(
+          (acc: Tuple2[List[A], RNG], func: Rand[A]) ⇒ {
+            val (res, ns) = func(acc._2)
+            (res :: acc._1, ns)
+          }
+        )
+        // ???: Feels suboptimal to reverse the list.
+        (folded._1.reverse, folded._2)
+      }
     }
 
-    def intsUsingSequence = ???
+    def intsUsingSequence(count: Int)(rng: RNG): (List[Int], RNG) = {
+      sequence(List.fill(count)((x: RNG) ⇒ x.nextInt))(rng)
+    }
 
   }
+
 }
 
 //  Run this in vim:
