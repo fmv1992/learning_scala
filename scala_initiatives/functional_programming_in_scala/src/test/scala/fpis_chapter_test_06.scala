@@ -36,6 +36,11 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
         .mean(StreamOfRNGs.map(SimpleRNG.nonNegativeInt(_)._1.toDouble).toList)
         === ((Int.MaxValue.toDouble / 2) +- 0.1 * Int.MaxValue)
     )
+    // Fix the rng1 variable.
+    val (_, rng2) = rng1.nextInt
+    assert(rng2 == SimpleRNG(25214903928L))
+    val (_, rng3) = rng2.nextInt
+    assert(rng3 == SimpleRNG(206026503483683L))
   }
 
   test("6.1: Implementation of nonNegativeInt.") {
@@ -103,7 +108,15 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     assert(intDoubleFromMap2 === intDoubleFromFunction)
   }
 
-  test("6.7: Implementation of sequence and intsUsingSequence.") {}
+  test("6.7: Implementation of sequence and intsUsingSequence.") {
+    val (a, rng2) = rng1.nextInt
+    val (b, rng3) = rng2.nextInt
+    val (c, rng4) = rng3.nextInt
+    val seqFunc = SimpleRNG.sequence(List.fill(3)((x: RNG) ⇒ x.nextInt))
+    val seqRes = seqFunc(rng1)
+    assert(rng4 === seqRes._2)
+    assert(List(a, b, c) === seqRes._1)
+  }
 
   test("6.8: ???.") {}
 

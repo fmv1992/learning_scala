@@ -203,7 +203,14 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
         }
     }
 
-    def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = ???
+    def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = {
+      val nilA: List[A] = Nil
+      rng ⇒ fs.foldRight((nilA, rng))(
+        (func: Rand[A], acc: Tuple2[List[A], RNG]) ⇒ {
+          val (res, ns) = func(acc._2)
+          (res :: acc._1, ns)
+    })
+    }
 
     def intsUsingSequence = ???
 
