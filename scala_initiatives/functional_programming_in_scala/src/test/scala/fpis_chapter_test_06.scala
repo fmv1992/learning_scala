@@ -103,7 +103,7 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     assert(intDoubleFromMap2 === intDoubleFromFunction)
   }
 
-  test("6.7: ???.") {}
+  test("6.7: Implementation of sequence and intsUsingSequence.") {}
 
   test("6.8: ???.") {}
 

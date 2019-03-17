@@ -101,6 +101,8 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
     def unit[A](a: A): Rand[A] = rng ⇒ (a, rng)
 
+    def nonNegativeEven: Rand[Int] = map(nonNegativeInt)(i ⇒ i - i % 2)
+
     // NOTE: Returns a function!
     def map[A, B](s: Rand[A])(f: A ⇒ B): Rand[B] = {
       rng ⇒ {
@@ -116,8 +118,6 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
     val randIntDouble: Rand[(Int, Double)] = both(int, double)
 
     val randDoubleInt: Rand[(Double, Int)] = both(double, int)
-
-    def nonNegativeEven: Rand[Int] = map(nonNegativeInt)(i ⇒ i - i % 2)
 
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
     // Changed those to fpinscala to proceed with certainty of correctness -|
@@ -202,6 +202,10 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
           (f(a, b), rng3)
         }
     }
+
+    def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = ???
+
+    def intsUsingSequence = ???
 
   }
 }
