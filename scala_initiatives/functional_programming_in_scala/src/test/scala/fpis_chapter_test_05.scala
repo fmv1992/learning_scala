@@ -44,6 +44,8 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   test("5.0.1: Test memoization and lazyness.") {
     // ???: Mark as slow. Test lazy momoization.
 
+    def localprint(x: Any) = println("5.0.1 Test: " + x)
+
     val sleepTime: Long = 100 * 1e6.toLong // nano seconds.
     val evaluationTime = 1.1 * sleepTime
     val fastTime = 0.1 * sleepTime
@@ -53,12 +55,14 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     val slowVal =
       Stream.cons({ Thread.sleep(sleepTime / 1e6.toLong); 0 }, Stream(1))
     val end1 = System.nanoTime
+    localprint("Test Fast assignment.")
     assert(end1 - start1 < fastTime)
 
     // Assert evaluation: will sleep.
     val start2 = System.nanoTime
     slowVal.toList
     val end2 = System.nanoTime
+    localprint("Test sleep activation.")
     assert(end2 - start2 > sleepTime)
     assert(end2 - start2 < evaluationTime)
 
@@ -69,6 +73,7 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     assert(end3 - start3 < fastTime)
 
     // Assert lazyness again for a lot of different functions..
+    localprint("Test Memoization.")
     getErrorStream()
     getErrorStream().append(s1)
     getErrorStream().drop(100)

@@ -47,3 +47,5 @@ $(SBT_FILES): $(shell find $(dir $@) -iname '*.scala') ./tmp/.testcomplete
 .FORCE:
 
 .PHONY: all clean test
+
+# vim: set noexpandtab foldmethod=marker fileformat=unix filetype=make wrap foldtext=foldtext():
