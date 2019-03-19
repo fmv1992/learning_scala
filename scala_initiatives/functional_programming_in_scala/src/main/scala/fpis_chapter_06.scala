@@ -93,9 +93,9 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
   object SimpleRNG {
 
-    // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------|
-    // Changed those to fpinscala to proceed with certainty of correctness ---|
-    // (despite using a lot of tests). ---------------------------------------| {
+    // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
+    // Changed those to fpinscala to proceed with certainty of correctness -|
+    // (despite using a lot of tests). -------------------------------------| {
 
     val int: Rand[Int] = _.nextInt
 
@@ -118,6 +118,14 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
     val randIntDouble: Rand[(Int, Double)] = both(int, double)
 
     val randDoubleInt: Rand[(Double, Int)] = both(double, int)
+
+    def nonNegativeLessThan(n: Int): Rand[Int] = {
+      rng ⇒ val (i, rng2) = nonNegativeInt(rng)
+        val mod = i % n
+        if (i + (n - 1) - mod >= 0)
+          (mod, rng2)
+        else nonNegativeLessThan(n)(rng)
+    }
 
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
     // Changed those to fpinscala to proceed with certainty of correctness -|
@@ -151,7 +159,7 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
     //
     // ```
     // def nonNegativeEven: Rand[Int] =
-    // map(nonNegativeInt)(i => i - i % 2)
+    // map(nonNegativeInt)(i ⇒ i - i % 2)
     // ```
     //
     // But nonNegativeInt needs an argument!
@@ -195,7 +203,7 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       go(count, Nil, rng)
     }
 
-    def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = {
+    def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) ⇒ C): Rand[C] = {
       rng1 ⇒ {
           val (a, rng2) = ra(rng1)
           val (b, rng3) = rb(rng2)
@@ -221,6 +229,27 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       sequence(List.fill(count)((x: RNG) ⇒ x.nextInt))(rng)
     }
 
+    def flatMap[A, B](f: Rand[A])(g: A ⇒ Rand[B]): Rand[B] = {
+      (rng1: RNG) ⇒ {
+          // ???: Improve readability.
+          val t1: Tuple2[A, RNG] = f(rng1)
+          val t2: Tuple2[B, RNG] = g(t1._1)(t1._2)
+          t2
+        }
+    }
+
+    // def nonNegativeLessThanUsingFlatMap(n: Int): Rand[Int] = {
+    //
+    // val maxUniformValue = Int.MaxValue - (Int.MaxValue % n)
+    //
+    // rng1 ⇒ flatMap(nonNegativeInt)(
+    // x ⇒ if (x >= maxUniformValue) {
+    // nonNegativeLessThanUsingFlatMap(n)
+    // } else {
+    // rs ⇒ (x, rs)
+    // })
+    // }
+
   }
 
 }
@@ -232,5 +261,6 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 //
 // vim source: iabbrev R RNG
 // vim source: iabbrev S SimpleRNG
+// vim source: 1,-10s/=>/⇒/ge
 //
 // vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:
