@@ -231,24 +231,28 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
     def flatMap[A, B](f: Rand[A])(g: A ⇒ Rand[B]): Rand[B] = {
       (rng1: RNG) ⇒ {
-          // ???: Improve readability.
-          val t1: Tuple2[A, RNG] = f(rng1)
-          val t2: Tuple2[B, RNG] = g(t1._1)(t1._2)
-          t2
+          val (v1, rng2) = f(rng1)
+          val (v2, rng3) = g(v1)(rng2)
+          (v2, rng3)
         }
     }
 
-    // def nonNegativeLessThanUsingFlatMap(n: Int): Rand[Int] = {
-    //
-    // val maxUniformValue = Int.MaxValue - (Int.MaxValue % n)
-    //
-    // rng1 ⇒ flatMap(nonNegativeInt)(
-    // x ⇒ if (x >= maxUniformValue) {
-    // nonNegativeLessThanUsingFlatMap(n)
-    // } else {
-    // rs ⇒ (x, rs)
-    // })
-    // }
+    def nonNegativeLessThanUsingFlatMap(n: Int): Rand[Int] = {
+
+      val maxUniformValue = Int.MaxValue - (Int.MaxValue % n)
+
+      def recursivelyComputeN(a: Int): Rand[Int] = {
+        if (a > maxUniformValue) {
+          println(a)
+          nonNegativeLessThanUsingFlatMap(n)
+        } else {
+          val mod = a % n
+          (rs: RNG) ⇒ (mod, rs)
+        }
+      }
+
+      flatMap(nonNegativeInt)(recursivelyComputeN)
+    }
 
   }
 

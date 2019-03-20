@@ -18,8 +18,10 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
   // Declare constants.
   val StreamOfRNGs: Stream[SimpleRNG] = Stream
     .from(0)
-    .take(100)
     .map(SimpleRNG(_))
+
+  val StreamOfRNGs100: Stream[SimpleRNG] = StreamOfRNGs
+    .take(100)
   val rng1 = SimpleRNG(1)
 
   val nextZeroRNG: RNG = SimpleRNG((0XFFFFFFFFFFFFL - 0XBL) / 0X5DEECE66DL)
@@ -28,12 +30,14 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     // NOTE: Could not do it... See (note6.2).
     // assert(nextZeroRNG.nextInt._2.nextInt._1 == 0)
     assert(
-      Statistics.mean(StreamOfRNGs.map(_.double._1).toList)
+      Statistics.mean(StreamOfRNGs100.map(_.double._1).toList)
         === 0.5 +- 0.1
     )
     assert(
       Statistics
-        .mean(StreamOfRNGs.map(SimpleRNG.nonNegativeInt(_)._1.toDouble).toList)
+        .mean(
+          StreamOfRNGs100.map(SimpleRNG.nonNegativeInt(_)._1.toDouble).toList
+        )
         === ((Int.MaxValue.toDouble / 2) +- 0.1 * Int.MaxValue)
     )
     // Fix the rng1 variable.
@@ -50,14 +54,14 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     //
     // "Write a function that uses RNG.nextInt to generate a random integer
     // between 0 and Int.maxValue (inclusive)."
-    val nnis: Stream[Int] = StreamOfRNGs.map(SimpleRNG.nonNegativeInt(_)._1)
+    val nnis: Stream[Int] = StreamOfRNGs100.map(SimpleRNG.nonNegativeInt(_)._1)
     assert(nnis.forall(_ >= 0))
     assert(nnis.forall(_ <= Int.MaxValue))
     // ???: Generate a seed whose next seed will yield Int.MaxValue.
   }
 
   test("6.2: Implementation of double.") {
-    val doubles: Stream[Double] = StreamOfRNGs.map(_.double._1)
+    val doubles: Stream[Double] = StreamOfRNGs100.map(_.double._1)
     assert(doubles.forall(x ⇒ (x >= 0) && (x < 1)))
     assert(doubles.toSet.size == doubles.length)
   }
@@ -96,7 +100,7 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     assert(SimpleRNG.double(rng1) == SimpleRNG.doubleUsingMap(rng1))
 
     val doubles: Stream[Double] =
-      StreamOfRNGs.map(SimpleRNG.doubleUsingMap(_)._1)
+      StreamOfRNGs100.map(SimpleRNG.doubleUsingMap(_)._1)
     assert(doubles.forall(x ⇒ (x >= 0) && (x < 1)))
     assert(doubles.toSet.size == doubles.length)
   }
@@ -141,7 +145,19 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     assert(ns != rng1)
   }
 
-  test("6.8: ???.") {}
+  test("6.8: Implementation of flatMap.") {
+    val l2 = StreamOfRNGs
+      .take(10000)
+      .map(SimpleRNG.nonNegativeLessThanUsingFlatMap(2)(_))
+    val l2d = l2.map(_._1.toDouble)
+    assert(Statistics.mean(l2d) === 0.5 +- 0.01)
+
+    val l13 = StreamOfRNGs
+      .take(10000)
+      .map(SimpleRNG.nonNegativeLessThanUsingFlatMap(13)(_))
+    val l13d = l13.map(_._1.toDouble)
+    assert(Statistics.mean(l13d) === (13 - 1.toDouble) / 2 +- 0.01)
+  }
 
   test("6.9: ???.") {}
 
