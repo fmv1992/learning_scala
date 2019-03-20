@@ -263,6 +263,26 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       flatMap(nonNegativeInt)(recursivelyComputeN)
     }
 
+    def mapUsingFlatMap[A, B](s: Rand[A])(f: A ⇒ B): Rand[B] = {
+      flatMap(s)((x: A) ⇒ ((r: RNG) ⇒ (f(x), r)))
+    }
+
+    def map2UsingFlatMap[A, B, C](rA: Rand[A], rb: Rand[B])(f: (A, B) ⇒ C): Rand[C] = {
+      def curriedF: A ⇒ (RNG ⇒ Tuple2[C, RNG]) = x ⇒ (r ⇒ {
+        val (b, rng2) = rb(r)
+        (f(x, b), rng2)
+      })
+
+      // def procRAAndRb(a: A): RNG ⇒ Rand[C] = {
+        // (r: RNG) ⇒ {
+          // val (b, rng2) = rb(r)
+          // (f(a, b), rgn2)
+        // }
+      // }
+
+      flatMap((x: RNG) ⇒ rA(x))(curriedF)
+    }
+
   }
 
 }

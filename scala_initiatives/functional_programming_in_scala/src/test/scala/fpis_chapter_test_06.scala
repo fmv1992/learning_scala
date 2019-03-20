@@ -170,7 +170,22 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     assert(Statistics.mean(l13d) === (13 - 1.toDouble) / 2 +- 0.01)
   }
 
-  test("6.9: ???.") {}
+  test("6.9: Implementation of map and map2 using flatMap.") {
+    // Map.
+    val vWithMapVanilla = SimpleRNG.map(
+      SimpleRNG.nonNegativeLessThan(9))(i ⇒ i * i + 100)(rng1)
+    val vWithMapUsingFM = SimpleRNG.mapUsingFlatMap(
+      SimpleRNG.nonNegativeLessThan(9))(i ⇒ i * i + 100)(rng1)
+    assert(vWithMapVanilla == vWithMapUsingFM)
+    assert(vWithMapVanilla._2 == rng1.nextInt._2)
+
+    // Map2.
+    val intDoubleFromMap2Vanilla =
+      SimpleRNG.map2(_.nextInt, SimpleRNG.double(_))((_, _))(rng1)
+    val intDoubleFromMap2UsingFM =
+      SimpleRNG.map2UsingFlatMap(_.nextInt, SimpleRNG.double(_))((_, _))(rng1)
+    assert(intDoubleFromMap2Vanilla === intDoubleFromMap2UsingFM)
+  }
 
   test("6.10: ???.") {}
 
