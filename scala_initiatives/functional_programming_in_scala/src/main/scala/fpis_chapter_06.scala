@@ -13,6 +13,8 @@ import scalainitiatives.common.ScalaInitiativesExercise
 
 object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
+  // Random State. --- {
+
   // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------|
   // Changed those to fpinscala to proceed with certainty of correctness ---|
   // (despite using a lot of tests). ---------------------------------------| {
@@ -135,6 +137,8 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
           (mod, rng2)
         else nonNegativeLessThan(n)(rng)
     }
+
+    def rollDie: Rand[Int] = map(nonNegativeLessThan(6))(_ + 1)
 
     // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------|
     // Changed those to fpinscala to proceed with certainty of correctness -|
@@ -267,28 +271,79 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       flatMap(s)((x: A) ⇒ ((r: RNG) ⇒ (f(x), r)))
     }
 
-    def map2UsingFlatMap[A, B, C](rA: Rand[A], rb: Rand[B])(
+    def map2UsingFlatMap[A, B, C](ra: Rand[A], rb: Rand[B])(
         f: (A, B) ⇒ C
     ): Rand[C] = {
-      def curriedF: A ⇒ (RNG ⇒ Tuple2[C, RNG]) =
+
+      def delayedF: A ⇒ (RNG ⇒ Tuple2[C, RNG]) =
         x ⇒ (r ⇒ {
             val (b, rng2) = rb(r)
             (f(x, b), rng2)
           })
 
-      // def procRAAndRb(a: A): RNG ⇒ Rand[C] = {
-      // (r: RNG) ⇒ {
-      // val (b, rng2) = rb(r)
-      // (f(a, b), rgn2)
-      // }
-      // }
+      flatMap((x: RNG) ⇒ ra(x))(delayedF)
 
-      flatMap((x: RNG) ⇒ rA(x))(curriedF)
     }
 
   }
 
+  // Random State. --- }
+
+  // General state. --- {
+
+  type StateType[STATE, +VALUETYPE] = STATE ⇒ (VALUETYPE, STATE)
+
+  case class State[S, +A](run: StateType[S, A])
+
+  object State {
+
+    // def unit[A](a: A): Rand[A] = rng ⇒ (a, rng)
+
+    // def map[A, B](s: Rand[A])(f: A ⇒ B): Rand[B] = {
+    //   // ???: Using flatMap.
+    //   rng ⇒ {
+    //       val (a, rng2) = s(rng)
+    //       (f(a), rng2)
+    //     }
+    // }
+
+    // def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) ⇒ C): Rand[C] = {
+    //   // ???: Using flatMap.
+    //   rng1 ⇒ {
+    //       val (a, rng2) = ra(rng1)
+    //       val (b, rng3) = rb(rng2)
+    //       (f(a, b), rng3)
+    //     }
+    // }
+
+    // def flatMap[A, B](f: Rand[A])(g: A ⇒ Rand[B]): Rand[B] = {
+    //   (rng1: RNG) ⇒ {
+    //       val (v1, rng2) = f(rng1)
+    //       val (v2, rng3) = g(v1)(rng2)
+    //       (v2, rng3)
+    //     }
+    // }
+
+    // def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = {
+    //   val nilA: List[A] = Nil
+    //   rng ⇒ {
+    //     val folded = fs.foldLeft((nilA, rng))(
+    //       (acc: Tuple2[List[A], RNG], func: Rand[A]) ⇒ {
+    //         val (res, ns) = func(acc._2)
+    //         (res :: acc._1, ns)
+    //       }
+    //     )
+    //     // ???: Feels suboptimal to reverse the list.
+    //     (folded._1.reverse, folded._2)
+    //   }
+    // }
+
+  }
+
+  // General state. --- }
+
 }
+
 //  Run this in vim:
 //
 // ???: Why this is not automatic? It should be.
@@ -298,4 +353,4 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 // vim source: iabbrev S SimpleRNG
 // vim source: 1,-10s/=>/⇒/ge
 //
-// vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:
+// vim: set filetype=scala fileformat=unix nowrap tabstop=2 softtabstop=2:
