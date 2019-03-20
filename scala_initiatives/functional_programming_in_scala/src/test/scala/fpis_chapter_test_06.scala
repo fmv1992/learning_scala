@@ -172,10 +172,11 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
 
   test("6.9: Implementation of map and map2 using flatMap.") {
     // Map.
-    val vWithMapVanilla = SimpleRNG.map(
-      SimpleRNG.nonNegativeLessThan(9))(i ⇒ i * i + 100)(rng1)
+    val vWithMapVanilla =
+      SimpleRNG.map(SimpleRNG.nonNegativeLessThan(9))(i ⇒ i * i + 100)(rng1)
     val vWithMapUsingFM = SimpleRNG.mapUsingFlatMap(
-      SimpleRNG.nonNegativeLessThan(9))(i ⇒ i * i + 100)(rng1)
+      SimpleRNG.nonNegativeLessThan(9)
+    )(i ⇒ i * i + 100)(rng1)
     assert(vWithMapVanilla == vWithMapUsingFM)
     assert(vWithMapVanilla._2 == rng1.nextInt._2)
 
@@ -192,7 +193,6 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
   test("6.11: ???.") {}
 
 }
-
 //  Run this in vim:
 //
 // ???: Why this is not automatic? It should be.
