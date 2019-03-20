@@ -19,6 +19,7 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
   trait RNG {
     def nextInt: (Int, RNG)
+    def nextIntFromBook: (Int, RNG)
   }
 
   type Rand[+A] = RNG ⇒ (A, RNG)
@@ -26,6 +27,13 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
   trait LinearCongruentialGenerator extends RNG {}
 
   case class SimpleRNG(seed: Long) extends LinearCongruentialGenerator {
+
+    def nextIntFromBook: (Int, RNG) = {
+      val newSeed = (seed * 0X5DEECE66DL + 0XBL) & 0XFFFFFFFFFFFFL
+      val nextRNG = SimpleRNG(newSeed)
+      val n = (newSeed >>> 16).toInt
+      (n, nextRNG)
+    }
 
     def nextInt: (Int, RNG) = {
       // https://en.wikipedia.org/wiki/Linear_congruential_generator
@@ -49,9 +57,10 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       //
       // From: https://en.wikipedia.org/wiki/Linear_congruential_generator
       //
-      // "Choosing m to be a power of 2, most often m = 232 or m = 264, produces a
-      // particularly efficient LCG, because this allows the modulus operation to be
-      // computed by simply truncating the binary representation".
+      // "Choosing m to be a power of 2, most often m = 232 or m = 264,
+      // produces a particularly efficient LCG, because this allows the modulus
+      // operation to be computed by simply truncating the binary
+      // representation".
       //
       // However we see that by using >>> the generated numbers increase and
       // are of the same order. E.g. (without the fix):

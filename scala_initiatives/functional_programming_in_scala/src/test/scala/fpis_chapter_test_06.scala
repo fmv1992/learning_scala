@@ -45,6 +45,17 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     assert(rng2 == SimpleRNG(25214903928L))
     val (_, rng3) = rng2.nextInt
     assert(rng3 == SimpleRNG(206026503483683L))
+
+    // Test book function.
+    // ???: Looks like there is confusion regarding the quality of the PRNG
+    // described in the book...
+    val intsFromBookFunction = SimpleRNG
+      .sequence(List.fill(10000)((x: RNG) ⇒ x.nextIntFromBook))(rng1)
+      ._1
+    assert(intsFromBookFunction.toSet.size == intsFromBookFunction.length)
+    // ???: Why is the following not true?
+    // assert(Statistics.mean(intsFromBookFunction.map(_.toDouble)) ===
+    //   (0.0D +- 1.1))
   }
 
   test("6.1: Implementation of nonNegativeInt.") {
