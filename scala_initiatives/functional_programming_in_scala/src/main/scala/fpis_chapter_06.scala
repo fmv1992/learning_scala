@@ -331,19 +331,35 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
         }
     }
 
-    // def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = {
-    //   val nilA: List[A] = Nil
-    //   rng ⇒ {
-    //     val folded = fs.foldLeft((nilA, rng))(
-    //       (acc: Tuple2[List[A], RNG], func: Rand[A]) ⇒ {
-    //         val (res, ns) = func(acc._2)
-    //         (res :: acc._1, ns)
-    //       }
-    //     )
-    //     // ???: Feels suboptimal to reverse the list.
-    //     (folded._1.reverse, folded._2)
-    //   }
-    // }
+    def sequence[S, A](
+        fs: List[StateTransition[S, A]]
+    ): StateTransition[S, List[A]] = {
+
+      type ListComputationState = Tuple2[S, List[A]]
+      type ST = StateTransition[S, A]
+
+      val nilA: List[A] = Nil
+
+      def foldFunc(cs: ListComputationState, f: ST): Tuple2[S, List[A]] = {
+        val (s, acc) = cs
+        val (nextS, res) = f(s)
+        (nextS, res +: acc)
+      }
+
+      (s1: S) ⇒ {
+        val base: (S, List[A]) = (s1, nilA)
+        val foldedRes = fs.foldLeft(base)(foldFunc)
+        (foldedRes._1, foldedRes._2.reverse)
+      }
+    }
+// ICAgIC8vIGRlZiBzZXF1ZW5jZVtBXShmczogTGlzdFtSYW5kW0FdXSk6IFJhbmRbTGlzdFtBXV0g
+// PSB7CiAgICAvLyAgIHZhbCBuaWxBOiBMaXN0W0FdID0gTmlsCiAgICAvLyAgIHJuZyDih5Igewog
+// ICAgLy8gICAgIHZhbCBmb2xkZWQgPSBmcy5mb2xkTGVmdCgobmlsQSwgcm5nKSkoCiAgICAvLyAg
+// ICAgICAoYWNjOiBUdXBsZTJbTGlzdFtBXSwgUk5HXSwgZnVuYzogUmFuZFtBXSkg4oeSIHsKICAg
+// IC8vICAgICAgICAgdmFsIChyZXMsIG5zKSA9IGZ1bmMoYWNjLl8yKQogICAgLy8gICAgICAgICAo
+// cmVzIDo6IGFjYy5fMSwgbnMpCiAgICAvLyAgICAgICB9CiAgICAvLyAgICAgKQogICAgLy8gICAg
+// IC8vID8/PzogRmVlbHMgc3Vib3B0aW1hbCB0byByZXZlcnNlIHRoZSBsaXN0LgogICAgLy8gICAg
+// IChmb2xkZWQuXzEucmV2ZXJzZSwgZm9sZGVkLl8yKQogICAgLy8gICB9CiAgICAvLyB9Cg==
 
   }
 

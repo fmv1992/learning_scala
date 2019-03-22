@@ -265,6 +265,15 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
         == (872, "|2|_goes_to_the_right")
     )
 
+    // Test sequence.
+    val lot = List(
+      doubleIntState.run,
+      doubleIntState.run,
+      doubleIntState.run,
+      doubleIntState.run
+    )
+    assert(State.sequence(lot)(1) == (5, List(2, 4, 6, 8)))
+
   }
 
   test("6.11: ???.") {}
