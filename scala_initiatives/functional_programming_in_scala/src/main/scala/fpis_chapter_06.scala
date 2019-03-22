@@ -294,7 +294,37 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
   // https://docs.scala-lang.org/tour/traits.html
   type StateTransition[S, +A] = S ⇒ (S, A)
 
-  case class State[S, +A](run: StateTransition[S, A])
+  case class State[S, +A](run: StateTransition[S, A]) {
+
+    def unit[S, A](a: A): StateTransition[S, A] = {
+      ???
+    }
+
+    def map[S, A, B](
+        transform: StateTransition[S, A]
+    )(f: A ⇒ B): StateTransition[S, B] = {
+      ???
+    }
+
+    def map2[S, A, B, C](t1: StateTransition[S, A], t2: StateTransition[S, B])(
+        f: (A, B) ⇒ C
+    ): StateTransition[S, C] = {
+      ???
+    }
+
+    def flatMap[S, A, B](
+        f: StateTransition[S, A]
+    )(g: A ⇒ StateTransition[S, B]): StateTransition[S, B] = {
+      ???
+    }
+
+    def sequence[S, A](
+        fs: List[StateTransition[S, A]]
+    ): StateTransition[S, List[A]] = {
+      ???
+    }
+
+  }
 
   object State {
 
