@@ -221,6 +221,8 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
   // val immState = State(0, (x: Int) ⇒ (x, x))
   val nextIntFunc = (x: Int) ⇒ (x + 1, x)
   val nextIntState = State(nextIntFunc)
+  val doubleIntFunc = (x: Int) ⇒ (x + 1, 2 * x)
+  val doubleIntState = State(doubleIntFunc)
   //  1.  The double of the current state.
   //  2.  A new state, which is the next integer.
 
@@ -243,6 +245,16 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
       State.map(nextIntState.run)((x: Int) ⇒ math.pow(x + 1d, 2))(s2)
         == (3, 9)
     )
+
+    // Test map2.
+    assert(
+      State.map2(nextIntState.run, doubleIntState.run)(
+        (i1: Int, i2: Int) ⇒ List(i1, i2)
+      )(s2)
+        == (doubleIntState.run(nextIntState.run(s2)._1)._1,
+        List(2, 6))
+    )
+
   }
 
   test("6.11: ???.") {}

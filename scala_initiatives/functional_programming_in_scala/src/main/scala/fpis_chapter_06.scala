@@ -311,22 +311,15 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
         }
     }
 
-    // def map[A, B](s: Rand[A])(f: A ⇒ B): Rand[B] = {
-    //   // ???: Using flatMap.
-    //   rng ⇒ {
-    //       val (a, rng2) = s(rng)
-    //       (f(a), rng2)
-    //     }
-    // }
-
-    // def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) ⇒ C): Rand[C] = {
-    //   // ???: Using flatMap.
-    //   rng1 ⇒ {
-    //       val (a, rng2) = ra(rng1)
-    //       val (b, rng3) = rb(rng2)
-    //       (f(a, b), rng3)
-    //     }
-    // }
+    def map2[S, A, B, C](t1: StateTransition[S, A], t2: StateTransition[S, B])(
+        f: (A, B) ⇒ C
+    ): StateTransition[S, C] = {
+      (s1: S) ⇒ {
+          val (s2, a) = t1(s1)
+          val (s3, b) = t2(s2)
+          (s3, f(a, b))
+        }
+    }
 
     // def flatMap[A, B](f: Rand[A])(g: A ⇒ Rand[B]): Rand[B] = {
     //   (rng1: RNG) ⇒ {
