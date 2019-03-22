@@ -218,14 +218,19 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
   // function.
 
   // val s1 = State((x: Int) ⇒ (x + 1, State((y: Int) ⇒ 2 * x))
-  val immState = State(0, (x: Int) ⇒ (x, x))
-  val nextIntState = State(0, (x: Int) ⇒ (x, x + 1))
+  // val immState = State(0, (x: Int) ⇒ (x, x))
+  val nextIntState = State((x: Int) ⇒ (x + 1, x))
   //  1.  The double of the current state.
   //  2.  A new state, which is the next integer.
 
   test(
     "6.10: Generalization of unit, map, map2, flatMap and sequence for a State object."
-  ) {}
+  ) {
+    val (s2, a) = nextIntState.run(1)
+    val (s3, b) = nextIntState.run(s2)
+    assert(s2 == 2)
+    assert(s3 == 3)
+  }
 
   test("6.11: ???.") {}
 
@@ -236,6 +241,8 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
 // vim source: iabbrev t the
 //
 // vim source: iabbrev R RNG
-// vim source: iabbrev S SimpleRNG
+// vim source: iabbrev Si SimpleRNG
+// vim source: 1,-10s/=>/⇒/ge
+// vim source: NeoCompleteEnable
 //
 // vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:

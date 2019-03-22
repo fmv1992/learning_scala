@@ -292,13 +292,15 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
   // General state. --- {
 
   // https://docs.scala-lang.org/tour/traits.html
-  type StateType[STATE, +VALUETYPE] = STATE ⇒ (VALUETYPE, STATE)
+  type StateType[S, +A] = S ⇒ (S, A)
 
   case class State[S, +A](run: StateType[S, A])
 
   object State {
 
-    // def unit[A](a: A): Rand[A] = rng ⇒ (a, rng)
+    def unit[S, A](a: A)(s: S): StateType[S, A] = {
+      (s1: S) ⇒ (s1, a)
+    }
 
     // def map[A, B](s: Rand[A])(f: A ⇒ B): Rand[B] = {
     //   // ???: Using flatMap.
