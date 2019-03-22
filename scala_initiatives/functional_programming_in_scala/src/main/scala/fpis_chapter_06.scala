@@ -291,6 +291,7 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
   // General state. --- {
 
+  // https://docs.scala-lang.org/tour/traits.html
   type StateType[STATE, +VALUETYPE] = STATE ⇒ (VALUETYPE, STATE)
 
   case class State[S, +A](run: StateType[S, A])
@@ -350,7 +351,8 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 // vim source: iabbrev t the
 //
 // vim source: iabbrev R RNG
-// vim source: iabbrev S SimpleRNG
+// vim source: iabbrev Si SimpleRNG
 // vim source: 1,-10s/=>/⇒/ge
+// vim source: NeoCompleteEnable
 //
-// vim: set filetype=scala fileformat=unix nowrap tabstop=2 softtabstop=2:
+// vim: set filetype=scala fileformat=unix nowrap tabstop=2 softtabstop=2 foldmethod=marker:

@@ -6,6 +6,7 @@ import scalainitiatives.common.Statistics
 
 import FPISExerciseChapter06.SimpleRNG
 import FPISExerciseChapter06.RNG
+import FPISExerciseChapter06.State
 
 import scalainitiatives.common.ScalaInitiativesTest
 
@@ -188,7 +189,43 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     assert(intDoubleFromMap2Vanilla === intDoubleFromMap2UsingFM)
   }
 
-  test("6.10: ???.") {}
+  // See commit 'a6143ef' (and branch
+  // 'dev_unstable_chapter06_state_generalization').
+  //
+  // NOTE: What does a PRNG does? In a computation cycle it returns:
+  // 1. A useful output.
+  // 2. A new state.
+  //
+  // The whole point of doing this not to mutate the original object.
+  // (???) All derived functions in one way on another were linked to the only
+  // new state generator: nextInt. This would not be the case in a chess game,
+  // for example. It is in fact the contrary:
+  // - It has a fixed initial seed (the setting).
+  // - And different paths of mutation (player's movements).
+  //
+  // To define a PRNG we had to specify an initial state (seed) and a function
+  // for generating the next state.
+  // Thus defining a state object with only a function is not equivalent. One
+  // could do it and then provide a state via parameters, but this is not akin
+  // to the PRNG case.
+  //
+  // Stateful objects thus must have all of the following:
+  // 1. A current state.
+  // 2. A function to compute the next state. This function may take external
+  //    inputs (think of chess).
+  // Thus to define a state one must define both an initial state (or through a
+  // seed and a transformFromSeedToInitialState function) and a getNextState
+  // function.
+
+  // val s1 = State((x: Int) ⇒ (x + 1, State((y: Int) ⇒ 2 * x))
+  val immState = State(0, (x: Int) ⇒ (x, x))
+  val nextIntState = State(0, (x: Int) ⇒ (x, x + 1))
+  //  1.  The double of the current state.
+  //  2.  A new state, which is the next integer.
+
+  test(
+    "6.10: Generalization of unit, map, map2, flatMap and sequence for a State object."
+  ) {}
 
   test("6.11: ???.") {}
 
