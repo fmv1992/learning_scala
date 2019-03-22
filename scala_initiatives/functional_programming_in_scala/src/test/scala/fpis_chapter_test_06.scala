@@ -7,6 +7,7 @@ import scalainitiatives.common.Statistics
 import FPISExerciseChapter06.SimpleRNG
 import FPISExerciseChapter06.RNG
 import FPISExerciseChapter06.State
+import FPISExerciseChapter06.StateTransition
 
 import scalainitiatives.common.ScalaInitiativesTest
 
@@ -253,6 +254,15 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
       )(s2)
         == (doubleIntState.run(nextIntState.run(s2)._1)._1,
         List(2, 6))
+    )
+
+    // Test flatMap.
+    def int2StrAndBigIncrease(x: Int): StateTransition[Int, String] = {
+      (y: Int) ⇒ (y + 870, ("|" + y + "|") + "_goes_to_the_right")
+    }
+    assert(
+      State.flatMap(nextIntState.run)(int2StrAndBigIncrease)(1)
+        == (872, "|2|_goes_to_the_right")
     )
 
   }
