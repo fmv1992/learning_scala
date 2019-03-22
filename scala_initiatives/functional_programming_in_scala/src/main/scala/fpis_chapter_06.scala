@@ -292,14 +292,23 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
   // General state. --- {
 
   // https://docs.scala-lang.org/tour/traits.html
-  type StateType[S, +A] = S ⇒ (S, A)
+  type StateTransition[S, +A] = S ⇒ (S, A)
 
-  case class State[S, +A](run: StateType[S, A])
+  case class State[S, +A](run: StateTransition[S, A])
 
   object State {
 
-    def unit[S, A](a: A)(s: S): StateType[S, A] = {
+    def unit[S, A](a: A): StateTransition[S, A] = {
       (s1: S) ⇒ (s1, a)
+    }
+
+    def map[S, A, B](
+        transform: StateTransition[S, A]
+    )(f: A ⇒ B): StateTransition[S, B] = {
+      (s1: S) ⇒ {
+          val (s2, a) = transform(s1)
+          (s2, f(a))
+        }
     }
 
     // def map[A, B](s: Rand[A])(f: A ⇒ B): Rand[B] = {
@@ -352,9 +361,11 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 // ???: Why this is not automatic? It should be.
 // vim source: iabbrev t the
 //
-// vim source: iabbrev R RNG
-// vim source: iabbrev Si SimpleRNG
 // vim source: 1,-10s/=>/⇒/ge
 // vim source: NeoCompleteEnable
+// vim source: iabbrev R RNG
+// vim source: iabbrev ST StateTransition
+// vim source: iabbrev Si SimpleRNG
+// vim source: iabbrev St State
 //
 // vim: set filetype=scala fileformat=unix nowrap tabstop=2 softtabstop=2 foldmethod=marker:
