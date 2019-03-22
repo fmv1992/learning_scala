@@ -48,7 +48,10 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
 
     val sleepTime: Long = 100 * 1e6.toLong // nano seconds.
     val evaluationTime = 1.1 * sleepTime
-    val fastTime = 0.1 * sleepTime
+    // Fix:
+    // 18033678 was not less than 1.0E7 (fpis_chapter_test_05.scala:59)
+    // Where 59 is current 62.
+    val fastTime = 0.3 * sleepTime
 
     // Assert lazyness: fast assignment.
     val start1 = System.nanoTime
