@@ -301,16 +301,21 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       State.unit(a)(this)
     }
 
-    def map[S, A, B](
-        transform: StateTransition[S, A]
-    )(f: A ⇒ B): StateTransition[S, B] = {
-      ???
+    def map[B](f: A ⇒ B): StateTransition[S, B] = {
+      // ??!: Design choice: should this modify the object itself so that all
+      // new states return B instead of A? Or should this be just one time?
+      //
+      // ??!: Again State is a "State transition" (p.88):
+      // "Here State is short for computation that carries some state along, or
+      // state action, state transition, or even statement (see the next
+      // section)."
+      (s1: S) ⇒ State.map(this.run)(f)(s1)
     }
 
-    def map2[S, A, B, C](t1: StateTransition[S, A], t2: StateTransition[S, B])(
+    def map2[B, C](t2: StateTransition[S, B])(
         f: (A, B) ⇒ C
     ): StateTransition[S, C] = {
-      ???
+      (s1: S) ⇒ State.map2(this.run, t2)(f)(s1)
     }
 
     def flatMap[S, A, B](
@@ -398,6 +403,7 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 // vim source: 1,-10s/=>/⇒/ge
 // vim source: NeoCompleteEnable
 // vim source: iabbrev R RNG
+// vim source: iabbrev SR StateResult
 // vim source: iabbrev ST StateTransition
 // vim source: iabbrev Si SimpleRNG
 // vim source: iabbrev St State
