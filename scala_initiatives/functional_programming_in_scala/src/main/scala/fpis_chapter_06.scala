@@ -397,17 +397,77 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
   // Coin machine. --- {
 
+  // "State actions, which are really functions."
+
   sealed trait Input
   case object Coin extends Input
   case object Turn extends Input
-  case class Machine(locked: Boolean, candies: Int, coins: Int)
+  case object Buy extends Input // Must be Coin → Turn
 
-  // 1.  Inserting a coin into a locked machine will cause it to unlock if there’s any candy left.
-  // 2.  Turning the knob on an unlocked machine will cause it to dispense candy and become locked.
-  // 3.  Turning the knob on a locked machine or inserting a coin into an unlocked machine does nothing.
+  type MachineResult = (Machine, (Int, Int))
+
+  case class Machine(locked: Boolean, candies: Int, coins: Int) {
+
+    // The API should also return the goods purchased!
+    def processInput(i: Input): MachineResult = {
+      i match {
+        case Coin ⇒ processCoin
+        case Turn ⇒ processTurn
+        case _ ⇒ throw new Exception()
+      }
+    }
+
+    def processCoin(): MachineResult = {
+      // 1.  Inserting a coin into a locked machine will cause it to unlock if
+      // there’s any candy left.
+      if (this.candies > 0) {
+        (Machine(false, this.candies, this.coins), (this.candies, this.coins))
+      // 3.  Turning the knob on a locked machine or inserting a coin into an
+      // unlocked machine does nothing.
+      } else {
+        (this, (this.candies, this.coins))
+      }
+    }
+
+    def processTurn(): MachineResult = {
+      // 2.  Turning the knob on an unlocked machine will cause it to dispense
+      // candy and become locked.
+      if (this.candies > 0) {
+        (Machine(false, this.candies, this.coins), (this.candies, this.coins))
+      // 3.  Turning the knob on a locked machine or inserting a coin into an
+      // unlocked machine does nothing.
+      } else {
+        (this, (this.candies, this.coins))
+      }
+    }
+
+  }
+
   // 4.  A machine that’s out of candy ignores all inputs.
 
-  def simulateMachine(inputs: List[Input]): State[Machine, (Int, Int)] = ???
+  object simulateMachine {
+
+    def simulateMachine(
+      inputs: List[Input]
+    ): StateTransition[Machine, (Int, Int)] = {
+      (m: Machine) ⇒ {
+        val foldedRes: Machine = inputs.foldLeft(m)(
+
+          (x: Tuple2[Machine, Input]) ⇒ {
+            val (currM: Machine, currInput: Input) = x
+            val processed: MachineResult = currM.processInput(currInput)
+            println(processed)
+            m
+          }
+
+        )
+
+        (m, (1, 1))
+
+      }
+    }
+
+  }
 
   // Coin machine. --- }
 

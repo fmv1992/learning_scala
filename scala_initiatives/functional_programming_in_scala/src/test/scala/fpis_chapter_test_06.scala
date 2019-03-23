@@ -8,6 +8,11 @@ import FPISExerciseChapter06.SimpleRNG
 import FPISExerciseChapter06.RNG
 import FPISExerciseChapter06.State
 import FPISExerciseChapter06.StateTransition
+import FPISExerciseChapter06.Machine
+import FPISExerciseChapter06.Buy
+import FPISExerciseChapter06.Coin
+import FPISExerciseChapter06.Input
+import FPISExerciseChapter06.simulateMachine
 
 import scalainitiatives.common.ScalaInitiativesTest
 
@@ -295,7 +300,15 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     )
   }
 
-  test("6.11: ???.") {}
+  test("6.11: Implement simulateMachine.") {
+    // "For example, if the input Machine has 10 coins and 5 candies, and a total
+    // of 4 candies are successfully bought, the output should be (14, 1)."
+    val exampleMachine = Machine(true, 5, 10)
+    assert(
+      simulateMachine(List.fill(4)(Buy))(exampleMachine)
+        == (Machine(true, 1, 14), (14, 1))
+    )
+  }
 
 }
 //  Run this in vim:
