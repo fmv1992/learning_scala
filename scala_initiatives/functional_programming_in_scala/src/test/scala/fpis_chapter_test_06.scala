@@ -306,12 +306,14 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     // of 4 candies are successfully bought, the output should be (14, 1)."
     val exampleMachine = Machine(true, 5, 10)
     // assert(
-      // simulateMachine(List.fill(4)(Buy))(exampleMachine)
-        // == (Machine(true, 1, 14), (14, 1))
+    // simulateMachine(List.fill(4)(Buy))(exampleMachine)
+    // == (Machine(true, 1, 14), (14, 1))
     // )
     val lActions = List.fill(4)(List(Coin, Turn)).flatten
-    assert(SimulateMachine.simulateMachine(lActions)(exampleMachine)
-      == (Machine(true, 1, 14), (14, 1)))
+    assert(
+      SimulateMachine.simulateMachine(lActions)(exampleMachine)
+        == (Machine(true, 1, 14), (1, 14))
+    )
   }
 
 }

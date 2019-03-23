@@ -422,8 +422,8 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       // there’s any candy left.
       if (this.candies > 0) {
         (Machine(false, this.candies, this.coins), (this.candies, this.coins))
-      // 3.  Turning the knob on a locked machine or inserting a coin into an
-      // unlocked machine does nothing.
+        // 3.  Turning the knob on a locked machine or inserting a coin into an
+        // unlocked machine does nothing.
       } else {
         (this, (this.candies, this.coins))
       }
@@ -433,9 +433,12 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       // 2.  Turning the knob on an unlocked machine will cause it to dispense
       // candy and become locked.
       if (this.candies > 0) {
-        (Machine(false, this.candies, this.coins), (this.candies, this.coins))
-      // 3.  Turning the knob on a locked machine or inserting a coin into an
-      // unlocked machine does nothing.
+        (
+          Machine(true, this.candies - 1, this.coins + 1),
+          (this.candies, this.coins)
+        )
+        // 3.  Turning the knob on a locked machine or inserting a coin into an
+        // unlocked machine does nothing.
       } else {
         (this, (this.candies, this.coins))
       }
@@ -448,14 +451,19 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
   object SimulateMachine {
 
     def simulateMachine(
-      inputs: List[Input]
+        inputs: List[Input]
     ): StateTransition[Machine, (Int, Int)] = {
-      (m: Machine) ⇒ {
-        // val foldedRes: Machine = inputs.foldLeft(m)(
-          // ???
-        // )
-        (m, (1, 1))
 
+      // NOTE: Super time saving: write folding functions separetely!
+      def foldingFunction(xm: Machine, xi: Input): Machine = {
+        xm.processInput(xi)._1
+      }
+
+      (m: Machine) ⇒ {
+        val foldedRes: Machine = inputs.foldLeft(m)(foldingFunction)
+
+        (foldedRes, (foldedRes.candies, foldedRes.coins))
+        // (m, (1, 1))
       }
     }
 
