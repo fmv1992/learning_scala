@@ -235,6 +235,10 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
   assert(s3 == 3)
   assert(b == 2)
 
+  def int2StrAndBigIncrease(x: Int): StateTransition[Int, String] = {
+    (y: Int) ⇒ (y + 870, ("|" + y + "|") + "_goes_to_the_right")
+  }
+
   test(
     "6.10.0: Generalization of unit, map, map2, flatMap and sequence for a State object."
   ) {
@@ -258,9 +262,6 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     )
 
     // Test flatMap.
-    def int2StrAndBigIncrease(x: Int): StateTransition[Int, String] = {
-      (y: Int) ⇒ (y + 870, ("|" + y + "|") + "_goes_to_the_right")
-    }
     assert(
       State.flatMap(nextIntState.run)(int2StrAndBigIncrease)(1)
         == (872, "|2|_goes_to_the_right")
@@ -287,6 +288,10 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     assert(
       State.map2(nextIntState.run, doubleIntState.run)(toL)(s2)
         == nextIntState.map2(doubleIntState.run)(toL)(s2)
+    )
+    assert(
+      State.flatMap(nextIntState.run)(int2StrAndBigIncrease)(1)
+        == nextIntState.flatMap(int2StrAndBigIncrease)(1)
     )
   }
 

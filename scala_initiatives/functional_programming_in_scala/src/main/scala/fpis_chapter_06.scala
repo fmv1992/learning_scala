@@ -318,17 +318,18 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       (s1: S) ⇒ State.map2(this.run, t2)(f)(s1)
     }
 
-    def flatMap[S, A, B](
-        f: StateTransition[S, A]
-    )(g: A ⇒ StateTransition[S, B]): StateTransition[S, B] = {
-      ???
+    def flatMap[B](g: A ⇒ StateTransition[S, B]): StateTransition[S, B] = {
+      (s1: S) ⇒ State.flatMap(this.run)(g)(s1)
     }
 
-    def sequence[S, A](
-        fs: List[StateTransition[S, A]]
-    ): StateTransition[S, List[A]] = {
-      ???
-    }
+    // Makes no sense to implement this on the class level because we could
+    // only repeat the `this.run` sequence, which makes more sense to do on the
+    // singleton level.
+    // def sequence[S, A](
+    //     fs: List[StateTransition[S, A]]
+    // ): StateTransition[S, List[A]] = {
+    //   Not implemented!
+    // }
 
   }
 
@@ -371,6 +372,7 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
         fs: List[StateTransition[S, A]]
     ): StateTransition[S, List[A]] = {
 
+      // Those types helped fix the problem a lot!
       type ListComputationState = Tuple2[S, List[A]]
       type ST = StateTransition[S, A]
 
