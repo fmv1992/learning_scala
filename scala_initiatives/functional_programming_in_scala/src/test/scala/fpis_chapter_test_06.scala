@@ -12,7 +12,8 @@ import FPISExerciseChapter06.Machine
 import FPISExerciseChapter06.Buy
 import FPISExerciseChapter06.Coin
 import FPISExerciseChapter06.Input
-import FPISExerciseChapter06.simulateMachine
+import FPISExerciseChapter06.Turn
+import FPISExerciseChapter06.SimulateMachine
 
 import scalainitiatives.common.ScalaInitiativesTest
 
@@ -304,10 +305,13 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     // "For example, if the input Machine has 10 coins and 5 candies, and a total
     // of 4 candies are successfully bought, the output should be (14, 1)."
     val exampleMachine = Machine(true, 5, 10)
-    assert(
-      simulateMachine(List.fill(4)(Buy))(exampleMachine)
-        == (Machine(true, 1, 14), (14, 1))
-    )
+    // assert(
+      // simulateMachine(List.fill(4)(Buy))(exampleMachine)
+        // == (Machine(true, 1, 14), (14, 1))
+    // )
+    val lActions = List.fill(4)(List(Coin, Turn)).flatten
+    assert(SimulateMachine.simulateMachine(lActions)(exampleMachine)
+      == (Machine(true, 1, 14), (14, 1)))
   }
 
 }

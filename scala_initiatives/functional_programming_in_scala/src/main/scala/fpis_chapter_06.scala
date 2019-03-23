@@ -445,23 +445,15 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
   // 4.  A machine that’s out of candy ignores all inputs.
 
-  object simulateMachine {
+  object SimulateMachine {
 
     def simulateMachine(
       inputs: List[Input]
     ): StateTransition[Machine, (Int, Int)] = {
       (m: Machine) ⇒ {
-        val foldedRes: Machine = inputs.foldLeft(m)(
-
-          (x: Tuple2[Machine, Input]) ⇒ {
-            val (currM: Machine, currInput: Input) = x
-            val processed: MachineResult = currM.processInput(currInput)
-            println(processed)
-            m
-          }
-
-        )
-
+        // val foldedRes: Machine = inputs.foldLeft(m)(
+          // ???
+        // )
         (m, (1, 1))
 
       }
