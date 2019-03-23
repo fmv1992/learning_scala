@@ -406,6 +406,8 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
   type MachineResult = (Machine, (Int, Int))
 
+  // Improvements, it should also return items that were not properly used
+  // (e.g.: a coin in an unlocked machine).
   case class Machine(locked: Boolean, candies: Int, coins: Int) {
 
     // The API should also return the goods purchased!
@@ -413,6 +415,7 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       i match {
         case Coin ⇒ processCoin
         case Turn ⇒ processTurn
+        case Buy ⇒ processCoin._1.processTurn
         case _ ⇒ throw new Exception()
       }
     }
@@ -461,9 +464,7 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
       (m: Machine) ⇒ {
         val foldedRes: Machine = inputs.foldLeft(m)(foldingFunction)
-
         (foldedRes, (foldedRes.candies, foldedRes.coins))
-        // (m, (1, 1))
       }
     }
 
