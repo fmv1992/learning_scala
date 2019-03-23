@@ -410,6 +410,13 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
   // (e.g.: a coin in an unlocked machine).
   case class Machine(locked: Boolean, candies: Int, coins: Int) {
 
+    require(candies >= 0)
+    require(coins >= 0)
+
+    def getState(): MachineResult = {
+      (this, (this.candies, this.coins))
+    }
+
     // The API should also return the goods purchased!
     def processInput(i: Input): MachineResult = {
       i match {
@@ -420,30 +427,36 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       }
     }
 
-    def processCoin(): MachineResult = {
+    // NOTE: Improvement: making this method private! Users should not access
+    // them directly!
+    private def processCoin(): MachineResult = {
       // 1.  Inserting a coin into a locked machine will cause it to unlock if
       // there’s any candy left.
       if (this.candies > 0) {
-        (Machine(false, this.candies, this.coins), (this.candies, this.coins))
+        Machine(false, this.candies, this.coins + 1).getState
         // 3.  Turning the knob on a locked machine or inserting a coin into an
         // unlocked machine does nothing.
       } else {
-        (this, (this.candies, this.coins))
+        getState()
       }
     }
 
-    def processTurn(): MachineResult = {
+    // NOTE: Improvement: making this method private! Users should not access
+    // them directly!
+    private def processTurn(): MachineResult = {
       // 2.  Turning the knob on an unlocked machine will cause it to dispense
       // candy and become locked.
+      //
+      // 3.  Turning the knob on a locked machine or inserting a coin into an
+      // unlocked machine does nothing.
       if (this.candies > 0) {
-        (
-          Machine(true, this.candies - 1, this.coins + 1),
-          (this.candies, this.coins)
-        )
-        // 3.  Turning the knob on a locked machine or inserting a coin into an
-        // unlocked machine does nothing.
+        if (this.locked) {
+          getState
+        } else {
+          Machine(true, this.candies - 1, this.coins).getState
+        }
       } else {
-        (this, (this.candies, this.coins))
+        getState
       }
     }
 
