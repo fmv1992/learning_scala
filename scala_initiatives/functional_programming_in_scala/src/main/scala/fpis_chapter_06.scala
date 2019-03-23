@@ -395,6 +395,22 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
   // General state. --- }
 
+  // Coin machine. --- {
+
+  sealed trait Input
+  case object Coin extends Input
+  case object Turn extends Input
+  case class Machine(locked: Boolean, candies: Int, coins: Int)
+
+  // 1.  Inserting a coin into a locked machine will cause it to unlock if there’s any candy left.
+  // 2.  Turning the knob on an unlocked machine will cause it to dispense candy and become locked.
+  // 3.  Turning the knob on a locked machine or inserting a coin into an unlocked machine does nothing.
+  // 4.  A machine that’s out of candy ignores all inputs.
+
+  def simulateMachine(inputs: List[Input]): State[Machine, (Int, Int)] = ???
+
+  // Coin machine. --- }
+
 }
 
 //  Run this in vim:
@@ -410,4 +426,4 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 // vim source: iabbrev Si SimpleRNG
 // vim source: iabbrev St State
 //
-// vim: set filetype=scala fileformat=unix nowrap tabstop=2 softtabstop=2 foldmethod=marker:
+// vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:
