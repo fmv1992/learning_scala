@@ -292,12 +292,13 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
   // General state. --- {
 
   // https://docs.scala-lang.org/tour/traits.html
+  type StateResult[S, +A] = (State[S, A], A)
   type StateTransition[S, +A] = S ⇒ (S, A)
 
   case class State[S, +A](run: StateTransition[S, A]) {
 
-    def unit[S, A](a: A): StateTransition[S, A] = {
-      ???
+    def unit[B >: A](a: B): StateResult[S, B] = {
+      State.unit(a)(this)
     }
 
     def map[S, A, B](
@@ -382,14 +383,6 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
         (foldedRes._1, foldedRes._2.reverse)
       }
     }
-// ICAgIC8vIGRlZiBzZXF1ZW5jZVtBXShmczogTGlzdFtSYW5kW0FdXSk6IFJhbmRbTGlzdFtBXV0g
-// PSB7CiAgICAvLyAgIHZhbCBuaWxBOiBMaXN0W0FdID0gTmlsCiAgICAvLyAgIHJuZyDih5Igewog
-// ICAgLy8gICAgIHZhbCBmb2xkZWQgPSBmcy5mb2xkTGVmdCgobmlsQSwgcm5nKSkoCiAgICAvLyAg
-// ICAgICAoYWNjOiBUdXBsZTJbTGlzdFtBXSwgUk5HXSwgZnVuYzogUmFuZFtBXSkg4oeSIHsKICAg
-// IC8vICAgICAgICAgdmFsIChyZXMsIG5zKSA9IGZ1bmMoYWNjLl8yKQogICAgLy8gICAgICAgICAo
-// cmVzIDo6IGFjYy5fMSwgbnMpCiAgICAvLyAgICAgICB9CiAgICAvLyAgICAgKQogICAgLy8gICAg
-// IC8vID8/PzogRmVlbHMgc3Vib3B0aW1hbCB0byByZXZlcnNlIHRoZSBsaXN0LgogICAgLy8gICAg
-// IChmb2xkZWQuXzEucmV2ZXJzZSwgZm9sZGVkLl8yKQogICAgLy8gICB9CiAgICAvLyB9Cg==
 
   }
 

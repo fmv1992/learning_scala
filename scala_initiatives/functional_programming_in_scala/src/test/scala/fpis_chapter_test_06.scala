@@ -228,7 +228,7 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
   //  2.  A new state, which is the next integer.
 
   test(
-    "6.10: Generalization of unit, map, map2, flatMap and sequence for a State object."
+    "6.10.0: Generalization of unit, map, map2, flatMap and sequence for a State object."
   ) {
     val result1 = nextIntState.run(1)
     val (s2, a) = result1
@@ -274,6 +274,12 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     )
     assert(State.sequence(lot)(1) == (5, List(2, 4, 6, 8)))
 
+  }
+
+  test(
+    "6.10.1: Generalization of unit, map, map2, flatMap and sequence for a State class."
+  ) {
+    assert(nextIntState.unit(10) == (nextIntState, 10))
   }
 
   test("6.11: ???.") {}
