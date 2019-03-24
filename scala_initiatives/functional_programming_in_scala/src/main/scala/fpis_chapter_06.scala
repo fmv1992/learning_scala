@@ -457,10 +457,14 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       // 1.  Inserting a coin into a locked machine will cause it to unlock if
       // there’s any candy left.
       if (this.candies > 0) {
-        val newM = Machine(false, this.candies, this.coins + 1)
-        (newM, None)
-        // 3.  Turning the knob on a locked machine or inserting a coin into an
-        // unlocked machine returns the inserted coin.
+        if (this.locked) {
+          val newM = Machine(false, this.candies, this.coins + 1)
+          (newM, None)
+          // 3.  Turning the knob on a locked machine or inserting a coin into an
+          // unlocked machine returns the inserted coin.
+        } else {
+          (this, Some(Coin))
+        }
       } else {
         (this, Some(Coin))
       }
