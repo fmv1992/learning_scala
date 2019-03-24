@@ -400,11 +400,19 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
   // "State actions, which are really functions."
 
   sealed trait Input
-  case object Coin extends Input
+  sealed trait Output
+
   case object Turn extends Input
   case object Buy extends Input // Must be Coin → Turn
 
-  type MachineResult = (Machine, (Int, Int))
+  case object Coin extends Input with Output
+
+  case object Candy extends Output
+
+  type MachineResult = (Machine, Option[Output])
+  type MR = MachineResult
+  type MachineStateTransformation = (Machine, Input) ⇒ MR
+  type MST = MachineStateTransformation
 
   // Improvements, it should also return items that were not properly used
   // (e.g.: a coin in an unlocked machine).
@@ -413,12 +421,8 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
     require(candies >= 0)
     require(coins >= 0)
 
-    def getState(): MachineResult = {
-      (this, (this.candies, this.coins))
-    }
-
     // The API should also return the goods purchased!
-    def processInput(i: Input): MachineResult = {
+    def processInput(i: Input): MR = {
       i match {
         case Coin ⇒ processCoin
         case Turn ⇒ processTurn
@@ -429,21 +433,22 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
     // NOTE: Improvement: making this method private! Users should not access
     // them directly!
-    private def processCoin(): MachineResult = {
+    private def processCoin(): MR = {
       // 1.  Inserting a coin into a locked machine will cause it to unlock if
       // there’s any candy left.
       if (this.candies > 0) {
-        Machine(false, this.candies, this.coins + 1).getState
+        val newM = Machine(false, this.candies, this.coins + 1)
+        (newM, None)
         // 3.  Turning the knob on a locked machine or inserting a coin into an
-        // unlocked machine does nothing.
+        // unlocked machine returns the inserted coin.
       } else {
-        getState()
+        (this, Some(Coin))
       }
     }
 
     // NOTE: Improvement: making this method private! Users should not access
     // them directly!
-    private def processTurn(): MachineResult = {
+    private def processTurn(): MR = {
       // 2.  Turning the knob on an unlocked machine will cause it to dispense
       // candy and become locked.
       //
@@ -451,12 +456,13 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       // unlocked machine does nothing.
       if (this.candies > 0) {
         if (this.locked) {
-          getState
+          (this, None)
         } else {
-          Machine(true, this.candies - 1, this.coins).getState
+          val newM = Machine(true, this.candies - 1, this.coins)
+          (newM, Option(Candy))
         }
       } else {
-        getState
+        (this, None)
       }
     }
 
@@ -466,19 +472,10 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
   object SimulateMachine {
 
-    def simulateMachine(
-        inputs: List[Input]
-    ): StateTransition[Machine, (Int, Int)] = {
-
-      // NOTE: Super time saving: write folding functions separetely!
-      def foldingFunction(xm: Machine, xi: Input): Machine = {
-        xm.processInput(xi)._1
-      }
-
-      (m: Machine) ⇒ {
-        val foldedRes: Machine = inputs.foldLeft(m)(foldingFunction)
-        (foldedRes, (foldedRes.candies, foldedRes.coins))
-      }
+    // ???: Reimplement this case.
+    // def simulateMachine(inputs: List[Input])(m: Machine): MR = {
+    def simulateMachine(m: Machine, i: Input): MR = {
+      m.processInput(i)
     }
 
   }
