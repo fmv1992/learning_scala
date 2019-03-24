@@ -466,6 +466,8 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
           (this, Some(Coin))
         }
       } else {
+        // This also protects the machine from entering an invalid state: its
+        // unlocking (thus consuming a coin) but no candy to give.
         (this, Some(Coin))
       }
     }

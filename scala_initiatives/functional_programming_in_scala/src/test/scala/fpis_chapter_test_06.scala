@@ -338,7 +338,7 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
         (exampleMachine, List())
     )
 
-    // ???: FAILING. Two coins being inserted but no candy being taken.
+    // Two coins being inserted but no candy being taken.
     val lActions4 = List.fill(3)(Coin)
     val simulatedExampleMachine4 =
       SimulateMachine.simulateMachine(exampleMachine, lActions4)
@@ -347,28 +347,26 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
         == (Machine(false, 5, 11),
         List(Coin, Coin))
     )
-    // assert(
-    // exampleMachine.processInput(Coin)._1.processInput(Coin)._1
-    // != Machine(false, 5, 12)
-    // )
 
-    // val forgottenUnlockMachine = Machine(false, 10, 10)
-    // assert(forgottenUnlockMachine.processInput(Turn)._1 == Machine(true, 9, 10))
+    val forgottenUnlockMachine = Machine(false, 10, 10)
+    assert(
+      SimulateMachine.simulateMachine(forgottenUnlockMachine, lActions3)
+        == (Machine(true, 9, 10), List(Candy))
+    )
 
-    // // ???: Failing. Machine giving candies even if it does not have one.
-    // val almostEmptyMachine = Machine(true, 1, 0)
-    // assert(
-    //   almostEmptyMachine
-    //     .processInput(Coin)
-    //     ._1
-    //     .processInput(Turn)
-    //     ._1
-    //     .processInput(Coin)
-    //     ._1
-    //     .processInput(Turn)
-    //     ._1
-    //     == Machine(true, -1, 0)
-    // )
+    // Interesting case: an empty machine should not be unlocked because there
+    // are no candies to be gotten with "Turn".
+    val lActions5 = List.fill(100)(Coin) ++ List.fill(10)(Turn) ++ List(Coin)
+    val emptyMachine1 = Machine(true, 0, 0)
+    val emptyMachine2 = Machine(false, 0, 0)
+    assert(
+      SimulateMachine.simulateMachine(emptyMachine1, lActions5)
+        == (emptyMachine1, List.fill(101)(Coin))
+    )
+    assert(
+      SimulateMachine.simulateMachine(emptyMachine2, lActions5)
+        == (emptyMachine2, List.fill(101)(Coin))
+    )
 
   }
 
