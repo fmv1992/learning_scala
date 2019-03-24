@@ -8,12 +8,14 @@ import FPISExerciseChapter06.SimpleRNG
 import FPISExerciseChapter06.RNG
 import FPISExerciseChapter06.State
 import FPISExerciseChapter06.StateTransition
-import FPISExerciseChapter06.Machine
 import FPISExerciseChapter06.Buy
+import FPISExerciseChapter06.Candy
 import FPISExerciseChapter06.Coin
 import FPISExerciseChapter06.Input
-import FPISExerciseChapter06.Turn
+import FPISExerciseChapter06.Machine
+import FPISExerciseChapter06.Output
 import FPISExerciseChapter06.SimulateMachine
+import FPISExerciseChapter06.Turn
 
 import scalainitiatives.common.ScalaInitiativesTest
 
@@ -313,11 +315,13 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     // total of 4 candies are successfully bought, the output should be (14,
     // 1)."
 
-    // val lActions1 = List.fill(4)(List(Coin, Turn)).flatten
-    // val simulatedExampleMachine1 =
-    //   SimulateMachine.simulateMachine(lActions1)(exampleMachine)
-    // println(simulatedExampleMachine1)
-    // // assert(simulatedExampleMachine1 == (Machine(true, 1, 14), (1, 14)))
+    val lActions1 = List.fill(4)(List(Coin, Turn)).flatten
+    val simulatedExampleMachine1 =
+      SimulateMachine.simulateMachine(exampleMachine, lActions1)
+    assert(
+      simulatedExampleMachine1 ==
+        (Machine(true, 1, 14), List(Candy, Candy, Candy, Candy))
+    )
 
     // // Test buy action.
     // val lActions2 = List.fill(4)(Buy)

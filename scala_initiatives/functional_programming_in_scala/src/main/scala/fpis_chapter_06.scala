@@ -431,6 +431,26 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       }
     }
 
+    def processInput(l: List[Input]): (Machine, List[Output]) = {
+      this.sequence(l)
+    }
+
+    def sequence(l: List[Input]): (Machine, List[Output]) = {
+      val nilLO: List[Output] = Nil
+      val initialState = (this, nilLO)
+
+      def foldFunc(s: Tuple2[Machine, List[Output]], i: Input) = {
+        val (m, acc) = s
+        val (newM, r) = m.processInput(i)
+        r match {
+          case None ⇒ (newM, acc)
+          case Some(v) ⇒ (newM, v +: acc)
+        }
+      }
+
+      l.foldLeft(initialState)(foldFunc)
+    }
+
     // NOTE: Improvement: making this method private! Users should not access
     // them directly!
     private def processCoin(): MR = {
@@ -472,8 +492,10 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
   object SimulateMachine {
 
-    // ???: Reimplement this case.
-    // def simulateMachine(inputs: List[Input])(m: Machine): MR = {
+    def simulateMachine(m: Machine, l: List[Input]): (Machine, List[Output]) = {
+      m.processInput(l)
+    }
+
     def simulateMachine(m: Machine, i: Input): MR = {
       m.processInput(i)
     }
