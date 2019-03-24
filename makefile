@@ -44,6 +44,12 @@ $(SBT_FILES): $(shell find $(dir $@) -iname '*.scala') ./tmp/.testcomplete
 	cd $(dir $@) && sbt test
 	touch $@
 
+dev:
+	cp -f ./other_code/git_hooks/git_pre_commit_hook.sh ./.git/hooks/pre-commit || true
+	cp -f ./other_code/git_hooks/git_pre_push.sh ./.git/hooks/pre-push || true
+	chmod a+x ./.git/hooks/pre-commit
+	chmod a+x ./.git/hooks/pre-push
+
 .FORCE:
 
 .PHONY: all clean test
