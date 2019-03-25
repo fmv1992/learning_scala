@@ -12,6 +12,8 @@ I'll also try to stick to the [functional programming](https://en.wikipedia.org/
 
 The following tags are used in this project:
 
+*   `BUG`: Bugs found in different programs. Should be followed by an open issue on Github.
+
 *   `???`: Errors to be fixed at a later point.
 
 *   `??!`: Answers to these errors. Should be of the format:
@@ -40,6 +42,20 @@ The following tags are used in this project:
     *   `Commit: 'cfe6164'` or `commit: 'cfe6164'` (it has to have 7 chars): Reference to a commit inside the source files.
 
 *   `IMPROVEMENT:`: Notes for exercise or code; these are not code comments.
+
+*   `ERRATA:`: Erratas from the book.
+
+*   Code cited in comments/answers:
+
+        // Written answer:
+        //
+        // Deliberation...
+        //
+        // ```
+        // my code goes here without extra indent
+        // ```
+        //
+        // Deliberation...
 
 ## Resources
 
@@ -155,5 +171,13 @@ Website: <http://aperiodic.net/phil/scala/s-99/>.
 
 * http://twitter.github.io/effectivescala/
 -->
+
+## Miscellaneous
+
+*   Count the Scala tokens:
+
+    ```
+    cat **/*.scala | sed -E 's/[^a-zA-Z]+/\n/g' | sort | uniq -c | sort -n
+    ```
 
 [comment]: # ( vim: set filetype=markdown fileformat=unix wrap spell spelllang=en: )

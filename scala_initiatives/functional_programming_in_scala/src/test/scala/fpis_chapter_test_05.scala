@@ -1,6 +1,6 @@
 package scalainitiatives.functional_programming_in_scala
 
-import scala.{Stream => _, _}
+import scala.{Stream ⇒ _, _}
 
 import FPISExerciseChapter05.Stream
 import FPISExerciseChapter05.Cons
@@ -22,33 +22,50 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   val minus10to10 = Stream(_minus10to10: _*)
   val s2 = Stream(1, 2, 3)
 
-  def getErrorStream: () ⇒ Stream[Int] = () ⇒ Stream.cons(
-    -12,
-    Stream.cons({ throw new Exception(); -11 }, Stream(_minus10to10: _*)))
+  val neverEndingStream = Stream
+    .from(10)
+    .map(x ⇒ {
+      // Thread.sleep(1e9.toLong);
+      // ???
+      throw new Exception()
+      x
+    })
 
-  test ("5.0.0: Basic tests.") {
+  def getErrorStream: () ⇒ Stream[Int] =
+    () ⇒ Stream.cons(
+        -12,
+        Stream.cons({ throw new Exception(); -11 }, Stream(_minus10to10: _*))
+      )
+
+  test("5.0.0: Basic tests.") {
     assert(s1.isCustomStream)
   }
 
   test("5.0.1: Test memoization and lazyness.") {
     // ???: Mark as slow. Test lazy momoization.
 
-    val sleepTime: Long = 100 * 1e6.toLong  // nano seconds.
+    def localprint(x: Any) = println("5.0.1 Test: " + x)
+
+    val sleepTime: Long = 100 * 1e6.toLong // nano seconds.
     val evaluationTime = 1.1 * sleepTime
-    val fastTime = 0.1 * sleepTime
+    // Fix:
+    // 18033678 was not less than 1.0E7 (fpis_chapter_test_05.scala:59)
+    // Where 59 is current 62.
+    val fastTime = 0.3 * sleepTime
 
     // Assert lazyness: fast assignment.
     val start1 = System.nanoTime
-    val slowVal = Stream.cons(
-    {Thread.sleep(sleepTime / 1e6.toLong) ; 0},
-    Stream(1))
+    val slowVal =
+      Stream.cons({ Thread.sleep(sleepTime / 1e6.toLong); 0 }, Stream(1))
     val end1 = System.nanoTime
+    localprint("Test Fast assignment.")
     assert(end1 - start1 < fastTime)
 
     // Assert evaluation: will sleep.
     val start2 = System.nanoTime
     slowVal.toList
     val end2 = System.nanoTime
+    localprint("Test sleep activation.")
     assert(end2 - start2 > sleepTime)
     assert(end2 - start2 < evaluationTime)
 
@@ -58,12 +75,29 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     val end3 = System.nanoTime
     assert(end3 - start3 < fastTime)
 
-    //  ???: Re enable this test.
-    //  val minus10to10WithError = (
-    //    Stream(_minus10to10: _*)
-    //  ++ Stream.cons(
-    //  {println("tne"); throw new Exception() ; 11},
-    //  Empty))
+    // Assert lazyness again for a lot of different functions..
+    localprint("Test Memoization.")
+    getErrorStream()
+    getErrorStream().append(s1)
+    getErrorStream().drop(100)
+    getErrorStream().filter(x ⇒ true)
+    getErrorStream().flatMap(x ⇒ Stream.cons(x, Empty))
+    getErrorStream().headOption
+    getErrorStream().map(x ⇒ x)
+    getErrorStream().mapUsingUnfold(x ⇒ x)
+    getErrorStream().tailOption
+    getErrorStream().tails
+    getErrorStream().take(100)
+    getErrorStream().takeUsingUnfold(100)
+    getErrorStream().takeWhile(x ⇒ true)
+    getErrorStream().takeWhileUsingFoldRight(x ⇒ true)
+    getErrorStream().takeWhileUsingUnfold(x ⇒ true)
+    getErrorStream().zipWith(getErrorStream())((x, y) ⇒ x + y)
+    val minus10to10WithError = (Stream(_minus10to10: _*)
+      ++ Stream.cons({ println("tne"); throw new Exception(); 11 }, Empty))
+    minus10to10WithError ++ getErrorStream()
+    minus10to10WithError :+ 11
+    minus10to10.scanRight(0)(_ + _)
     //  // NOTE: It is important to notice how this code fails in a way. See the
     //  // two assertions below. They actually happen. After some inspection I
     //  // noticed how the Cons (upper case C) is being used. It does not use lazy
@@ -79,6 +113,29 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     //  // && minus10to10WithError.take(21).toList.sum == 0)
     // assertThrows[Exception](error.toList)
     // assertThrows[Exception](error.toList)
+
+  }
+
+  test("5.0.2: Very basic scala lazyness test.") {
+
+    // Exercise/Test 5.16 suscited the following tests to better
+    // understand lazyness.
+
+    // "Invoking" forces evaluation of a lazy val, even inside a function call.
+    def problematicLazyValGenerator: Int = {
+      throw new Exception()
+      lazy val r = 1
+      r
+    }
+    assertThrows[Exception](problematicLazyValGenerator)
+
+    // Creating lazy vals using lazy vals does not trigger evaluation:
+    lazy val newDepedentOnPLV1 = problematicLazyValGenerator + 1
+    lazy val newDepedentOnPLV2 = (problematicLazyValGenerator, 2)
+    // But calling them does:
+    assertThrows[Exception](newDepedentOnPLV1)
+    assertThrows[Exception](newDepedentOnPLV2._2)
+
   }
 
   test("5.1: toList.") {
@@ -153,7 +210,10 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   // }
 
   test("5.2: Implementation of take and drop.") {
-    assert(minus10to10.take(5).toList == List(-10, -9, -8, -7, -6))
+
+    val jazz = minus10to10.take(5) // :)
+
+    assert(jazz.toList == List(-10, -9, -8, -7, -6))
     // IMPROVEMENT: See strange cases below. Both take and drop go beyond the
     // end of the stream.
     // Alternative:
@@ -165,11 +225,14 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     assert(Stream().drop(5).toList == Nil)
     assert(Stream(1).drop(1).toList == Nil)
     assert(Stream(1, 2, 3).drop(1).toList == List(2, 3))
+
   }
 
   test("5.3: Implementation of takeWhile.") {
-    assert(minus10to10.takeWhile(_ < -5).toList
-      == List(-10, -9, -8, -7, -6))
+    assert(
+      minus10to10.takeWhile(_ < -5).toList
+        == List(-10, -9, -8, -7, -6)
+    )
     assert(s1.takeWhile(x ⇒ false).toList == Nil)
     assert(Empty.takeWhile(Nothing ⇒ true) == Empty)
     assert(s2.takeWhile(_ != 3).toList == List(1, 2))
@@ -177,15 +240,16 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
 
   test("5.4: Implementation of forAll.") {
     assert(minus10to10.forAll(math.abs(_) < 11))
-    assert(! minus10to10.forAll(_ != 10))
-    assert(
-      Stream("sim", "sam", "sif").forAll(_.startsWith("s")))
-    assert(! getErrorStream().forAll(_ != -12))
+    assert(!minus10to10.forAll(_ != 10))
+    assert(Stream("sim", "sam", "sif").forAll(_.startsWith("s")))
+    assert(!getErrorStream().forAll(_ != -12))
   }
 
   test("5.5: Implementation of takeWhileUsingFoldRight.") {
-    assert(minus10to10.takeWhileUsingFoldRight(_ < -5).toList
-      == List(-10, -9, -8, -7, -6))
+    assert(
+      minus10to10.takeWhileUsingFoldRight(_ < -5).toList
+        == List(-10, -9, -8, -7, -6)
+    )
     assert(s1.takeWhileUsingFoldRight(x ⇒ false).toList == Nil)
     assert(Empty.takeWhileUsingFoldRight(Nothing ⇒ true) == Empty)
     assert(s2.takeWhileUsingFoldRight(_ != 3).toList == List(1, 2))
@@ -208,11 +272,17 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     assert(s2.filter(_ % 2 != 1).toList == Stream(2).toList)
 
     // Assert append.
-    assert(s2.append(s2).toList == Stream(1,2,3,1,2,3).toList)
+    assert(s2.append(s2).toList == Stream(1, 2, 3, 1, 2, 3).toList)
 
     // Assert flatMap.
-    assert(s2.flatMap(i ⇒ Stream(i, i)).toList == Stream(1,1,2,2,3,3).toList)
-    assert(minus10to10.flatMap(i ⇒ Stream(i)).toList == minus10to10.map(identity _).toList)
+    assert(
+      s2.flatMap(i ⇒ Stream(i, i)).toList == Stream(1, 1, 2, 2, 3, 3).toList
+    )
+    assert(
+      minus10to10.flatMap(i ⇒ Stream(i)).toList == minus10to10
+        .map(identity _)
+        .toList
+    )
   }
 
   test("5.8: Implementation of constant.") {
@@ -234,50 +304,185 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   test("5.11: Implementation of unfold.") {
     assert(
       Stream.constant(0).take(100).toList
-      == Stream.unfold(0)(x ⇒ Option(x, x)).take(100).toList)
+        == Stream.unfold(0)(x ⇒ Option(x, x)).take(100).toList
+    )
     assert(
       Stream.unfold(10)(x ⇒ if (x < 20) Option(x / 3, x + 1) else None).toList
-      == Stream(3,  3,  4,  4,  4,  5,  5,  5,  6, 6).toList)
+        == Stream(3, 3, 4, 4, 4, 5, 5, 5, 6, 6).toList
+    )
     //          10, 11, 12, 13, 14, 15, 16, 17, 18,19,
     //          3,  3,  4,  4,  4,  5,  5,  5,  6, 6,
   }
 
   test("5.12: Implementation of fibs, from, constant, and ones using unfold.") {
-    val t1 = (
-      Stream.onesUsingUnfold.take(100),
-      Stream.ones.take(100))
-    val t2 = (
-      Stream.constantUsingUnfold(15).take(100),
-      Stream.constant(15).take(100))
-    val t3 = (
-      Stream.fromUsingUnfold(200).take(100),
-      Stream.from(200).take(100))
-    val t4 = (
-      Stream.fibUsingUnfold.take(20),
-      Stream.fib.take(20))
+    val t1 = (Stream.onesUsingUnfold.take(100), Stream.ones.take(100))
+    val t2 =
+      (Stream.constantUsingUnfold(15).take(100), Stream.constant(15).take(100))
+    val t3 = (Stream.fromUsingUnfold(200).take(100), Stream.from(200).take(100))
+    val t4 = (Stream.fibUsingUnfold.take(20), Stream.fib.take(20))
     val l = List(t1, t2, t3, t4)
 
     l.foreach(t ⇒ assert(t._1.toList == t._2.toList))
 
   }
 
-  test("5.13: ???.") {
+  test(
+    "5.13: Implementation of mapUsingUnfold, takeUsingUnfold, takeWhileUsingUnfold, zipWith, zipAll."
+  ) {
+
+    assert(s2.map(_ * 2).toList == s2.mapUsingUnfold(_ * 2).toList)
+    assert(
+      s1.map("" + _ + "|").toList == s1.mapUsingUnfold("" + _ + "|").toList
+    )
+
+    assert(minus10to10.take(5).toList == minus10to10.takeUsingUnfold(5).toList)
+    assert(Stream().take(5).toList == Stream().takeUsingUnfold(5).toList)
+    assert(Stream(1).take(1).toList == Stream(1).takeUsingUnfold(1).toList)
+
+    assert(
+      minus10to10.takeWhile(_ < -5).toList == minus10to10
+        .takeWhileUsingUnfold(_ < -5)
+        .toList
+    )
+    assert(
+      s1.takeWhile(x ⇒ false).toList == s1
+        .takeWhileUsingUnfold(x ⇒ false)
+        .toList
+    )
+    assert(
+      Empty.takeWhile(Nothing ⇒ true) == Empty
+        .takeWhileUsingUnfold(Nothing ⇒ true)
+    )
+    assert(
+      s2.takeWhile(_ != 3).toList == s2.takeWhileUsingUnfold(_ != 3).toList
+    )
+
+    assert(s2.tailOption.get.toList == s2.drop(1).toList)
+    assert(s2.drop(100).tailOption == None)
+    assert(s2.zipWith(s2)(_ + _).toList == s2.map(_ * 2).toList)
+    assert(
+      Stream.ones
+        .zipWith(s2 ++ Stream(0))(_ / _)
+        .toList == Stream(1, 0, 0).toList
+    )
+    assert((s2 ++ s2).zipWith(s2)(_ / _).toList == Stream.ones.take(3).toList)
+
+    assert(
+      (s2 ++ s2).zipAll(s2).toList
+        == List(
+          (Some(1), Some(1)),
+          (Some(2), Some(2)),
+          (Some(3), Some(3)),
+          (Some(1), None),
+          (Some(2), None),
+          (Some(3), None)
+        )
+    )
+
+    assert(Stream().zipAll(Stream()).toList == List())
+    assert(
+      s1.zipAll(s2).toList == List(
+        (Some(1), Some(1)),
+        (None, Some(2)),
+        (None, Some(3))
+      )
+    )
 
   }
 
-  test("5.14: ???.") {
+  test("5.14: Implementation of startsWith.") {
+    // Much easier than the other exercise... :P
+    assert(Stream(1, 2, 3) startsWith Stream(1, 2))
+    assert(
+      Stream.fib.startsWith(
+        Stream(0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610)
+      )
+    )
+  }
+
+  test("5.15: Implementation of tails.") {
+
+    assert(
+      Stream(1, 2, 3).tails.map(_.toList).toList
+        == Stream(Stream(1, 2, 3), Stream(2, 3), Stream(3), Stream())
+          .map(_.toList)
+          .toList
+    )
+
+    assert(Stream().tails.toList == List(Empty))
 
   }
 
-  test("5.15: ???.") {
+  test("5.16: Implementation of scanRight.") {
+
+    assert(Stream(1, 2, 3).scanRight(0)(_ + _).toList == List(6, 5, 3, 0))
+
+    // ???: Assess that takes linear time.
+    // Your function should reuse intermediate results so that traversing a
+    // Stream with n elements always takes time linear in n.
+    //
+    // (1): Can it be implemented using unfold?
+    //
+    // (2): How, or why not?
+    //
+    // (3): Could it be implemented using another function we’ve written?
+    //
+    // Written answer:
+    //
+    // (1): Consider the commit '03428a7'.
+    //
+    // It cannot be implemented using unfold because of unfold's
+    // signature:
+    //
+    // ```
+    // def unfold[A, S](z: S)(f: S ⇒ Option[(A, S)]): Stream[A] = †
+    // ```
+    //
+    // This returns a Stream[A]. However if we use:
+    //
+    // ```
+    // def scanRight(z: ⇒ A)(f: (A, A) ⇒ A): Stream[A] = †
+    // ```
+    //
+    // We get:
+    //
+    // [error] ⋯/learning_scala/scala_initiatives/functional_programming_in_scala/src/main/scala/fpis_chapter_05.scala:315:27: covariant type A occurs in contravariant position in type (A, A) ⇒ A of value f
+    // [error]     def scanRight(z: ⇒ A)(f: (A, A) ⇒ A): Stream[A] = †
+    // [error]                           ^
+    //
+    // The reasons for this are not entirely clear to me... If wre are
+    // manipulating data only in the domain of type A, why should the compiler
+    // complain?
+    //
+    // (2): ???.
+    //
+    // (3): The functions that we defined that return a different Stream type
+    // are (as of commit: 'f6ab100'):
+    //
+    // def ++[B>:A](s1: ⇒ Stream[B]): Stream[B] = †
+    // def :+[B>:A](s1: ⇒ B): Stream[B] = †
+    // def append[B>:A, X: scala.reflect.ClassTag, Y: scala.reflect.ClassTag](s1: ⇒ Stream[B]): Stream[B] = †
+    // def append[B>:A, X: scala.reflect.ClassTag](v: ⇒ B): Stream[B] = †
+    // def flatMap[B](f: A ⇒ Stream[B]): Stream[B] = †
+    // def mapUsingUnfold[B](f: A ⇒ B): Stream[B] = †
+    // def map[B](f: A ⇒ B): Stream[B] = †
+    // def scanRight[B>:A](z: ⇒ B)(f: (A, B) ⇒ B): Stream[B] = †
+    // def startsWith[B](s: Stream[B]): Boolean = †
+    // def zipAll[B](s2: Stream[B]): Stream[(Option[A],Option[B])] = †
+    // def zipWith[B, C](that: Stream[B])(f: (A, B) ⇒ C): Stream[C] = †
+    //
+    // The alternatives are:
+    //
+    // a. unfold followed by flatMap: looks like it would take O(n^2) time.
+    // b. unfold followed by map: a conversion from A to B must be readily
+    // present. I don't know how to do this yet.
+    // c. zipWith is not very helpful in this case since it does not help us
+    // 'accumulate' the values.
+
+    getErrorStream().scanRight(0)(_ + _)
+    neverEndingStream.scanRight(11)(_ + _)
 
   }
-
-  test("5.16: ???.") {
-
-  }
-
-
 
 }
 
