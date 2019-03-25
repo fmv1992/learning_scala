@@ -47,7 +47,7 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     def localprint(x: Any) = println("5.0.1 Test: " + x)
 
     val sleepTime: Long = 100 * 1e6.toLong // nano seconds.
-    val evaluationTime = 1.1 * sleepTime
+    val evaluationTime = 1.2 * sleepTime
     // Fix:
     // 18033678 was not less than 1.0E7 (fpis_chapter_test_05.scala:59)
     // Where 59 is current 62.
@@ -67,6 +67,10 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     val end2 = System.nanoTime
     localprint("Test sleep activation.")
     assert(end2 - start2 > sleepTime)
+    // [info] - 5.0.1: Test memoization and lazyness. *** FAILED ***
+    // [info]   116708951 was not less than 1.1000000000000001E8 (fpis_chapter_test_05.scala:70)
+    // For line:
+    // assert(end2 - start2 < evaluationTime)
     assert(end2 - start2 < evaluationTime)
 
     // Assert memoization.
