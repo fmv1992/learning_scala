@@ -9,6 +9,7 @@
 !.gitignore
 !license.txt
 !makefile
+!license.txt
 # etc...
 
 # ...even if they are in subdirectories

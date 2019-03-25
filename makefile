@@ -3,8 +3,8 @@ SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 # Find all scala files.
-SCALA_FILES := $(shell find ./code -iname "*.scala")
-CLASS_FILES := $(patsubst %.scala, %.class, $(SCALA_FILES))
+SBT_FILES := $(shell find ./scala_initiatives -iname "build.sbt")
+SBT_FOLDERS := $(dir $(SBT_FILES))
 
 # Ignore these files.
 IGNORE_FILES := ./code/project_euler/id_0451/modular_inverses.scala
@@ -14,31 +14,44 @@ CLASS_FILES := $(filter-out $(IGNORE_FILES), $(CLASS_FILES))
 # Set scala compilation flags.
 SCALAC_CFLAGS = -cp $$PWD:$(ROOT_DIR)/code/my_scala_project/
 
-all:
+# ???: Google drive link to download ~/.sbt needed to compile this project.
+# https://drive.google.com/open?id=1FoY3kQi52PWllwc3ytYU9452qJ4ack1u
 
-clean: .FORCE
+all: test
+
+clean_fpis_chapter:
+ifdef LEARNING_SCALA_CHAPTER
+	(find . -path '*/target/*FPIS*Chapter$(LEARNING_SCALA_CHAPTER)*.class' -type f -print0 | xargs -0 rm) || true
+else
+	echo "Env var LEARNING_SCALA_CHAPTER not defined."
+	exit 1
+endif
+
+clean:
 	find . -iname '*.class' -print0 | xargs -0 rm -rf
 	find . -path '*/project/*' -type d -prune -print0 | xargs -0 rm -rf
 	find . -iname 'target' -print0 | xargs -0 rm -rf
 	find . -type d -empty -delete
+	rm ./tmp/.testcomplete || true
 
-run: $(CLASS_FILES) $(SCALA_FILES) .FORCE
+test: $(SBT_FILES) tmp/.testcomplete
 
-# If there is any makefile in the directory of the same scala file, run it's
-# "all" rule instead.
-%.scala: .FORCE
-	if [ -f $$(dirname $@)/makefile ];    \
-	then    \
-	    cd $$(dirname $@) && make all;    \
-	else    \
-	    cd $$(dirname $@) && (scalac ./$$(basename $@) 2>/dev/null 1>/dev/null || scala $(SCALAC_CFLAGS) ./$$(basename $@));    \
-	fi;
+tmp/.testcomplete:
+	touch $@
 
-# This brute force assumes that all .scala file generates a corrisponding
-# .class file, which is not true.
-%.class: %.scala
-	cd $$(dirname $<) && (scalac ./$$(basename $<) 2>/dev/null 1>/dev/null || true)
+$(SBT_FILES): $(shell find $(dir $@) -iname '*.scala') ./tmp/.testcomplete
+	cd $(dir $@) && sbt compile
+	cd $(dir $@) && sbt test
+	touch $@
+
+dev:
+	cp -f ./other_code/git_hooks/git_pre_commit_hook.sh ./.git/hooks/pre-commit || true
+	cp -f ./other_code/git_hooks/git_pre_push.sh ./.git/hooks/pre-push || true
+	chmod a+x ./.git/hooks/pre-commit
+	chmod a+x ./.git/hooks/pre-push
 
 .FORCE:
 
-.PHONY: all clean run
+.PHONY: all clean test
+
+# vim: set noexpandtab foldmethod=marker fileformat=unix filetype=make wrap foldtext=foldtext():

@@ -1,14 +1,73 @@
 package scalainitiatives.common
 
+import org.scalatest.FunSuite
+
 import java.io.File
 import java.io.ByteArrayInputStream
 
-// Common to all projects. --- {{{
+
+// Common to all projects. --- {
 
 trait ScalaInitiativesMain {
 }
 
-trait ScalaInitiativesTest {
+trait ScalaInitiativesUtilities {
+  def curry[A, B, C](f: (A, B) => C): A => (B => C) = {
+    (a: A) => (
+      (b: B) => f(a, b)
+    )
+  }
+}
+
+trait ScalaInitiativesTest extends FunSuite {
+
+  // Declare very common variables to all the tests.
+  val oneToFive = (1 to 5).toList
+
+  // // https://jaytaylor.com/notes/node/1348628729000.html
+  // def tupleize[A, B](f: A => B => C) = {
+
+  //   // Function.tupled(f(_))
+  //   f(_).tupled
+
+  // }
+  //
+  def namedTest(x: => String): (=> Any) => Unit = {
+    def lazyTestBody(testBody: => Any) = {
+      lazy val testResult = test(x) {
+        println("Starting: " + x + " " + System.nanoTime)
+        testBody
+        println("Ended:    " + x + " " + System.nanoTime)
+      }
+      testResult
+    }
+    lazyTestBody
+  }
+
+  def isClose[T](
+    a: T,
+    b: T,
+    atol: Double = 1e-10,
+    rtol: Double = Double.NaN)(
+      implicit num: Numeric[T]): Boolean = {
+        import num._
+
+        val aD = a.toDouble
+        val bD = b.toDouble
+
+        val aDiff = scala.math.abs(aD - bD)
+        // atol.
+        if (rtol.isNaN) aDiff <= atol
+        // rtol.
+      else {
+        val aAbs: Double = scala.math.abs(aD)
+        val bAbs: Double = scala.math.abs(bD)
+        val bigger = if (aAbs <= bAbs) bAbs else aAbs
+        val smaller = if (aAbs <= bAbs) aAbs else bAbs
+        val rDiff = (bigger - smaller) / bigger
+        rDiff <= rtol
+      }
+      }
 
   def loadTestFiles(folderPath: String): (Seq[String], Seq[String]) = {
     // Read the test files.
@@ -22,12 +81,22 @@ trait ScalaInitiativesTest {
 
   }
 
+
 }
 
 trait ScalaInitiativesExercise {
+
+  def Try[A](a: => A): Either[Exception, A] = {
+    try Right(a)
+    catch { case e: Exception => Left(e) }
+  }
+
 }
 
 object Constants {
+
+  private val maxExp10 = scala.math.floor(scala.math.log10(Int.MaxValue))
+  val maxInt10 = scala.math.pow(10, maxExp10)
 
   object Test {
     val regexDataFiles = """data_\d+\.txt$""".r
@@ -72,18 +141,20 @@ object Paths {
 
 }
 
-// --- }}}
+// --- }
 
-// Project PIS. --- {{{
-trait ScalaInitiativesTestPIS extends ScalaInitiativesTest{
+// Project PIS. --- {
+
+trait ScalaInitiativesTestPIS extends ScalaInitiativesTest {
 
   val nTests = 100
 
 }
-// --- }}}
 
-// Project SPOJ. --- {{{
-// ???: Should go into project spoj.
+// --- }
+
+// Project SPOJ. --- {
+
 trait ScalaInitiativesMainSPOJ extends ScalaInitiativesMain {
 
   def ReadApplyPrint[A, B](
@@ -101,7 +172,6 @@ trait ScalaInitiativesMainSPOJ extends ScalaInitiativesMain {
 
 }
 
-// ???: Should go into project spoj.
 trait ScalaInitiativesTestSPOJ extends ScalaInitiativesTest {
 
   // https://stackoverflow.com/questions/29474414/how-to-mock-scala-readline/39597093
@@ -119,4 +189,7 @@ trait ScalaInitiativesTestSPOJ extends ScalaInitiativesTest {
   }
 
 }
-// --- }}}
+
+// --- }
+
+// vim: set filetype=scala fileformat=unix foldmarker={,} wrap tabstop=2 softtabstop=2:

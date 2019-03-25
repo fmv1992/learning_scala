@@ -4,7 +4,7 @@ import scalainitiatives.common.ScalaInitiativesExercise
 
 object FPISExerciseChapter02 extends ScalaInitiativesExercise {
 
-  def Exercise2Dot1Fibonacci(n: Int) : Int = {
+  def Exercise2Dot1Fib(n: Int) : Int = {
 
     // F(n) = F(n-1) + F(n-2)
     // Example:
@@ -31,9 +31,8 @@ object FPISExerciseChapter02 extends ScalaInitiativesExercise {
   def Exercise2Dot2isSorted[A](as: Array[A], ordered: (A, A) => Boolean): Boolean = {
 
     def go(leftPosition: Int): Boolean = {
-      // println(leftPosition, as, as(0))
       if (as.length == 1 || as.length == 0) true else {
-        if (leftPosition == as.length) true else {
+        if (leftPosition == as.length - 1) true else {
           if (ordered(as(leftPosition), as(leftPosition + 1))) go(leftPosition + 1)
           else false
         }
@@ -42,10 +41,21 @@ object FPISExerciseChapter02 extends ScalaInitiativesExercise {
 
     go(0)
   }
-  def Exercise2Dot3() {}
-  def Exercise2Dot4() {}
-  def Exercise2Dot5() {}
+
+  def Exercise2Dot3Currying[A, B, C](f: (A, B) => C): A => (B => C) = {
+    (a: A) => (
+      (b: B) => f(a, b)
+    )
+  }
+
+  def Exercise2Dot4Uncurrying[A, B, C](f: A => B => C): (A, B) => C = {
+    (a: A, b: B) => f(a)(b)
+  }
+
+  def Exercise2Dot5Compose[A, B, C](f: B => C, g: A => B): A => C = {
+    x => f(g(x))
+  }
 
 }
 
-// vim: set filetype=scala fileformat=unix wrap tabstop=2 softtabstop=2:
+// vim: set filetype=scala fileformat=unix foldmarker={,} wrap tabstop=2 softtabstop=2:
