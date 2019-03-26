@@ -7,6 +7,13 @@ lazy val commonSettings = Seq(
     pollInterval := scala.concurrent.duration.FiniteDuration(50L, "ms"),
     maxErrors := 10,
 
+    excludeFilter in unmanagedSources :=
+      "*.orig"
+      || "*BACKUP*.scala"
+      || "*BASE*.scala"
+      || "*LOCAL*.scala"
+      || "*REMOTE*.scala",
+
     // This final part makes test artifacts being only importable by the test files
     // libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % Test,
     //                                                                   ↑↑↑↑↑
