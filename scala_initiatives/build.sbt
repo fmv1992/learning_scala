@@ -1,5 +1,10 @@
-name := "LearningScala"
+// https://www.scala-sbt.org/1.0/docs/Howto-Project-Metadata.html
 
+name := "FMV1992LearningScala"
+
+organization := "org.fmv1992"
+
+licenses += "GPLv2" -> url("https://www.gnu.org/licenses/gpl-2.0.html")
 
 lazy val commonSettings = Seq(
     version := "0.0.1-SNAPSHOT",

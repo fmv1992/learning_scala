@@ -20,3 +20,5 @@ for i in $(seq 1 "$full_checks")
 do
     make clean && make test
 done
+
+# vim: set filetype=sh fileformat=unix wrap:
