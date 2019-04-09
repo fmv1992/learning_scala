@@ -31,12 +31,6 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
 
   object Par {
 
-    def run[A](a: Par[A]): A = {
-      ???
-    }
-
-    def unit[A](a: A): Par[A] = (es: ExecutorService) ⇒ UnitFuture(a)
-
     private case class UnitFuture[A](get: A) extends Future[A] {
       def isDone = true
       def get(timeout: Long, units: TimeUnit) = get
@@ -58,15 +52,29 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
         f: (A, B) ⇒ C
     )(t: Timeout = InfiniteTimeout): Par[C] = {
       (es: ExecutorService) ⇒ {
+          // Not easy at all. The combinations of       |
+          // task can be ('p' for parallel, 'np' for    |
+          // non-parallel):                             |
+          //  1.  np-np.                                |
+          //  2.  np-p.                                 |
+          //  3.  p-p. In any case t1 + t2 < t. For     | Anyway the Api
+          //      the np's computations timeouts        | specifies that they are
+          //      have to be set anyway (they may       | all Par, that is:
+          //      take forever if a timeout is not      |
+          //      set). Finally, due to its             | ES ⇒ Future
+          //      transparent interface, `Par` may      |
+          //      be                                    |
+          //  instantaneous or not.                     |
           val af = a(es)
           val bf = b(es)
           val timeStart = System.nanoTime
-          val afv = af.get(t.timeout, t.timeUnit)
+          val afv = af.get(t)
           val timeEnd = System.nanoTime
           val elapsedTime = timeEnd - timeStart
           val newTimeout =
-            FiniteTimeout(t.timeout - elapsedTime, TimeUnitNano())
+            FiniteTimeout(t.timeout - elapsedTime, t.timeUnit)
           val bfv = bf.get(newTimeout)
+          // ???: No fork here.
           fork(unit(f(afv, bfv)))(es)
         }
     }
@@ -78,6 +86,10 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
           }
         )
     }
+
+    def unit[A](a: A): Par[A] = (es: ExecutorService) ⇒ UnitFuture(a)
+
+    def run[A](s: ExecutorService)(a: Par[A]): Future[A] = a(s)
 
   }
 
@@ -129,9 +141,8 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
 
   }
 
-  def run[A](s: ExecutorService)(a: Par[A]): Future[A] = a(s)
-
   // Parallel computation. --- }
+
 }
 
 //  Run this in vim:
