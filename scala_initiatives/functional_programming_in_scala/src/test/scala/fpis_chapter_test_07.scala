@@ -8,7 +8,7 @@ import scalainitiatives.common.ScalaInitiativesTest
 
 // Se matchers here:
 // http://www.scalatest.org/user_guide/using_matchers#checkingObjectIdentity
-class FPISTestChapter07 extends ScalaInitiativesTest with Matchers {
+class FPISTestChapter07 extends ScalaInitiativesTest {
 
   // Declare constants.
 
