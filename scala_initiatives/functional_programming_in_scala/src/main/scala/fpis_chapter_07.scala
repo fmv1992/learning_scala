@@ -29,21 +29,59 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
 
   // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------| }
 
-  case class Par[A]()
-
   object Par {
 
     def unit[A](a: => A): Par[A] = {
       ???
     }
 
-    def get[A](a: Par[A]): A = {
+    def run[A](a: Par[A]): A = {
       ???
     }
 
     def map2[A, B, C](a: Par[A], b: Par[B])(f: (A, B) ⇒ C): Par[C] = {
       ???
     }
+    // type TimeUnit
+
+  }
+
+  type Par[A] = ExecutorService => Future[A]
+
+  type TimeUnit
+
+  trait Callable[A] { def call: A }
+
+  class ExecutorService {
+
+    def submit[A](a: Callable[A]): Future[A] = {
+      ???
+    }
+  }
+
+  trait Future[A] {
+
+    def get: A = {
+      ???
+    }
+
+    def get(timeout: Long, unit: TimeUnit): A = {
+      ???
+    }
+
+    def cancel(evenIfRunning: Boolean): Boolean = {
+      ???
+    }
+
+    def isDone: Boolean = {
+      ???
+    }
+
+    def isCancelled: Boolean = {
+      ???
+    }
+
+    def run[A](s: ExecutorService)(a: Par[A]): Future[A] = a(s)
 
   }
 
