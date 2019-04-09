@@ -43,6 +43,8 @@ The following tags are used in this project:
 
 *   `IMPROVEMENT:`: Notes for exercise or code; these are not code comments.
 
+*   `SKIPPED:`: Skipped exercises (a justification must follow).
+
 *   `ERRATA:`: Erratas from the book.
 
 *   Code cited in comments/answers:

@@ -5,9 +5,7 @@ import scalainitiatives.common.ScalaInitiativesExercise
 object FPISExerciseChapter07 extends ScalaInitiativesExercise {
   // Parallel computation. --- {
 
-  // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------|
-  // Changed those to fpinscala to proceed with certainty of correctness ---|
-  // (despite using a lot of tests). ---------------------------------------| {
+  // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------| {
 
   // def sum(ints: IndexedSeq[Int]): Int = {
   //   if (ints.size <= 1)
@@ -29,9 +27,7 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
     }
   }
 
-  // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------|
-  // Changed those to fpinscala to proceed with certainty of correctness ---|
-  // (despite using a lot of tests). ---------------------------------------| }
+  // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------| }
 
   case class Par[A]()
 
@@ -42,6 +38,10 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
     }
 
     def get[A](a: Par[A]): A = {
+      ???
+    }
+
+    def map2[A, B, C](a: Par[A], b: Par[B])(f: (A, B) ⇒ C): Par[C] = {
       ???
     }
 
