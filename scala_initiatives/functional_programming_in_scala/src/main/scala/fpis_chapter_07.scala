@@ -23,7 +23,7 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
       Par.unit(ints.headOption getOrElse 0)
     else {
       val (l, r) = ints.splitAt(ints.length / 2)
-      Par.map2(sum(l), sum(r))(_ + _)
+      Par.map2(sum(l), sum(r))(_ + _)()
     }
   }
 
@@ -35,7 +35,7 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
       ???
     }
 
-    def unit[A](a: A): Par[A] = (es: ExecutorService) => UnitFuture(a)
+    def unit[A](a: A): Par[A] = (es: ExecutorService) ⇒ UnitFuture(a)
 
     private case class UnitFuture[A](get: A) extends Future[A] {
       def isDone = true
@@ -44,18 +44,21 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
       def cancel(evenIfRunning: Boolean): Boolean = false
     }
 
-    def map2[A, B, C](a: Par[A], b: Par[B])(f: (A, B) => C): Par[C] = {
-      (es: ExecutorService) =>
-        {
+    // def map2[A, B, C](a: Par[A], b: Par[B])(f: (A, B) ⇒ C)(t: Timeout = InfiniteTimeout): Par[C] = {
+    def map2[A, B, C](a: Par[A], b: Par[B])(
+        f: (A, B) ⇒ C
+    )(t: Timeout = InfiniteTimeout): Par[C] = {
+      (es: ExecutorService) ⇒ {
           val af = a(es)
           val bf = b(es)
-          UnitFuture(f(af.get, bf.get))
+          UnitFuture(
+            f(af.get(t.timeout, t.timeUnit), bf.get(t.timeout, t.timeUnit))
+          )
         }
     }
 
-    def fork[A](a: => Par[A]): Par[A] = {
-      es =>
-        es.submit(
+    def fork[A](a: ⇒ Par[A]): Par[A] = {
+      es ⇒ es.submit(
           new Callable[A] {
             def call = a(es).get
           }
@@ -64,9 +67,24 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
 
   }
 
-  type Par[A] = ExecutorService => Future[A]
+  type Par[A] = ExecutorService ⇒ Future[A]
 
-  type TimeUnit
+  trait TimeUnit
+
+  trait Timeout {
+
+    val timeout: Long
+
+    val timeUnit: TimeUnit
+
+  }
+
+  case class FiniteTimeout(timeout: Long, timeUnit: TimeUnit) extends Timeout
+
+  object InfiniteTimeout extends Timeout {
+    val timeout = Long.MaxValue
+    val timeUnit: TimeUnit = null
+  }
 
   trait Callable[A] { def call: A }
 
@@ -75,6 +93,7 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
     def submit[A](a: Callable[A]): Future[A] = {
       ???
     }
+
   }
 
   trait Future[A] {
