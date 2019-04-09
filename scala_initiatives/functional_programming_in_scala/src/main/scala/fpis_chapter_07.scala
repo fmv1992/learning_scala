@@ -44,16 +44,30 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
       def cancel(evenIfRunning: Boolean): Boolean = false
     }
 
+    // ???: Overloading error when trying to implement a more natural way of
+    // using timeout.
+    // [error] both method map2 in object Par of type [A, B, C](a: scalainitiatives.functional_programming_in_scala.FPISExerciseChapter07.Par[A], b: scalainitiatives.functional_programming_in_scala.FPISExerciseChapter07.Par[B])(f: (A, B) ⇒ C)(t: scalainitiatives.functional_programming_in_scala.FPISExerciseChapter07.Timeout)scalainitiatives.functional_programming_in_scala.FPISExerciseChapter07.Par[C]
+    // [error] and  method map2 in object Par of type [A, B, C](a: scalainitiatives.functional_programming_in_scala.FPISExerciseChapter07.Par[A], b: scalainitiatives.functional_programming_in_scala.FPISExerciseChapter07.Par[B])(f: (A, B) ⇒ C)                                                                                   scalainitiatives.functional_programming_in_scala.FPISExerciseChapter07.Par[C]
+    // [error] match argument types (scalainitiatives.functional_programming_in_scala.FPISExerciseChapter07.Par[A],scalainitiatives.functional_programming_in_scala.FPISExerciseChapter07.Par[B])
     // def map2[A, B, C](a: Par[A], b: Par[B])(f: (A, B) ⇒ C)(t: Timeout = InfiniteTimeout): Par[C] = {
+    //   val partialF: Timeout ⇒ Par[C] = t ⇒ map2(a, b)(f)(t)
+    //   partialF(InfiniteTimeout)
+    // }
+
     def map2[A, B, C](a: Par[A], b: Par[B])(
         f: (A, B) ⇒ C
     )(t: Timeout = InfiniteTimeout): Par[C] = {
       (es: ExecutorService) ⇒ {
           val af = a(es)
           val bf = b(es)
-          UnitFuture(
-            f(af.get(t.timeout, t.timeUnit), bf.get(t.timeout, t.timeUnit))
-          )
+          val timeStart = System.nanoTime
+          val afv = af.get(t.timeout, t.timeUnit)
+          val timeEnd = System.nanoTime
+          val elapsedTime = timeEnd - timeStart
+          val newTimeout =
+            FiniteTimeout(t.timeout - elapsedTime, TimeUnitNano())
+          val bfv = bf.get(newTimeout)
+          fork(unit(f(afv, bfv)))(es)
         }
     }
 
@@ -69,7 +83,10 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
 
   type Par[A] = ExecutorService ⇒ Future[A]
 
-  trait TimeUnit
+  trait TimeUnit {
+    val nameSI: String
+  }
+  case class TimeUnitNano(nameSI: String = "ns") extends TimeUnit
 
   trait Timeout {
 
@@ -99,6 +116,8 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
   trait Future[A] {
 
     def get: A
+
+    def get(t: Timeout): A = get(t.timeout, t.timeUnit)
 
     def get(timeout: Long, unit: TimeUnit): A
 
