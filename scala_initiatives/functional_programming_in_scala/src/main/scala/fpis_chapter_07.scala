@@ -51,6 +51,24 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
         }
     }
 
+    // By introducing timeout arguments to map there is a problem:
+    //
+    // (to: Long = -1, tu: TimeUnit = TimeUnit("ns")
+    //
+    // Even if they have default values, then all of the calls have to have a
+    // trailing (), e.g.:
+    //
+    // Par.map2(sum(l), sum(r))(_ + _)()
+    def map2WithTimeout[A, B, C](a: Par[A], b: Par[B])(
+        f: (A, B) ⇒ C
+    )(to: Long = -1, tu: TimeUnit = TimeUnit("ns")): Par[C] = {
+      (es: ExecutorService) ⇒ {
+          val af: Future[A] = a(es)
+          val bf: Future[B] = b(es)
+          UnitFuture(f(af.get(to, tu), bf.get(to, tu)))
+        }
+    }
+
     def fork[A](a: ⇒ Par[A]): Par[A] = {
       es ⇒ es.submit(
           new Callable[A] {
