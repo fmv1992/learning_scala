@@ -27,8 +27,6 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
     }
   }
 
-  // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------| }
-
   type Par[A] = ExecutorService ⇒ Future[A]
 
   case class TimeUnit(unit: String = "ns")
@@ -42,14 +40,29 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
       def cancel(evenIfRunning: Boolean): Boolean = false
     }
 
-    def map2[A, B, C](a: Par[A], b: Par[B])(f: (A, B) => C): Par[C] = {
-      (es: ExecutorService) =>
-        {
+    def map2[A, B, C](a: Par[A], b: Par[B])(f: (A, B) ⇒ C): Par[C] = {
+      (es: ExecutorService) ⇒ {
           val af = a(es)
           val bf = b(es)
           UnitFuture(f(af.get, bf.get))
         }
     }
+
+    def fork[A](a: ⇒ Par[A]): Par[A] = {
+      es ⇒ es.submit(
+          new Callable[A] {
+            def call = a(es).get
+          }
+        )
+    }
+
+    def unit[A](a: A): Par[A] = (es: ExecutorService) ⇒ UnitFuture(a)
+
+    def run[A](s: ExecutorService)(a: Par[A]): Future[A] = a(s)
+
+    def lazyUnit[A](a: ⇒ A): Par[A] = fork(unit(a))
+
+    // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------| }
 
     // By introducing timeout arguments to map there is a problem:
     //
@@ -69,17 +82,14 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
         }
     }
 
-    def fork[A](a: ⇒ Par[A]): Par[A] = {
-      es ⇒ es.submit(
-          new Callable[A] {
-            def call = a(es).get
-          }
-        )
+    def asyncF[A, B](f: A ⇒ B): A ⇒ Par[B] = {
+      // This is also a lazy function.
+      // Lazyunit is non-strict on its arguments.
+      // Fork returns a callable.
+      // Thus this function is also non strict.
+      // Test that this function is non strict.
+      (a: A) ⇒ lazyUnit(f(a))
     }
-
-    def unit[A](a: A): Par[A] = (es: ExecutorService) ⇒ UnitFuture(a)
-
-    def run[A](s: ExecutorService)(a: Par[A]): Future[A] = a(s)
 
   }
 
@@ -113,6 +123,6 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
 
 //  Run this in vim:
 //
-// vim source: 1,-5s/=>/⇒/ge
+// vim source: 1,$-5s/=>/⇒/ge
 //
 // vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:
