@@ -117,16 +117,43 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
       map(parBol)((x: List[Boolean]) ⇒ x.zip(as).filter(_._1).map(_._2))
     }
 
-    // def combineOps[A](i: IndexedSeq[A], basecase: A)(f: (A, A) ⇒ A): Par[A] = {
-    // if (i.size <= 1) {
-    // unit(basecase)
-    // } else {
-    // val split: Tuple2[IndexedSeq[A], IndexedSeq[A]] =
-    // i.splitAt(i.length / 2)
-    // val (l, r) = split
-    // map2(combineOps(l, basecase)(f), combineOps(r, basecase)(f))(f)
-    // }
-    // }
+    def combineOps[A](i: IndexedSeq[A], basecase: A)(f: (A, A) ⇒ A): Par[A] = {
+      if (i.size <= 1) {
+        unit(basecase)
+      } else {
+        val split: Tuple2[IndexedSeq[A], IndexedSeq[A]] =
+          i.splitAt(i.length / 2)
+        val (l, r) = split
+        map2(combineOps(l, basecase)(f), combineOps(r, basecase)(f))(f)
+      }
+    }
+
+    def max(i: IndexedSeq[Int]): Par[Int] = {
+      // if (i.isEmpty) throw new Exception() else {
+      combineOps(i, Int.MinValue)(_ max _): Par[Int]
+      // }
+    }
+
+    def countWordsInParagraphs(p: List[String]): Par[Int] = {
+      p.map(
+          asyncF((s: String) ⇒ s.count((c: Char) ⇒ c == ' ') + 1)
+        )
+        .foldLeft(unit(0))(map2(_, _)(_ + _))
+    }
+
+    def map3[A, B, C](a: Par[A], b: Par[B])(f: (A, B) ⇒ C): Par[C] = { ??? }
+
+    def map4[A, B, C, D](a: Par[A], b: Par[B], c: Par[C])(
+        f: (A, B, C) ⇒ D
+    ): Par[D] = {
+      ???
+    }
+
+    def map5[A, B, C, D, E](a: Par[A], b: Par[B], c: Par[C], d: Par[D])(
+        f: (A, B, C, D) ⇒ E
+    ): Par[E] = {
+      ???
+    }
 
   }
 

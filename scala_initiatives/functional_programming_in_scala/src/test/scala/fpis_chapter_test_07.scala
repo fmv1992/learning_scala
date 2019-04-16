@@ -66,9 +66,13 @@ class FPISTestChapter07 extends ScalaInitiativesTest {
 
   test("7.6: ???.") {}
 
-  test("7.6.1: ???.") {}
+  test("7.6.1: ???.") {
+    // ???: Test that combineOps is the same as sum.
+  }
 
-  test("7.6.2: ???.") {}
+  test("7.6.2: ???.") {
+    // ???: Test countWordsInParagraphs.
+  }
 
   test("7.6.3: ???.") {}
 
