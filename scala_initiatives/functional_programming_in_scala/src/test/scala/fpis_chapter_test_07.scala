@@ -66,6 +66,12 @@ class FPISTestChapter07 extends ScalaInitiativesTest {
 
   test("7.6: ???.") {}
 
+  test("7.6.1: ???.") {}
+
+  test("7.6.2: ???.") {}
+
+  test("7.6.3: ???.") {}
+
   test("7.7: ???.") {}
 
   test("7.8: ???.") {}

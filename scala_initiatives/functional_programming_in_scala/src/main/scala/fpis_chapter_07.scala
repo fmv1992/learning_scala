@@ -68,7 +68,12 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
 
     def sortPar(parList: Par[List[Int]]) = map(parList)(_.sorted)
 
-    // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------| }
+    def parMap[A, B](ps: List[A])(f: A => B): Par[List[B]] = fork {
+      val fbs: List[Par[B]] = ps.map(asyncF(f))
+      sequence(fbs)
+    }
+
+    // From fpinscala <https://github.com/fpinscala/fpinscala>. ------------| }
 
     // By introducing timeout arguments to map there is a problem:
     //
@@ -105,6 +110,32 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
           unit(la)(es)
         }
     }
+
+    def parFilter[A](as: List[A])(f: A => Boolean): Par[List[A]] = {
+      // ???: What a messy and complicated way! Sure there a better one!
+      val filterAux: List[Par[Boolean]] = as.map(asyncF(f))
+      val filterAuxSeq: Par[List[Boolean]] = sequence(filterAux)
+      val combPar: Par[List[(Boolean, A)]] =
+        map2(filterAuxSeq, unit(as))(_ zip _)
+      val filteredCombPar: Par[List[A]] = map(combPar)(
+        (x: List[(Boolean, A)]) ⇒ x.filter((y: (Boolean, A)) ⇒ y._1).map((z: (Boolean, A)) ⇒ z._2)
+      )
+      filteredCombPar
+      // val zipped: List[(Boolean, A)] = filterAuxSeq.zip(as)
+      // val filtered: List[(Boolean, A)] = zipped.filter(x ⇒ x._1)
+      // lazyUnit(filtered)
+    }
+
+    // def combineOps[A](i: IndexedSeq[A], basecase: A)(f: (A, A) ⇒ A): Par[A] = {
+    // if (i.size <= 1) {
+    // unit(basecase)
+    // } else {
+    // val split: Tuple2[IndexedSeq[A], IndexedSeq[A]] =
+    // i.splitAt(i.length / 2)
+    // val (l, r) = split
+    // map2(combineOps(l, basecase)(f), combineOps(r, basecase)(f))(f)
+    // }
+    // }
 
   }
 
