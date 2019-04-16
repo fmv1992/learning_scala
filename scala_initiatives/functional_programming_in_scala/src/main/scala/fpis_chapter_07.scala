@@ -98,7 +98,12 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
     }
 
     def sequence[A](ps: List[Par[A]]): Par[List[A]] = {
-      ???
+      (es: ExecutorService) ⇒ {
+          // ???: the call to `.get` is blocking but calling `sequence` is not.
+          // However I cannot envisage a way to convert from Par[A] to A.
+          val la: List[A] = ps.map(x ⇒ x(es).get)
+          unit(la)(es)
+        }
     }
 
   }
