@@ -62,6 +62,12 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
 
     def lazyUnit[A](a: ⇒ A): Par[A] = fork(unit(a))
 
+    def map[A, B](pa: Par[A])(f: A ⇒ B): Par[B] = {
+      map2(pa, unit(()))((a, _) ⇒ f(a))
+    }
+
+    def sortPar(parList: Par[List[Int]]) = map(parList)(_.sorted)
+
     // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------| }
 
     // By introducing timeout arguments to map there is a problem:
@@ -84,11 +90,15 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
 
     def asyncF[A, B](f: A ⇒ B): A ⇒ Par[B] = {
       // This is also a lazy function.
-      // Lazyunit is non-strict on its arguments.
+      // Lazyunit is non-strict on its arguments. It also applies fork.
       // Fork returns a callable.
       // Thus this function is also non strict.
-      // Test that this function is non strict.
+      // ???: Test that this function is non strict.
       (a: A) ⇒ lazyUnit(f(a))
+    }
+
+    def sequence[A](ps: List[Par[A]]): Par[List[A]] = {
+      ???
     }
 
   }
