@@ -111,19 +111,10 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
         }
     }
 
-    def parFilter[A](as: List[A])(f: A => Boolean): Par[List[A]] = {
-      // ???: What a messy and complicated way! Sure there a better one!
-      val filterAux: List[Par[Boolean]] = as.map(asyncF(f))
-      val filterAuxSeq: Par[List[Boolean]] = sequence(filterAux)
-      val combPar: Par[List[(Boolean, A)]] =
-        map2(filterAuxSeq, unit(as))(_ zip _)
-      val filteredCombPar: Par[List[A]] = map(combPar)(
-        (x: List[(Boolean, A)]) ⇒ x.filter((y: (Boolean, A)) ⇒ y._1).map((z: (Boolean, A)) ⇒ z._2)
-      )
-      filteredCombPar
-      // val zipped: List[(Boolean, A)] = filterAuxSeq.zip(as)
-      // val filtered: List[(Boolean, A)] = zipped.filter(x ⇒ x._1)
-      // lazyUnit(filtered)
+    def parFilter[A](as: List[A])(f: A => Boolean): Par[List[A]] = fork {
+      val mappedToBool: List[Par[Boolean]] = as.map(asyncF(f))
+      val parBol: Par[List[Boolean]] = sequence(mappedToBool)
+      map(parBol)((x: List[Boolean]) ⇒ x.zip(as).filter(_._1).map(_._2))
     }
 
     // def combineOps[A](i: IndexedSeq[A], basecase: A)(f: (A, A) ⇒ A): Par[A] = {
