@@ -103,6 +103,11 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
           def call = a(es).get
         })
 
+    def parMap[A, B](ps: List[A])(f: A ⇒ B): Par[List[B]] = fork {
+      val fbs: List[Par[B]] = ps.map(asyncF(f))
+      sequence(fbs)
+    }
+
     def map[A, B](pa: Par[A])(f: A ⇒ B): Par[B] =
       map2(pa, unit(()))((a, _) ⇒ f(a))
 
@@ -123,8 +128,27 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
     }
 
     def sequence[A](ps: List[Par[A]]): Par[List[A]] = {
+      // Is blocking:
+      // """
+      // Remember, asyncF converts an A ⇒ B to an A ⇒ Par[B] by forking
+      // a parallel com- putation to produce the result. So we can fork off our
+      // N parallel computations pretty easily, **but we need some way of
+      // collecting their results**. Are we stuck? Well, just from inspecting
+      // the types, we can see that we need some way of converting our
+      // List[Par[B]] to the Par[List[B]] required by the return type of parMap
+      // .
+      // """
+      // Emphasis mine.
       (es: ExecutorService) ⇒ {
           UnitFuture(ps.map(x ⇒ x(es).get))
+        }
+    }
+
+    def parFilter[A](as: List[A])(f: A ⇒ Boolean): Par[List[A]] = {
+      (es: ExecutorService) ⇒ {
+          UnitFuture(
+            as.map(x ⇒ (asyncF(f)(x))).zip(as).filter(_._1(es).get).map(_._2)
+          )
         }
     }
 
