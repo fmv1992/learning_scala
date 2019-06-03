@@ -14,7 +14,10 @@ class FPISTestChapter07 extends ScalaInitiativesTest {
 
   test("7.1: Par.map2 signature.") {
     // Written Answer:
-    // See function signature.
+    //
+    // ```
+    // def map2[A, B, C](a: Par[A], b: Par[B])(f: (A, B) ⇒ C): Par[C] = {
+    // ```
   }
 
   test("7.2: Representations of Par.") {
@@ -96,9 +99,6 @@ class FPISTestChapter07 extends ScalaInitiativesTest {
 
 //  Run this in vim:
 //
-// vim source: iabbrev R RNG
-// vim source: iabbrev Si SimpleRNG
-// vim source: 1,-10s/⇒/⇒/ge
-// vim source: NeoCompleteEnable
+// vim source: 1,-10s/=>/⇒/ge
 //
 // vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2 spell spelllang=en:
