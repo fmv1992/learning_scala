@@ -146,11 +146,21 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
 
     def parFilter[A](as: List[A])(f: A ⇒ Boolean): Par[List[A]] = {
       (es: ExecutorService) ⇒ {
-          UnitFuture(
-            as.map(x ⇒ (asyncF(f)(x))).zip(as).filter(_._1(es).get).map(_._2)
+        UnitFuture(
+            as.map(x ⇒ (asyncF(f)(x)))
+              .zip(as)
+              .filter(_._1(es).get)
+              .map(_._2)
           )
         }
     }
+
+  def choiceN[A](n: Par[Int])(choices: List[Par[A]]): Par[A] = {
+      (es: ExecutorService) ⇒ {
+        val index = run(es)(n).get
+        run(es)(choices(index))
+      }
+  }
 
   }
 
