@@ -101,7 +101,9 @@ class FPISTestChapter07 extends ScalaInitiativesTest {
     // `SKIPPED`: marked as hard.
   }
 
-  test("7.10: Fix the fact that non blocking implementation with Actors do not raise/propagate exceptions.") {
+  test(
+    "7.10: Fix the fact that non blocking implementation with Actors do not raise/propagate exceptions."
+  ) {
     // `SKIPPED`: marked as hard.
   }
 
@@ -109,9 +111,14 @@ class FPISTestChapter07 extends ScalaInitiativesTest {
     // Done.
   }
 
-  test("7.12: ???.") {}
+  test("7.12: ???.") {
+    // Both the list and the map behave as a general "mapping device"
+    // (function).
+  }
 
-  test("7.13: ???.") {}
+  test("7.13: ???.") {
+    // Done.
+  }
 
   test("7.14: ???.") {}
 

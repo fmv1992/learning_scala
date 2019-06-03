@@ -146,7 +146,7 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
 
     def parFilter[A](as: List[A])(f: A ⇒ Boolean): Par[List[A]] = {
       (es: ExecutorService) ⇒ {
-        UnitFuture(
+          UnitFuture(
             as.map(x ⇒ (asyncF(f)(x)))
               .zip(as)
               .filter(_._1(es).get)
@@ -155,29 +155,50 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
         }
     }
 
-  def choiceN[A](n: Par[Int])(choices: List[Par[A]]): Par[A] = {
+    def choiceN[A](n: Par[Int])(choices: List[Par[A]]): Par[A] = {
       (es: ExecutorService) ⇒ {
-        val index: Int = run(es)(n).get
-        run(es)(choices(index))
-      }
-  }
-
-  def choice[A](cond: Par[Boolean])(t: Par[A], f: Par[A]): Par[A] = {
-      (es: ExecutorService) ⇒ {
-        val ind: Par[Int] = if (run(es)(cond).get) {
-          unit(0)
-        } else {
-          unit(1)
+          val index: Int = run(es)(n).get
+          run(es)(choices(index))
         }
-        val asList: List[Par[A]] = List(t, f)
-        choiceN(ind)(asList)(es)
-      }
-  }
+    }
+
+    def choice[A](cond: Par[Boolean])(t: Par[A], f: Par[A]): Par[A] = {
+      (es: ExecutorService) ⇒ {
+          val ind: Par[Int] = if (run(es)(cond).get) {
+            unit(0)
+          } else {
+            unit(1)
+          }
+          val asList: List[Par[A]] = List(t, f)
+          choiceN(ind)(asList)(es)
+        }
+    }
+
+    def chooser[A, B](pa: Par[A])(choices: A ⇒ Par[B]): Par[B] = {
+      (es: ExecutorService) ⇒ {
+          choices(run(es)(pa).get)(es)
+        }
+    }
+
+    def bind[A, B](pa: Par[A])(choices: A ⇒ Par[B]): Par[B] = {
+      chooser(pa)(choices)
+    }
+
+    def choiceAsBind[A](cond: Par[Boolean])(t: Par[A], f: Par[A]): Par[A] = {
+      (es: ExecutorService) ⇒ {
+          bind(null)(x ⇒ if (cond(es).get) t else f)(es)
+        }
+    }
+
+    def choiceNAsBind[A](n: Par[Int])(choices: List[Par[A]]): Par[A] = {
+      (es: ExecutorService) ⇒ {
+          bind(n)(x ⇒ choices(x))(es)
+        }
+    }
+
+    // Parallel computation. --- }
 
   }
-
-  // Parallel computation. --- }
-
 }
 
 //  Run this in vim:
