@@ -196,6 +196,18 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
         }
     }
 
+    def join[A](a: Par[Par[A]]): Par[A] = {
+      (es: ExecutorService) ⇒ {
+          (a(es).get)(es)
+        }
+    }
+
+    def bindWithJoin[A, B](pa: Par[A])(choices: A ⇒ Par[B]): Par[B] = {
+      (es: ExecutorService) ⇒ {
+          run(es)(join(map(pa)(choices)))
+        }
+    }
+
     // Parallel computation. --- }
 
   }

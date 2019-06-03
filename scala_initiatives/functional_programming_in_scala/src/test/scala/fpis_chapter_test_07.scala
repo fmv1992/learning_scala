@@ -111,16 +111,30 @@ class FPISTestChapter07 extends ScalaInitiativesTest {
     // Done.
   }
 
-  test("7.12: ???.") {
+  test("7.12: Deliberation on `choice` design.") {
     // Both the list and the map behave as a general "mapping device"
     // (function).
   }
 
-  test("7.13: ???.") {
+  test("7.13: Implementation of chooser.") {
     // Done.
   }
 
-  test("7.14: ???.") {}
+  test("7.14: Implementation of join.") {
+    // Done.
+  }
+
+  test("7.14.1: map2 with join.") {
+    // `SKIPPED`: Will focus on finishing chapter.
+  }
+
+  test("7.14.2: Laws relating to join.") {
+    // `SKIPPED`: Will focus on finishing chapter.
+  }
+
+  test("7.14.3: Limits on this parallel algebra and other algebra.") {
+    // `SKIPPED`: Will focus on finishing chapter.
+  }
 
 }
 
