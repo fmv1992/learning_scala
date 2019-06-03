@@ -105,7 +105,9 @@ class FPISTestChapter07 extends ScalaInitiativesTest {
     // `SKIPPED`: marked as hard.
   }
 
-  test("7.11: ???.") {}
+  test("7.11: Implementation of choiceN and choice.") {
+    // Done.
+  }
 
   test("7.12: ???.") {}
 

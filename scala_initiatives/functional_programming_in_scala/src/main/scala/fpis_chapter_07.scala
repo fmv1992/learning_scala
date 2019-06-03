@@ -157,8 +157,20 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
 
   def choiceN[A](n: Par[Int])(choices: List[Par[A]]): Par[A] = {
       (es: ExecutorService) ⇒ {
-        val index = run(es)(n).get
+        val index: Int = run(es)(n).get
         run(es)(choices(index))
+      }
+  }
+
+  def choice[A](cond: Par[Boolean])(t: Par[A], f: Par[A]): Par[A] = {
+      (es: ExecutorService) ⇒ {
+        val ind: Par[Int] = if (run(es)(cond).get) {
+          unit(0)
+        } else {
+          unit(1)
+        }
+        val asList: List[Par[A]] = List(t, f)
+        choiceN(ind)(asList)(es)
       }
   }
 
