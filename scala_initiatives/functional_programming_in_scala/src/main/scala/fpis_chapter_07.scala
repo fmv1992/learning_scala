@@ -16,7 +16,7 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
       Par.map2(Par.fork(sum(l)), Par.fork(sum(r)))(_ + _)
     }
 
-  type TimeUnit
+  def run[A](s: ExecutorService)(a: Par[A]): Future[A] = a(s)
 
   abstract class ExecutorService {
     def submit[A](a: Callable[A]): Future[A]
@@ -24,22 +24,69 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
 
   trait Callable[A] { def call: A }
 
+  // Time unit helper code. --- {
+
+  trait TimeUnit {
+    def unit: String
+    def v: Long
+
+    def -(that: TimeUnit): TimeUnit = {
+      Time.-(this, that)
+    }
+  }
+
+  object Time {
+
+    def apply(unit: String, v: Long): TimeUnit = {
+      if (unit == "ns") {
+        Nanosecond(v)
+      } else {
+        throw new NotImplementedError
+      }
+    }
+
+    def -(a: TimeUnit, b: TimeUnit): TimeUnit = {
+      if (a.unit == b.unit) {
+        apply(a.unit, a.v - b.v)
+      } else {
+        throw new NotImplementedError
+      }
+    }
+
+  }
+  case class Time(unit: String, v: Long) extends TimeUnit
+  case class Nanosecond(v: Long) extends TimeUnit {
+    val unit = "ns"
+  }
+
+  // --- }
+
+  def getRunningTime[A](f: ⇒ A, unit: String = "ns"): (A, TimeUnit) = {
+    val before: TimeUnit = Nanosecond(System.nanoTime)
+    val res: A = f
+    val after: Nanosecond = Nanosecond(System.nanoTime)
+    (res, after - before)
+  }
+
   trait Future[A] {
     def get: A
-    def get(timeout: Long, unit: TimeUnit): A
+    def get(timeout: Long, timeUnit: TimeUnit): A
+    def get(timeUnit: TimeUnit): A
     def cancel(evenIfRunning: Boolean): Boolean
     def isDone: Boolean
     def isCancelled: Boolean
   }
 
   type Par[A] = ExecutorService ⇒ Future[A]
-  def run[A](s: ExecutorService)(a: Par[A]): Future[A] = a(s)
 
   object Par {
+
     def unit[A](a: A): Par[A] = (es: ExecutorService) ⇒ UnitFuture(a)
+
     private case class UnitFuture[A](get: A) extends Future[A] {
       def isDone = true
       def get(timeout: Long, units: TimeUnit) = get
+      def get(timeUnit: TimeUnit) = get
       def isCancelled = false
       def cancel(evenIfRunning: Boolean): Boolean = false
     }
@@ -55,9 +102,20 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
       es ⇒ es.submit(new Callable[A] {
           def call = a(es).get
         })
-  }
 
-  // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------| }
+    // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------| }
+
+    def map2WithRunningTime[A, B, C](a: Par[A], b: Par[B], time: TimeUnit)(
+        f: (A, B) ⇒ C
+    ): Par[C] =
+      (es: ExecutorService) ⇒ {
+        val (af, timeU) = getRunningTime(a(es).get(time))
+        val remainingTime: TimeUnit = time - timeU
+        val bf = b(es).get(remainingTime)
+        UnitFuture(f(af, bf))
+      }
+
+  }
 
   // Parallel computation. --- }
 
