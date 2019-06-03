@@ -70,7 +70,6 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
 
   trait Future[A] {
     def get: A
-    def get(timeout: Long, timeUnit: TimeUnit): A
     def get(timeUnit: TimeUnit): A
     def cancel(evenIfRunning: Boolean): Boolean
     def isDone: Boolean
@@ -83,9 +82,10 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
 
     def unit[A](a: A): Par[A] = (es: ExecutorService) ⇒ UnitFuture(a)
 
+    def lazyUnit[A](a: ⇒ A): Par[A] = fork(unit(a))
+
     private case class UnitFuture[A](get: A) extends Future[A] {
       def isDone = true
-      def get(timeout: Long, units: TimeUnit) = get
       def get(timeUnit: TimeUnit) = get
       def isCancelled = false
       def cancel(evenIfRunning: Boolean): Boolean = false
@@ -103,6 +103,9 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
           def call = a(es).get
         })
 
+    def map[A, B](pa: Par[A])(f: A ⇒ B): Par[B] =
+      map2(pa, unit(()))((a, _) ⇒ f(a))
+
     // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------| }
 
     def map2WithRunningTime[A, B, C](a: Par[A], b: Par[B], time: TimeUnit)(
@@ -114,6 +117,16 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
         val bf = b(es).get(remainingTime)
         UnitFuture(f(af, bf))
       }
+
+    def asyncF[A, B](f: A ⇒ B): A ⇒ Par[B] = {
+      (a: A) ⇒ lazyUnit(f(a))
+    }
+
+    def sequence[A](ps: List[Par[A]]): Par[List[A]] = {
+      (es: ExecutorService) ⇒ {
+          UnitFuture(ps.map(x ⇒ x(es).get))
+        }
+    }
 
   }
 
