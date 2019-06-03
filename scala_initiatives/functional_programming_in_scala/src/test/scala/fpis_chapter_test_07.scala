@@ -61,31 +61,49 @@ class FPISTestChapter07 extends ScalaInitiativesTest {
     // ```
   }
 
-  test("7.3: ???.") {}
-
-  test("7.4: ???.") {}
-
-  test("7.5: ???.") {}
-
-  test("7.6: ???.") {}
-
-  test("7.6.1: ???.") {
-    // ???: Test that combineOps is the same as sum.
+  test("7.3: Timeouts on map2.") {
+    // Done.
   }
 
-  test("7.6.2: ???.") {
-    // ???: Test countWordsInParagraphs.
+  test("7.4: Implementation of asyncF.") {
+    // Done.
   }
 
-  test("7.6.3: ???.") {}
+  test("7.5: Implementation of sequence.") {
+    // Done.
+  }
 
-  test("7.7: ???.") {}
+  test("7.6: Implementation of parFilter.") {
+    // Done.
+  }
 
-  test("7.8: ???.") {}
+  test("7.6.1: Implementation of parMax.") {
+    // `SKIPPED`: Will focus on finishing chapter.
+  }
 
-  test("7.9: ???.") {}
+  test("7.6.2: Implementation of parParagraphCount.") {
+    // `SKIPPED`: Will focus on finishing chapter.
+  }
 
-  test("7.10: ???.") {}
+  test("7.6.3: Implementation of map3, map4 and map5 in terms of map2.") {
+    // `SKIPPED`: Will focus on finishing chapter.
+  }
+
+  test("7.7: Prove 'Theorems for free!'.") {
+    // `SKIPPED`: marked as hard.
+  }
+
+  test("7.8: Find that `fork` law holds for our implementation.") {
+    // `SKIPPED`: marked as hard.
+  }
+
+  test("7.9: Show that fixed size thread pools can deadlock.") {
+    // `SKIPPED`: marked as hard.
+  }
+
+  test("7.10: Fix the fact that non blocking implementation with Actors do not raise/propagate exceptions.") {
+    // `SKIPPED`: marked as hard.
+  }
 
   test("7.11: ???.") {}
 
