@@ -417,7 +417,7 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
 
 }
 
-//  Run this in vim:
+// Run this in vim:
 //
 // vim source: call matchadd("ErrorXXX", '\<Cons\>', 2)
 //

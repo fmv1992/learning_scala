@@ -213,7 +213,7 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
   }
 }
 
-//  Run this in vim:
+// Run this in vim:
 //
 // vim source: 1,$-5s/=>/⇒/ge
 //

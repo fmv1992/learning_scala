@@ -512,7 +512,7 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
 }
 
-//  Run this in vim:
+// Run this in vim:
 //
 // ???: Why this is not automatic? It should be.
 // vim source: iabbrev t the

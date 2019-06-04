@@ -138,7 +138,7 @@ class FPISTestChapter07 extends ScalaInitiativesTest {
 
 }
 
-//  Run this in vim:
+// Run this in vim:
 //
 // vim source: 1,-10s/=>/⇒/ge
 //
