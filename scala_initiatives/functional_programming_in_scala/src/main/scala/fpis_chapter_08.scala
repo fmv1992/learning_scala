@@ -35,8 +35,7 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
           val newSeed = (prng.seed * 0X5DEECE66DL + 0XBL) & 0XFFFFFFFFFFFFL
           val nextRNG = PRNG(newSeed)
           val n = (newSeed >>> 16).toInt
-          // ???: This "abs" may distort our prng.
-          (nextRNG, n.abs)
+          (nextRNG, n)
         }
     }
 
@@ -51,7 +50,8 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
     def choose(start: Int, stopExclusive: Int): Gen[Int] = {
       Gen((x: PRNG) ⇒ {
         val (p, ni) = PRNG.nextInt(x)
-        val newInt = ni % (stopExclusive - start) + start
+        // ???: This "abs" may distort our prng.
+        val newInt = ni.abs % (stopExclusive - start) + start
         (p, newInt)
       })
     }
@@ -65,8 +65,8 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
     def listOfN[A](n: Int, g: Gen[A]): Gen[List[A]] = {
       lazy val streamG: Stream[(PRNG, A)] =
         g.sample(PRNG(0)) #::
-        g.sample(streamG.head._1) #::
-        streamG.tail.map(x ⇒ g.sample(x._1))
+          g.sample(streamG.head._1) #::
+          streamG.tail.map(x ⇒ g.sample(x._1))
       val nElements = streamG.take(n).toVector
       Gen(x ⇒ (nElements.last._1, nElements.map(_._2).toList))
     }

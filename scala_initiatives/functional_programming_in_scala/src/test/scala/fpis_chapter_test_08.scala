@@ -42,8 +42,45 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
   }
 
   test("8.5: Implementation of unit, boolean and listOfN.") {
-    println(Gen.listOfN(10, Gen.choose(0, 500)).sample(p0))
+    assert(Gen.unit("s").sample(p0)._2 == "s")
+    // Gen.boolean(???)
+    Gen.listOfN(10, Gen.choose(0, 500)).sample(p0)
   }
+
+  test("8.5.x: Further discussion.") {
+    // Written answer:
+    //
+    // 1. No we do not need a new primitive. It is possible to either group
+    //    a single run of listOfN or zip two runs together:
+
+    Gen.listOfN(10, Gen.choose(0, 500)).sample(p0)._2.grouped(2).toList
+
+    //
+    // 2.
+    //    a. Gen[Option[Int]] from Gen[Int].
+
+    val gen: Gen[Int] = Gen.unit(0)
+    val genOpt: Gen[Option[Int]] = Gen(
+      // (x: PRNG) ⇒ {
+      //   val (p, ni) = PRNG.nextInt(x)
+      //   val nio = if (ni % 2 == 0) Some(ni)  else None
+      //   (p, nio)})
+      (x: PRNG) ⇒ {
+        val (p, ni) = gen.sample(x)
+        (p, Some(ni))
+      }
+    )
+
+    //    b. The reverse process with a `.getOrElse` clause.
+    //
+    // 3. Yes we can generate strings.. We can map ints to chars and group
+    //    those into strings. However a convenience function would be welcome
+    //    in this case.
+
+    Gen.listOfN(10, Gen.choose('a', 'z')).sample(p0)._2.map(_.toChar.toString)
+
+  }
+
   test("8.6: ???.") {}
   test("8.7: ???.") {}
   test("8.8: ???.") {}
