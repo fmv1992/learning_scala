@@ -20,6 +20,8 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
 
   }
 
+  // PRNG and State. --- {
+
   type State[S, +A] = S ⇒ (S, A)
 
   case class PRNG(seed: Long)
@@ -39,6 +41,8 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
 
   }
 
+  // --- }
+
   case class Gen[B](sample: State[PRNG, B])
 
   object Gen {
@@ -46,11 +50,24 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
     def choose(start: Int, stopExclusive: Int): Gen[Int] = {
       Gen((x: PRNG) ⇒ {
         // val randomSeed = System.nanoTime
-        val randomSeed = 0
-        val (p, ni) = PRNG.nextInt(PRNG(randomSeed))
+        // val randomSeed = 0
+        val (p, ni) = PRNG.nextInt(x)
         val newInt = ni % (stopExclusive - start) + start
         (p, newInt)
       })
+    }
+
+    def unit[A](a: ⇒ A): Gen[A] = Gen(x ⇒ (x, a))
+
+    def boolean: Gen[Boolean] = {
+      ???
+    }
+
+    def listOfN[A](n: Int, g: Gen[A]): Gen[List[A]] = {
+      lazy val streamG: Stream[(PRNG, A)] =
+        g.sample(PRNG(0)) #:: g.sample(streamG.head._1) #:: streamG.tail
+      val nElements = streamG.take(n).toVector
+      Gen(x ⇒ (nElements.last._1, nElements.map(_._2).toList))
     }
 
   }

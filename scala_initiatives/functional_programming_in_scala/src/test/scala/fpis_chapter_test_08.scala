@@ -9,7 +9,7 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
   // Declare constants.
 
   test(
-    "8.1: Thinking about the properties of a `sum: List[Int] => Int` function."
+    "8.1: Thinking about the properties of a `sum: List[Int] ⇒ Int` function."
   ) {
     // Written answer:
     //
@@ -20,7 +20,7 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
     // 4. The sum of a n=1 list is equal to l(0).
   }
   test(
-    "8.2: Thinking about the properties of a `max: List[Int] => Int` function."
+    "8.2: Thinking about the properties of a `max: List[Int] ⇒ Int` function."
   ) {
     // Written answer:
     //
@@ -33,9 +33,24 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
     //
     // 1. The max function should find the element that is greater than or equal to any other element in a list.
   }
-  test("8.3: ???.") {}
-  test("8.4: ???.") {}
-  test("8.5: ???.") {}
+  test("8.3: Implement && as a method of Prop.") {
+    // Done.
+  }
+  test("8.4: Implementation of choose.") {
+
+    List
+      .range(0, 20)
+      .foreach(
+        x ⇒ {
+          println(x)
+          println(
+            Gen.choose(10, 13).sample(PRNG(x))
+          )
+        }
+      )
+  }
+
+  test("8.5: Implementation of unit, boolean and listOfN.") {}
   test("8.6: ???.") {}
   test("8.7: ???.") {}
   test("8.8: ???.") {}
