@@ -7,6 +7,7 @@ import scalainitiatives.common.ScalaInitiativesTest
 class FPISTestChapter08 extends ScalaInitiativesTest {
 
   // Declare constants.
+  val p0 = PRNG(0)
 
   test(
     "8.1: Thinking about the properties of a `sum: List[Int] ⇒ Int` function."
@@ -37,20 +38,12 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
     // Done.
   }
   test("8.4: Implementation of choose.") {
-
-    List
-      .range(0, 20)
-      .foreach(
-        x ⇒ {
-          println(x)
-          println(
-            Gen.choose(10, 13).sample(PRNG(x))
-          )
-        }
-      )
+    Gen.choose(0, 100).sample(p0)
   }
 
-  test("8.5: Implementation of unit, boolean and listOfN.") {}
+  test("8.5: Implementation of unit, boolean and listOfN.") {
+    println(Gen.listOfN(10, Gen.choose(0, 500)).sample(p0))
+  }
   test("8.6: ???.") {}
   test("8.7: ???.") {}
   test("8.8: ???.") {}
