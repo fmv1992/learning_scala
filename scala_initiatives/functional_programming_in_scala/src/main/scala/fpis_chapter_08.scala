@@ -43,7 +43,36 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
 
   // --- }
 
-  case class Gen[B](sample: State[PRNG, B])
+  case class Gen[A](sample: State[PRNG, A]) {
+
+    def flatMap[B](f: A ⇒ Gen[B]): Gen[B] = {
+      Gen((x1: PRNG) ⇒ {
+        val (p1, a1) = this.sample(x1)
+        val g1 = f(a1)
+        val (p2, a2) = g1.sample(p1)
+        (p1, a2)
+      })
+    }
+
+    // def listOfN(n: Int): Gen[List[A]] = {
+    //   Gen((x1: PRNG) ⇒ {
+    //     val (p, a) = this.sample(x1)
+    //     (p, List.fill(n)(a))
+    //   })
+    // }
+    def listOfNWithFlatMap(size: Gen[Int]): Gen[List[A]] = {
+      // Gen((x: PRNG) ⇒ {
+      // val (p1, a1) = this.sample(x)
+      // val (p2, i) = size.sample(p1)
+      this.flatMap(
+        a ⇒ Gen((x: PRNG) ⇒ {
+            val (p1, i) = size.sample(x)
+            (p1, List.fill(i)(a))
+          })
+      )
+    }
+
+  }
 
   object Gen {
 
@@ -58,9 +87,12 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
 
     def unit[A](a: ⇒ A): Gen[A] = Gen(x ⇒ (x, a))
 
-    def boolean: Gen[Boolean] = {
-      ???
-    }
+    // def boolean: Gen[Boolean] = {
+    // Gen((x: PRNG) ⇒ {
+    // val i = Gen.choose(0, 1)(x)
+    // if (i == 0)  true else false
+    // })
+    // }
 
     def listOfN[A](n: Int, g: Gen[A]): Gen[List[A]] = {
       lazy val streamG: Stream[(PRNG, A)] =

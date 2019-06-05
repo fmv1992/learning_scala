@@ -7,6 +7,9 @@ import scalainitiatives.common.ScalaInitiativesTest
 class FPISTestChapter08 extends ScalaInitiativesTest {
 
   // Declare constants.
+  val g0: Gen[Int] = Gen.unit(0)
+  val g3: Gen[Int] = Gen.unit(3)
+  val g1To10: Gen[Int] = Gen.choose(1, 10)
   val p0 = PRNG(0)
 
   test(
@@ -59,14 +62,13 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
     // 2.
     //    a. Gen[Option[Int]] from Gen[Int].
 
-    val gen: Gen[Int] = Gen.unit(0)
     val genOpt: Gen[Option[Int]] = Gen(
       // (x: PRNG) ⇒ {
       //   val (p, ni) = PRNG.nextInt(x)
       //   val nio = if (ni % 2 == 0) Some(ni)  else None
       //   (p, nio)})
       (x: PRNG) ⇒ {
-        val (p, ni) = gen.sample(x)
+        val (p, ni) = g0.sample(x)
         (p, Some(ni))
       }
     )
@@ -81,7 +83,12 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
 
   }
 
-  test("8.6: ???.") {}
+  test("8.6: Implementation of flatMap and listOfN.") {
+    println(
+      g1To10.listOfNWithFlatMap(g3).sample(p0)
+    )
+  }
+
   test("8.7: ???.") {}
   test("8.8: ???.") {}
   test("8.9: ???.") {}
