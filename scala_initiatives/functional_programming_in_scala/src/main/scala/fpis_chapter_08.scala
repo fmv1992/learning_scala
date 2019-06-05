@@ -21,7 +21,43 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
     def isFalsified = true
   }
 
-  case class Prop(run: (TestCases, PRNG) ⇒ Result)
+  case class Prop(run: (TestCases, PRNG) ⇒ Result) {
+
+    def &&(that: Prop): Prop = {
+      Prop((t, p) ⇒ {
+        val r1 = this.run(t, p)
+        val r2 = that.run(t, p)
+        if (r1.isFalsified) {
+          // ??: Does not cover the case of both being falsified.
+          r1
+        } else {
+          if (r2.isFalsified) {
+            r2
+          } else {
+            Passed
+          }
+        }
+      })
+    }
+
+    def ||(that: Prop): Prop = {
+      Prop((t, p) ⇒ {
+        val r1 = this.run(t, p)
+        val r2 = that.run(t, p)
+        if (r1.isFalsified) {
+          if (r2.isFalsified) {
+            // ??: Does not cover the case of both being falsified.
+            r1
+          } else {
+            Passed
+          }
+        } else {
+          Passed
+        }
+      })
+    }
+
+  }
 
   def forAll[A](as: Gen[A])(f: A ⇒ Boolean): Prop = Prop {
     (n, rng) ⇒ randomStream(as)(rng)
