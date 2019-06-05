@@ -39,6 +39,13 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
         }
     }
 
+    def nextDouble: State[PRNG, Double] = {
+      (prng: PRNG) ⇒ {
+      val (p, n) = nextInt(prng)
+      (p, Int.MaxValue.toDouble / n)
+      }
+    }
+
   }
 
   // --- }
@@ -70,7 +77,6 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
             def s: Stream[(PRNG, A)] =
               Stream.iterate((p1, a))(x ⇒ this.sample(x._1))
             val str = s.take(i)
-            println(str.toList)
             (str.last._1, str.map(_._2).toList)
           })
       )
@@ -91,20 +97,41 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
 
     def unit[A](a: ⇒ A): Gen[A] = Gen(x ⇒ (x, a))
 
-    // def boolean: Gen[Boolean] = {
-    // Gen((x: PRNG) ⇒ {
-    // val i = Gen.choose(0, 1)(x)
-    // if (i == 0)  true else false
-    // })
-    // }
+    def boolean: Gen[Boolean] = {
+      Gen((x: PRNG) ⇒ {
+        val (p: PRNG, i) = Gen.choose(0, 2).sample(x)
+        if (i == 0) (p, true) else (p, false)
+      })
+    }
 
     def listOfN[A](n: Int, g: Gen[A]): Gen[List[A]] = {
-      lazy val streamG: Stream[(PRNG, A)] =
-        g.sample(PRNG(0)) #::
-          g.sample(streamG.head._1) #::
-          streamG.tail.map(x ⇒ g.sample(x._1))
-      val nElements = streamG.take(n).toVector
-      Gen(x ⇒ (nElements.last._1, nElements.map(_._2).toList))
+      Gen((x: PRNG) ⇒ {
+        def s: Stream[(PRNG, A)] =
+          Stream.iterate(g.sample(x))(x ⇒ g.sample(x._1))
+        val nElements = s.take(n).toVector
+        (nElements.last._1, nElements.map(_._2).toList)
+      })
+    }
+
+    def union[A](g1: Gen[A], g2: Gen[A]): Gen[A] = {
+      Gen((x: PRNG) ⇒ {
+        val (p, i) = Gen.boolean.sample(x)
+        if (i) g1.sample(p) else g2.sample(p)
+      })
+    }
+
+    def weighted[A](gd1: (Gen[A], Double), gd2: (Gen[A], Double)): Gen[A] = {
+
+      val (g1, d1) = gd1
+      val (g2, d2) = gd2
+
+      val cutoff1: Double = d1 / (d1 + d2)
+
+      Gen((x: PRNG) ⇒ {
+        val (p1: PRNG, d: Double) = PRNG.nextDouble(x)
+        val g: Gen[A] = if (cutoff1 < d) g1 else g2
+        g.sample(p1)
+      })
     }
 
   }

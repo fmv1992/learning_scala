@@ -9,7 +9,8 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
   // Declare constants.
   val g0: Gen[Int] = Gen.unit(0)
   val g3: Gen[Int] = Gen.unit(3)
-  val g1To10: Gen[Int] = Gen.choose(1, 10)
+  val g0To9: Gen[Int] = Gen.choose(0, 10)
+  val g10To19: Gen[Int] = Gen.choose(10, 20)
   val p0 = PRNG(0)
 
   test(
@@ -84,11 +85,21 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
   }
 
   test("8.6: Implementation of flatMap and listOfN.") {
-    g1To10.listOfNWithFlatMap(g3).sample(p0)
+    g0To9.listOfNWithFlatMap(g3).sample(p0)
   }
 
-  test("8.7: ???.") {}
-  test("8.8: ???.") {}
+  test("8.7: Implementation of union.") {
+    Gen.listOfN(10, Gen.union(g0To9, g10To19)).sample(p0)
+  }
+
+  test("8.8: Implementation of weighted.") {
+    Gen.listOfN(100,
+      Gen.weighted(
+        (g0To9, 0.1),
+        (g10To19, 0.9)
+        )).sample(p0)
+  }
+
   test("8.9: ???.") {}
   test("8.10: ???.") {}
   test("8.11: ???.") {}
