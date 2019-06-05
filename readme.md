@@ -47,6 +47,8 @@ The following tags are used in this project:
 
 *   `ERRATA:`: Erratas from the book.
 
+*   `CORRECT:`: Correct this part of code after correcting a chapter.
+
 *   Code cited in comments/answers:
 
         // Written answer:

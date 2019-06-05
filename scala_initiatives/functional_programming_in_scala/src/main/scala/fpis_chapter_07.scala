@@ -139,12 +139,18 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
       // .
       // """
       // Emphasis mine.
+      //
+      // CORRECT: Despite the book indication this is not blocking. It does not
+      // use the form of a function; it can be accomplished with matching or
+      // foldRight or a balanced parallelization.
       (es: ExecutorService) ⇒ {
           UnitFuture(ps.map(x ⇒ x(es).get))
         }
     }
 
     def parFilter[A](as: List[A])(f: A ⇒ Boolean): Par[List[A]] = {
+      // CORRECT: Use other primitives from the code. This does not have this
+      // "function" form.
       (es: ExecutorService) ⇒ {
           UnitFuture(
             as.map(x ⇒ (asyncF(f)(x)))
@@ -185,12 +191,16 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
     }
 
     def choiceAsBind[A](cond: Par[Boolean])(t: Par[A], f: Par[A]): Par[A] = {
+      // CORRECT: Use other primitives from the code. This does not have this
+      // "function" form. Use `bind` or `flatMap` directly.
       (es: ExecutorService) ⇒ {
           bind(null)(x ⇒ if (cond(es).get) t else f)(es)
         }
     }
 
     def choiceNAsBind[A](n: Par[Int])(choices: List[Par[A]]): Par[A] = {
+      // CORRECT: Use other primitives from the code. This does not have this
+      // "function" form. Use `bind` or `flatMap` directly.
       (es: ExecutorService) ⇒ {
           bind(n)(x ⇒ choices(x))(es)
         }
