@@ -50,7 +50,7 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
         val (p1, a1) = this.sample(x1)
         val g1 = f(a1)
         val (p2, a2) = g1.sample(p1)
-        (p1, a2)
+        (p2, a2)
       })
     }
 
@@ -67,7 +67,11 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
       this.flatMap(
         a ⇒ Gen((x: PRNG) ⇒ {
             val (p1, i) = size.sample(x)
-            (p1, List.fill(i)(a))
+            def s: Stream[(PRNG, A)] =
+              Stream.iterate((p1, a))(x ⇒ this.sample(x._1))
+            val str = s.take(i)
+            println(str.toList)
+            (str.last._1, str.map(_._2).toList)
           })
       )
     }

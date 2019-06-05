@@ -84,9 +84,7 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
   }
 
   test("8.6: Implementation of flatMap and listOfN.") {
-    println(
-      g1To10.listOfNWithFlatMap(g3).sample(p0)
-    )
+    g1To10.listOfNWithFlatMap(g3).sample(p0)
   }
 
   test("8.7: ???.") {}
