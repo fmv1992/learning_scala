@@ -93,11 +93,15 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
   }
 
   test("8.8: Implementation of weighted.") {
-    Gen.listOfN(100,
-      Gen.weighted(
-        (g0To9, 0.1),
-        (g10To19, 0.9)
-        )).sample(p0)
+    Gen
+      .listOfN(
+        100,
+        Gen.weighted(
+          (g0To9, 0.1),
+          (g10To19, 0.9)
+        )
+      )
+      .sample(p0)
   }
 
   test("8.9: ???.") {}

@@ -4,21 +4,49 @@ import scalainitiatives.common.ScalaInitiativesExercise
 
 object FPISExerciseChapter08 extends ScalaInitiativesExercise {
 
-  // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------| {
+  // From fpinscala (Prop) <https://github.com/fpinscala/fpinscala>. -------| {
 
-  trait Prop {
+  type FailedCase = String
+  type SuccessCount = Int
+  type TestCases = Int
 
-    def check: Boolean
-
-    // From fpinscala <https://github.com/fpinscala/fpinscala>. --------------| }
-
-    // Property based testing. --- {
-
-    def &&(p: Prop): Boolean = this.check && p.check
-
-    // --- }
-
+  sealed trait Result {
+    def isFalsified: Boolean
   }
+  case object Passed extends Result {
+    def isFalsified = false
+  }
+  case class Falsified(failure: FailedCase, successes: SuccessCount)
+      extends Result {
+    def isFalsified = true
+  }
+
+  case class Prop(run: (TestCases, PRNG) ⇒ Result)
+
+  def forAll[A](as: Gen[A])(f: A ⇒ Boolean): Prop = Prop {
+    (n, rng) ⇒ randomStream(as)(rng)
+        .zip(Stream.from(0))
+        .take(n)
+        .map {
+          case (a, i) ⇒ try {
+              if (f(a)) Passed else Falsified(a.toString, i)
+            } catch { case e: Exception ⇒ Falsified(buildMsg(a, e), i) }
+        }
+        .find(_.isFalsified)
+        .getOrElse(Passed)
+  }
+
+  def randomStream[A](g: Gen[A])(rng: PRNG): Stream[A] = {
+    Stream.iterate(g.sample(rng))(x ⇒ g.sample(x._1)).map(_._2)
+  }
+
+  def buildMsg[A](s: A, e: Exception): String = {
+    s"test case: $s\n" +
+      s"generated an exception: ${e.getMessage}\n" +
+      s"stack trace:\n ${e.getStackTrace.mkString("\n")}"
+  }
+
+  // From fpinscala (Prop) <https://github.com/fpinscala/fpinscala>. -------| }
 
   // PRNG and State. --- {
 
@@ -41,9 +69,9 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
 
     def nextDouble: State[PRNG, Double] = {
       (prng: PRNG) ⇒ {
-      val (p, n) = nextInt(prng)
-      (p, Int.MaxValue.toDouble / n)
-      }
+          val (p, n) = nextInt(prng)
+          (p, Int.MaxValue.toDouble / n)
+        }
     }
 
   }
@@ -61,16 +89,7 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
       })
     }
 
-    // def listOfN(n: Int): Gen[List[A]] = {
-    //   Gen((x1: PRNG) ⇒ {
-    //     val (p, a) = this.sample(x1)
-    //     (p, List.fill(n)(a))
-    //   })
-    // }
     def listOfNWithFlatMap(size: Gen[Int]): Gen[List[A]] = {
-      // Gen((x: PRNG) ⇒ {
-      // val (p1, a1) = this.sample(x)
-      // val (p2, i) = size.sample(p1)
       this.flatMap(
         a ⇒ Gen((x: PRNG) ⇒ {
             val (p1, i) = size.sample(x)
