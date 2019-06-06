@@ -104,10 +104,12 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
       .sample(p0)
   }
 
-  test("8.9: ???.") {}
-  test("8.10: ???.") {}
-  test("8.11: ???.") {}
-  test("8.12: ???.") {}
+  test("8.9: Implement prop && and ||.") {}
+  test("8.10: Implement helper functions for converting Gen to SGen.") {}
+  test("8.11: Define convenience functions for SGen.") {
+    // `SKIPPED`: marked as optional.
+  }
+  test("8.12: Implement listOf.") {}
   test("8.13: ???.") {}
   test("8.14: ???.") {}
   test("8.15: ???.") {}

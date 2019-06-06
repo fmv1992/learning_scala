@@ -13,9 +13,11 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
   sealed trait Result {
     def isFalsified: Boolean
   }
+
   case object Passed extends Result {
     def isFalsified = false
   }
+
   case class Falsified(failure: FailedCase, successes: SuccessCount)
       extends Result {
     def isFalsified = true
@@ -82,6 +84,17 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
       s"stack trace:\n ${e.getStackTrace.mkString("\n")}"
   }
 
+  case class SGen[+A](forSize: Int ⇒ Gen[A]) {
+
+    def listOf[A](g: Gen[A]): SGen[List[A]] = {
+      SGen(i ⇒ {
+        Gen(p ⇒ {
+          g.listOfNWithFlatMap(Gen(x ⇒ (x, i))).sample(p)
+        })
+      })
+    }
+  }
+
   // From fpinscala (Prop) <https://github.com/fpinscala/fpinscala>. -------| }
 
   // PRNG and State. --- {
@@ -114,7 +127,7 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
 
   // --- }
 
-  case class Gen[A](sample: State[PRNG, A]) {
+  case class Gen[+A](sample: State[PRNG, A]) {
 
     def flatMap[B](f: A ⇒ Gen[B]): Gen[B] = {
       Gen((x1: PRNG) ⇒ {
@@ -135,6 +148,10 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
             (str.last._1, str.map(_._2).toList)
           })
       )
+    }
+
+    def unsized: SGen[A] = {
+      SGen(x ⇒ this)
     }
 
   }
