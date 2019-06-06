@@ -4,7 +4,7 @@ import scalainitiatives.common.ScalaInitiativesExercise
 
 object FPISExerciseChapter08 extends ScalaInitiativesExercise {
 
-  // From fpinscala (PropOld) <https://github.com/fpinscala/fpinscala>. -------| {
+  // From fpinscala (Prop) <https://github.com/fpinscala/fpinscala>. -------| {
 
   type FailedCase = String
   type SuccessCount = Int
@@ -23,20 +23,43 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
     def isFalsified = true
   }
 
-  // case class PropOld(run: (TestCases, PRNG) ⇒ Result) {
+  case class PropOld(run: (TestCases, PRNG) ⇒ Result) {
 
-  // def forAll[A](as: Gen[A])(f: A ⇒ Boolean): Prop = Prop {
-  // (n: Int, rng: PRNG) ⇒ randomStream(as)(rng)
-  // .zip(Stream.from(0))
-  // .take(n)
-  // .map {
-  // case (a, i) ⇒ try {
-  // if (f(a)) Passed else Falsified(a.toString, i)
-  // } catch { case e: Exception ⇒ Falsified(buildMsg(a, e), i) }
-  // }
-  // .find(_.isFalsified)
-  // .getOrElse(Passed)
-  // }
+    def &&(that: PropOld): PropOld = {
+      PropOld((t, p) ⇒ {
+        val r1 = this.run(t, p)
+        val r2 = that.run(t, p)
+        if (r1.isFalsified) {
+          // ??: Does not cover the case of both being falsified.
+          r1
+        } else {
+          if (r2.isFalsified) {
+            r2
+          } else {
+            Passed
+          }
+        }
+      })
+    }
+
+    def ||(that: PropOld): PropOld = {
+      PropOld((t, p) ⇒ {
+        val r1 = this.run(t, p)
+        val r2 = that.run(t, p)
+        if (r1.isFalsified) {
+          if (r2.isFalsified) {
+            // ??: Does not cover the case of both being falsified.
+            r1
+          } else {
+            Passed
+          }
+        } else {
+          Passed
+        }
+      })
+    }
+
+  }
 
   def randomStream[A](g: Gen[A])(rng: PRNG): Stream[A] = {
     Stream.iterate(g.sample(rng))(x ⇒ g.sample(x._1)).map(_._2)
