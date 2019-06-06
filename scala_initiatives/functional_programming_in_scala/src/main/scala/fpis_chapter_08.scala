@@ -126,9 +126,14 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
   }
 
   def forAll[A](as: Gen[A])(f: A ⇒ Boolean): Prop = Prop {
-    (novar, n, rng) ⇒ randomStream(as)(rng)
+    (maxsize, n, rng) ⇒ {
+      val rs = randomStream(as)(rng)
         .zip(Stream.from(0))
         .take(n)
+      println("-" * 79)
+      println(rs.toList, n)
+      println("-" * 79)
+      val rsMap = rs
         .map {
           case (a, i) ⇒ try {
               if (f(a)) Passed else Falsified(a.toString, i)
@@ -136,6 +141,8 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
         }
         .find(_.isFalsified)
         .getOrElse(Passed)
+      rsMap
+    }
   }
 
   def forAll[A](g: SGen[A])(f: A ⇒ Boolean): Prop = {
@@ -157,6 +164,17 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
           .reduce(_ && _)
       prop.run(max, n, rng)
   }
+
+  def run(
+      p: Prop,
+      maxSize: Int = 100,
+      testCases: Int = 100,
+      rng: PRNG = PRNG(System.currentTimeMillis)
+  ): Unit =
+    p.run(maxSize, testCases, rng) match {
+      case Falsified(msg, n) ⇒ println(s"! Falsified after $n passed tests:\n $msg")
+      case Passed ⇒ println(s"+ OK, passed $testCases tests.")
+    }
 
   // From fpinscala (PropOld) <https://github.com/fpinscala/fpinscala>. -------| }
 
@@ -208,9 +226,13 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
             def s: Stream[(PRNG, A)] =
               Stream.iterate((p1, a))(x ⇒ this.sample(x._1))
             val str = s.take(i)
-            (str.last._1, str.map(_._2).toList)
+            (str.lastOption.getOrElse((p1, null))._1, str.map(_._2).toList)
           })
       )
+    }
+
+    def listOf1(size: Gen[Int]): Gen[List[A]] = {
+      ???
     }
 
     def unsized: SGen[A] = {
