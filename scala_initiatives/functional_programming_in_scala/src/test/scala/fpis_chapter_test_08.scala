@@ -115,18 +115,7 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
     SGen.listOf(g0To9).forSize(100).sample(p0)
   }
 
-  test("8.13: ???.") {
-
-    val smallInt = Gen.choose(-10, 10)
-    val maxProp = forAll(SGen.listOf(smallInt)) {
-      ns ⇒
-        val max = ns.max
-        !ns.exists(_ > max)
-    }
-
-    FPISExerciseChapter08.run(maxProp, 10, 10)
-
-  }
+  test("8.13: ???.") {}
   test("8.14: ???.") {}
   test("8.15: ???.") {}
   test("8.16: ???.") {}
@@ -139,6 +128,6 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
 
 // Run this in vim:
 //
-// vim source: 1,$-10s/=>/⇒/ge
+// vim source: 1,-10s/=>/⇒/ge
 //
 // vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2 spell spelllang=en:

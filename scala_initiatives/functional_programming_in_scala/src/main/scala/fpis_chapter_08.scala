@@ -87,71 +87,76 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
 
   type MaxSize = Int
 
-case class Prop(run: (MaxSize, TestCases, RNG) ⇒ Result) {
+  case class Prop(run: (MaxSize, TestCases, PRNG) ⇒ Result) {
 
-  def &&(p: Prop) = Prop { (max, n, rng) ⇒
-    run(max, n, rng) match {
-      case Passed | Proved ⇒ p.run(max, n, rng)
-      case x               ⇒ x
+    def &&(that: Prop): Prop = {
+      Prop((m, t, p) ⇒ {
+        val r1 = this.run(m, t, p)
+        val r2 = that.run(m, t, p)
+        if (r1.isFalsified) {
+          // ??: Does not cover the case of both being falsified.
+          r1
+        } else {
+          if (r2.isFalsified) {
+            r2
+          } else {
+            Passed
+          }
+        }
+      })
     }
-  }
 
-  def ||(p: Prop) = Prop { (max, n, rng) ⇒
-    run(max, n, rng) match {
-      // In case of failure, run the other prop.
-      case Falsified(msg, _) ⇒ p.tag(msg).run(max, n, rng)
-      case x                 ⇒ x
+    def ||(that: Prop): Prop = {
+      Prop((m, t, p) ⇒ {
+        val r1 = this.run(m, t, p)
+        val r2 = that.run(m, t, p)
+        if (r1.isFalsified) {
+          if (r2.isFalsified) {
+            // ??: Does not cover the case of both being falsified.
+            r1
+          } else {
+            Passed
+          }
+        } else {
+          Passed
+        }
+      })
     }
-  }
 
   }
 
-  def forAll[A](g: SGen[A])(f: A ⇒ Boolean): Prop ={
-    forAll(g(_))(f)
+  def forAll[A](as: Gen[A])(f: A ⇒ Boolean): Prop = Prop {
+    (novar, n, rng) ⇒ randomStream(as)(rng)
+        .zip(Stream.from(0))
+        .take(n)
+        .map {
+          case (a, i) ⇒ try {
+              if (f(a)) Passed else Falsified(a.toString, i)
+            } catch { case e: Exception ⇒ Falsified(buildMsg(a, e), i) }
+        }
+        .find(_.isFalsified)
+        .getOrElse(Passed)
   }
 
-  def forAll[A](as: Gen[A])(f: A ⇒ Boolean): Prop = Prop { (n, novar, rng) ⇒
-    randomStream(as)(rng)
-      .zip(Stream.from(0))
-      .take(n)
-      .map {
-        case (a, i) ⇒
-          try {
-            if (f(a)) Passed else Falsified(a.toString, i)
-          } catch { case e: Exception ⇒ Falsified(buildMsg(a, e), i) }
-      }
-      .find(_.isFalsified)
-      .getOrElse(Passed)
+  def forAll[A](g: SGen[A])(f: A ⇒ Boolean): Prop = {
+    forAll(x ⇒ g.forSize(x))(f)
   }
 
   def forAll[A](g: Int ⇒ Gen[A])(f: A ⇒ Boolean): Prop = Prop {
-    (max, n, rng) ⇒
-      val casesPerSize = (n - 1) / max + 1
-      val props: Stream[Prop] =
+    (max: MaxSize, n: TestCases, rng: PRNG) ⇒ val casesPerSize = (n + (max - 1)) / max
+      def props: Stream[Prop] =
         Stream.from(0).take((n min max) + 1).map(i ⇒ forAll(g(i))(f))
       val prop: Prop =
         props
           .map(
-            p ⇒
-              Prop { (max, n, rng) ⇒
-                p.run(max, casesPerSize, rng)
+            p ⇒ Prop {
+                (max, _, rng) ⇒ p.run(max, casesPerSize, rng)
               }
           )
           .toList
           .reduce(_ && _)
       prop.run(max, n, rng)
   }
-
-  def run(
-      p: Prop,
-      maxSize: Int = 100,
-      testCases: Int = 100,
-      rng: PRNG = PRNG(System.currentTimeMillis)
-  ): Unit =
-    p.run(maxSize, testCases, rng) match {
-      case Falsified(msg, n) ⇒ println(s"! Falsified after $n passed tests:\n $msg")
-      case Passed ⇒ println(s"+ OK, passed $testCases tests.")
-    }
 
   // From fpinscala (PropOld) <https://github.com/fpinscala/fpinscala>. -------| }
 
@@ -203,13 +208,9 @@ case class Prop(run: (MaxSize, TestCases, RNG) ⇒ Result) {
             def s: Stream[(PRNG, A)] =
               Stream.iterate((p1, a))(x ⇒ this.sample(x._1))
             val str = s.take(i)
-            (str.lastOption.getOrElse((p1, null))._1, str.map(_._2).toList)
+            (str.last._1, str.map(_._2).toList)
           })
       )
-    }
-
-    def listOf1(size: Gen[Int]): Gen[List[A]] = {
-      ???
     }
 
     def unsized: SGen[A] = {
