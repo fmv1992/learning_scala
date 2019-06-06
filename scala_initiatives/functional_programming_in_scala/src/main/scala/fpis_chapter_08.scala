@@ -4,7 +4,7 @@ import scalainitiatives.common.ScalaInitiativesExercise
 
 object FPISExerciseChapter08 extends ScalaInitiativesExercise {
 
-  // From fpinscala (Prop) <https://github.com/fpinscala/fpinscala>. -------| {
+  // From fpinscala (PropOld) <https://github.com/fpinscala/fpinscala>. -------| {
 
   type FailedCase = String
   type SuccessCount = Int
@@ -23,12 +23,53 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
     def isFalsified = true
   }
 
-  case class Prop(run: (TestCases, PRNG) ⇒ Result) {
+  // case class PropOld(run: (TestCases, PRNG) ⇒ Result) {
+
+  // def forAll[A](as: Gen[A])(f: A ⇒ Boolean): Prop = Prop {
+  // (n: Int, rng: PRNG) ⇒ randomStream(as)(rng)
+  // .zip(Stream.from(0))
+  // .take(n)
+  // .map {
+  // case (a, i) ⇒ try {
+  // if (f(a)) Passed else Falsified(a.toString, i)
+  // } catch { case e: Exception ⇒ Falsified(buildMsg(a, e), i) }
+  // }
+  // .find(_.isFalsified)
+  // .getOrElse(Passed)
+  // }
+
+  def randomStream[A](g: Gen[A])(rng: PRNG): Stream[A] = {
+    Stream.iterate(g.sample(rng))(x ⇒ g.sample(x._1)).map(_._2)
+  }
+
+  def buildMsg[A](s: A, e: Exception): String = {
+    s"test case: $s\n" +
+      s"generated an exception: ${e.getMessage}\n" +
+      s"stack trace:\n ${e.getStackTrace.mkString("\n")}"
+  }
+
+  case class SGen[+A](forSize: Int ⇒ Gen[A])
+
+  object SGen {
+
+    def listOf[A](g: Gen[A]): SGen[List[A]] = {
+      SGen(i ⇒ {
+        Gen(p ⇒ {
+          g.listOfNWithFlatMap(Gen(x ⇒ (x, i))).sample(p)
+        })
+      })
+    }
+
+  }
+
+  type MaxSize = Int
+
+  case class Prop(run: (MaxSize, TestCases, PRNG) ⇒ Result) {
 
     def &&(that: Prop): Prop = {
-      Prop((t, p) ⇒ {
-        val r1 = this.run(t, p)
-        val r2 = that.run(t, p)
+      Prop((m, t, p) ⇒ {
+        val r1 = this.run(m, t, p)
+        val r2 = that.run(m, t, p)
         if (r1.isFalsified) {
           // ??: Does not cover the case of both being falsified.
           r1
@@ -43,9 +84,9 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
     }
 
     def ||(that: Prop): Prop = {
-      Prop((t, p) ⇒ {
-        val r1 = this.run(t, p)
-        val r2 = that.run(t, p)
+      Prop((m, t, p) ⇒ {
+        val r1 = this.run(m, t, p)
+        val r2 = that.run(m, t, p)
         if (r1.isFalsified) {
           if (r2.isFalsified) {
             // ??: Does not cover the case of both being falsified.
@@ -62,7 +103,7 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
   }
 
   def forAll[A](as: Gen[A])(f: A ⇒ Boolean): Prop = Prop {
-    (n, rng) ⇒ randomStream(as)(rng)
+    (novar, n, rng) ⇒ randomStream(as)(rng)
         .zip(Stream.from(0))
         .take(n)
         .map {
@@ -74,28 +115,27 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
         .getOrElse(Passed)
   }
 
-  def randomStream[A](g: Gen[A])(rng: PRNG): Stream[A] = {
-    Stream.iterate(g.sample(rng))(x ⇒ g.sample(x._1)).map(_._2)
+  def forAll[A](g: SGen[A])(f: A ⇒ Boolean): Prop = {
+    forAll(x ⇒ g.forSize(x))(f)
   }
 
-  def buildMsg[A](s: A, e: Exception): String = {
-    s"test case: $s\n" +
-      s"generated an exception: ${e.getMessage}\n" +
-      s"stack trace:\n ${e.getStackTrace.mkString("\n")}"
+  def forAll[A](g: Int ⇒ Gen[A])(f: A ⇒ Boolean): Prop = Prop {
+    (max: MaxSize, n: TestCases, rng: PRNG) ⇒ val casesPerSize = (n + (max - 1)) / max
+      def props: Stream[Prop] =
+        Stream.from(0).take((n min max) + 1).map(i ⇒ forAll(g(i))(f))
+      val prop: Prop =
+        props
+          .map(
+            p ⇒ Prop {
+                (max, _, rng) ⇒ p.run(max, casesPerSize, rng)
+              }
+          )
+          .toList
+          .reduce(_ && _)
+      prop.run(max, n, rng)
   }
 
-  case class SGen[+A](forSize: Int ⇒ Gen[A]) {
-
-    def listOf[A](g: Gen[A]): SGen[List[A]] = {
-      SGen(i ⇒ {
-        Gen(p ⇒ {
-          g.listOfNWithFlatMap(Gen(x ⇒ (x, i))).sample(p)
-        })
-      })
-    }
-  }
-
-  // From fpinscala (Prop) <https://github.com/fpinscala/fpinscala>. -------| }
+  // From fpinscala (PropOld) <https://github.com/fpinscala/fpinscala>. -------| }
 
   // PRNG and State. --- {
 

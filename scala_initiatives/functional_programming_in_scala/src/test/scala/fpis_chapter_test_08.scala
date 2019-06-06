@@ -12,6 +12,7 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
   val g0To9: Gen[Int] = Gen.choose(0, 10)
   val g10To19: Gen[Int] = Gen.choose(10, 20)
   val p0 = PRNG(0)
+  val sg0To9: SGen[Int] = SGen(x ⇒ g0To9)
 
   test(
     "8.1: Thinking about the properties of a `sum: List[Int] ⇒ Int` function."
@@ -38,7 +39,7 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
     //
     // 1. The max function should find the element that is greater than or equal to any other element in a list.
   }
-  test("8.3: Implement && as a method of Prop.") {
+  test("8.3: Implement && as a method of PropOld.") {
     // Done.
   }
   test("8.4: Implementation of choose.") {
@@ -109,7 +110,11 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
   test("8.11: Define convenience functions for SGen.") {
     // `SKIPPED`: marked as optional.
   }
-  test("8.12: Implement listOf.") {}
+
+  test("8.12: Implement listOf.") {
+    SGen.listOf(g0To9).forSize(100).sample(p0)
+  }
+
   test("8.13: ???.") {}
   test("8.14: ???.") {}
   test("8.15: ???.") {}
