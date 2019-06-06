@@ -17,15 +17,18 @@ else
     make clean_fpis_chapter
 fi
 
-git diff --name-only --cached \
+git diff --name-only --cached --diff-filter=ACMRTUXB \
     | grep '\.scala' \
     | parallel \
         -I % \
         --verbose \
         --jobs $((2*$(nproc))) \
         "vim -i NONE -n -c 'VimScalafmt' -c 'noautocmd x!' %"
-git diff --name-only --cached \
-    | xargs --verbose git add
+git diff --name-only --cached --diff-filter=ACMRTUXB \
+    | xargs --verbose git add --force
+# --diff-filter=ACDMRTUXB
+#                 ↑
+# Removed deleted parameter.
 
 # https://stackoverflow.com/questions/3466166/how-to-check-if-running-in-cygwin-mac-or-linux
 cd ./scala_initiatives/

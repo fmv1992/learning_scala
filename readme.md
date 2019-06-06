@@ -35,11 +35,11 @@ The following tags are used in this project:
 
 *   `NOTE:`: Notes for exercise or code; these are not code comments.
 
-*   Special mixed natural language and code markers:
+*   `Written answer:`: Written answer to the question in case tests are not enough.
 
-    *   `Written answer:`: Written answer to the question in case tests are not enough.
+*   ~~`Commit: 'cfe6164'` or `commit: 'cfe6164'` (it has to have 7 chars): Reference to a commit inside the source files.~~
 
-    *   `Commit: 'cfe6164'` or `commit: 'cfe6164'` (it has to have 7 chars): Reference to a commit inside the source files.
+    *   Commit tags: `comm0123456` tags.
 
 *   `IMPROVEMENT:`: Notes for exercise or code; these are not code comments.
 
@@ -48,18 +48,6 @@ The following tags are used in this project:
 *   `ERRATA:`: Erratas from the book.
 
 *   `CORRECT:`: Correct this part of code after correcting a chapter.
-
-*   Code cited in comments/answers:
-
-        // Written answer:
-        //
-        // Deliberation...
-        //
-        // ```
-        // my code goes here without extra indent
-        // ```
-        //
-        // Deliberation...
 
 ## Resources
 
