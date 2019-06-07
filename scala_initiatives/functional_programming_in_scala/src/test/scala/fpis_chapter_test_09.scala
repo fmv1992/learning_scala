@@ -53,7 +53,11 @@ class FPISTestChapter09 extends ScalaInitiativesTest {
     //
     // 1. Product must fail if any of the parsers fail.
     // 2. Product must succeed for two successful parsers.
-    // 3. Product is not associative.
+    // 3. Product is not associative. → Wrong, it actually it is:
+    // """
+    // `product` is associative. These two expressions are "roughly" equal:
+    // """
+    // However I don't know why.
   }
 
   // Base64 hint for exercise 9.3:

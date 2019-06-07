@@ -48,12 +48,14 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
     def slice[A](p: Parser[A]): Parser[String]
 
     def many1[A](p: Parser[A]): Parser[List[A]] = {
-      many(
-        product(p, p).map(x ⇒ x._1)
-      )
+      // Corrected from exercises; then reimplemented some hours later.
+      // Use map2.
+      // Use many.
+      map2(p, many(p))(_ :: _)
     }
 
     def many[A](p: Parser[A]): Parser[List[A]] = {
+      // Corrected from exercises; then reimplemented some hours later.
       // or
       // map2
       // succeed
@@ -61,11 +63,18 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
       // a parser:
       // p | succeed(arg)
       // With map2 we can access this arg.
-      map2(p, many(p))(_ :: _) or succeed(List())
+      (
+        map2(p, many(p))(_ :: _)
+          | succeed(List())
+      )
     }
+
+    // "Way of running one parser, followed by another, assuming the first is
+    // successful."
     def product[A, B](p: Parser[A], p2: Parser[B]): Parser[(A, B)]
 
     def map2[A, B, C](p: Parser[A], p2: Parser[B])(f: (A, B) ⇒ C): Parser[C] = {
+      // From book: map(product(p, p2))(f.tupled)
       product(p, p2).map(x ⇒ f(x._1, x._2))
     }
 
