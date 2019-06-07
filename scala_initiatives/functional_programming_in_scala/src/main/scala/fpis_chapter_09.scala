@@ -21,7 +21,20 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
     // https://docs.scala-lang.org/tour/self-types.html
     self ⇒ // Dummy comment.
 
-    def listOfN[A](n: Int, p: Parser[A]): Parser[List[A]]
+    def listOfN[A](n: Int, p: Parser[A]): Parser[List[A]] = {
+      // Use map2.
+      // Use succeed.
+      //
+      //
+      // run(listOfN(3, "ab" | "cad"))("ababcad") == Right("ababcad")
+      // run(listOfN(3, "ab" | "cad"))("cadabab") == Right("cadabab")
+      // run(listOfN(3, "ab" | "cad"))("ababab") == Right("ababab")
+      if (n == 0) {
+        succeed(List())
+      } else {
+        map2(p, listOfN(n - 1, p))(_ :: _)
+      }
+    }
 
     def or[A](s1: Parser[A], s2: Parser[A]): Parser[A]
 
