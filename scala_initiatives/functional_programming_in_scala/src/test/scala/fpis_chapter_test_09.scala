@@ -8,9 +8,15 @@ class FPISTestChapter09 extends ScalaInitiativesTest {
 
   // Declare constants.
 
+  test("9.0: Discussion on parsers.") {}
+
   // Base64 hint for exercise 9.1:
   // VHJ5IG1hcHBpbmcgb3ZlciB0aGUgcmVzdWx0IG9mIGBwcm9kdWN0YC4=
-  test("9.1: ???.") {}
+  test("9.1: ???.") {
+
+    // run(or(string("abra"),string("cadabra")))("abra") == Right("abra")
+
+  }
 
   // Base64 hint for exercise 9.2:
   // TXVsdGlwbGljYXRpb24gb2YgbnVtYmVycyBpcyBhc3NvY2lhdGl2ZSwgYGEgKiAoYiAqIGMpID09
