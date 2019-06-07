@@ -24,7 +24,12 @@ lazy val commonSettings = Seq(
     //                                                                   ↑↑↑↑↑
     // Removed on commit 'cd9d482' to enable 'trait ScalaInitiativesTest' define
     // 'namedTest'.
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5",
+    libraryDependencies ++= Seq(
+      "org.scalatest" %% "scalatest" % "3.0.5",
+      "fpinscala" %% "fpinscala" % "dc04eb6"),
+      // "fpinscala" %% "fpinscala" % "0.1-SNAPSHOT"),
+
+
 
     scalacOptions ++= Seq("-feature", "-deprecation", "-Xfatal-warnings")
     )
@@ -49,7 +54,7 @@ lazy val fpis = (project in file("functional_programming_in_scala")).settings(
     commonSettings).dependsOn(common)
 
 // Root project.
-lazy val root = (project in file(".")).aggregate(
+lazy val root = (project in file(".")).settings(commonSettings).aggregate(
     common,
     spoj,
     programmingInScala,

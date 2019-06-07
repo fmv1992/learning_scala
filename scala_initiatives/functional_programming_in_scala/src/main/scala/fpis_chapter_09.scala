@@ -3,6 +3,8 @@ package scalainitiatives.functional_programming_in_scala
 import scala.language.higherKinds
 import scala.language.implicitConversions
 
+import fpinscala.testing._
+
 import scalainitiatives.common.ScalaInitiativesExercise
 
 object FPISExerciseChapter09 extends ScalaInitiativesExercise {
@@ -10,8 +12,11 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
   trait Parsers[ParseError, Parser[+ _]] {
 
     // https://docs.scala-lang.org/tour/self-types.html
-    self ⇒ def run[A](p: Parser[A])(input: String): Either[ParseError, A]
+    self ⇒ 
+    def run[A](p: Parser[A])(input: String): Either[ParseError, A]
     def char(c: Char): Parser[Char]
+
+    def listOfN[A](n: Int, p: Parser[A]): Parser[List[A]]
 
     def or[A](s1: Parser[A], s2: Parser[A]): Parser[A]
 

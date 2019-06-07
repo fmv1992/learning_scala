@@ -8,7 +8,37 @@ class FPISTestChapter09 extends ScalaInitiativesTest {
 
   // Declare constants.
 
-  test("9.0: Discussion on parsers.") {}
+  test("9.0: Discussion on parsers.") {
+    // Tasks:
+    //
+    //    1. Meaning that a Parser[A] can return a type B.
+    //    2. The parser necessarily will have its rules expressed in it. Thus
+    //       when it fails it can at least inform which rule failed. Maybe give
+    //       some extra hints? Some parsers like the 'repetitor' parser could
+    //       say that.
+    //    3. Same as 1.
+    //
+    // Considerations:
+    //
+    //    1. In this case an internal "state/representation" (counter in this
+    //       case) could better encode the results than a list.
+    //    2. The repetitions can have a more general form. Eg: A ⇒ B for
+    //       a repeating A.
+    //    3. The error could give context on the parsed material (which can be
+    //       huge in its entirety. Also the rule which caused the error should
+    //       be explicited.
+    //    4. It does not. Both conditions could happen at the same time, which
+    //       one takes precedence? E.g.: " (az) | (z) " for "azz". The matches
+    //       are overlaping.
+    //    5. The or operator is associative, i.e. The parenthesis does not
+    //       matter in this case.
+    //    6. Laws and combinators:
+    //        a. Laws:
+    //          i. Identity law (already stated):
+    //             run(a)(a.toString) == Right(a)
+    //          i. Disjoint law: ∀ x,y | x ∩ y = ∅
+    //             run(x)(y) == ParseError
+  }
 
   // Base64 hint for exercise 9.1:
   // VHJ5IG1hcHBpbmcgb3ZlciB0aGUgcmVzdWx0IG9mIGBwcm9kdWN0YC4=
