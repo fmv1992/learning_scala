@@ -45,14 +45,20 @@ class FPISTestChapter09 extends ScalaInitiativesTest {
   test("9.1: Implementation of map2 and many1.") {}
 
   // Base64 hint for exercise 9.2:
-  // TXVsdGlwbGljYXRpb24gb2YgbnVtYmVycyBpcyBhc3NvY2lhdGl2ZSwgYGEgKiAoYiAqIGMpID09
-  // IChhICogYikgKiBjYC4gSXMgdGhlcmUgYW4gYW5hbG9nb3VzIHByb3BlcnR5IGZvciBwYXJzZXJz
-  // PyBXaGF0IGNhbiB5b3Ugc2F5IGFib3V0IHRoZSByZWxhdGlvbnNoaXAgYmV0d2VlbiBgbWFwYCBh
-  // bmQgYHByb2R1Y3RgPwo=
-  test("9.2: ???.") {}
+  // Multiplication of numbers is associative, `a * (b * c) == (a * b) * c`. Is
+  // there an analogous property for parsers? What can you say about the
+  // relationship between `map` and `product`?
+  test("9.2: Laws for product.") {
+    // Written answer:
+    //
+    // 1. Product must fail if any of the parsers fail.
+    // 2. Product must succeed for two successful parsers.
+    // 3. Product is not associative.
+  }
 
   // Base64 hint for exercise 9.3:
-  // LQo=
+  // -
+  // Answered from book.
   test("9.3: ???.") {}
 
   // Base64 hint for exercise 9.4:

@@ -52,7 +52,17 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
         product(p, p).map(x ⇒ x._1)
       )
     }
-    def many[A](p: Parser[A]): Parser[List[A]]
+
+    def many[A](p: Parser[A]): Parser[List[A]] = {
+      // or
+      // map2
+      // succeed
+      // Int believe we could but suceed needs an argument in order to become
+      // a parser:
+      // p | succeed(arg)
+      // With map2 we can access this arg.
+      map2(p, many(p))(_ :: _) or succeed(List())
+    }
     def product[A, B](p: Parser[A], p2: Parser[B]): Parser[(A, B)]
 
     def map2[A, B, C](p: Parser[A], p2: Parser[B])(f: (A, B) ⇒ C): Parser[C] = {
