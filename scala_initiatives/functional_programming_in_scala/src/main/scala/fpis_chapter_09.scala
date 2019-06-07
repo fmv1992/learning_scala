@@ -2,6 +2,7 @@ package scalainitiatives.functional_programming_in_scala
 
 import scala.language.higherKinds
 import scala.language.implicitConversions
+import scala.util.matching.Regex
 
 import fpinscala.testing._
 
@@ -9,14 +10,7 @@ import scalainitiatives.common.ScalaInitiativesExercise
 
 object FPISExerciseChapter09 extends ScalaInitiativesExercise {
 
-  trait ParseError
-
-  trait Parser[+A] {
-    def map[B](f: A ⇒ B): Parser[B]
-  }
-
-  // trait Parsers[ParseError, Parser[+ _]] {
-  trait Parsers {
+  trait Parsers[ParseError, Parser[+ _]] {
 
     // https://docs.scala-lang.org/tour/self-types.html
     self ⇒ // Dummy comment.
@@ -45,14 +39,16 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
     implicit def asStringParser[A](a: A)(
         implicit f: A ⇒ Parser[String]
     ): ParserOps[String] = ParserOps(f(a))
+    implicit def regex(r: Regex): Parser[String]
 
     // def map[A,B](a: Parser[A])(f: A ⇒ B): Parser[B]
 
     case class ParserOps[A](p: Parser[A]) {
-      def |[B >: A](p2: Parser[B]): Parser[B] = self.or(p, p2)
+      def |[B >: A](p2: ⇒ Parser[B]): Parser[B] = self.or(p, p2)
       def or[B >: A](p2: ⇒ Parser[B]): Parser[B] = self.or(p, p2)
-      def **[B, C](p2: Parser[B]): Parser[(A, B)] = self.product(p, p2)
-      def product[B, C](p2: Parser[B]): Parser[(A, B)] = p ** p2
+      def **[B, C](p2: ⇒ Parser[B]): Parser[(A, B)] = self.product(p, p2)
+      def product[B, C](p2: ⇒ Parser[B]): Parser[(A, B)] = p ** p2
+      def map[B](f: A ⇒ B): Parser[B] = self.map(p)(f)
     }
 
     def char(c: Char): Parser[Char] = string(c.toString) map (_.charAt(0))
@@ -84,23 +80,41 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
 
     // "Way of running one parser, followed by another, assuming the first is
     // successful."
-    def product[A, B](p: Parser[A], p2: Parser[B]): Parser[(A, B)]
+    def product[A, B](p: Parser[A], p2: ⇒ Parser[B]): Parser[(A, B)]
 
-    def map2[A, B, C](p: Parser[A], p2: Parser[B])(f: (A, B) ⇒ C): Parser[C] = {
+    def map2[A, B, C](p: Parser[A], p2: ⇒ Parser[B])(
+        f: (A, B) ⇒ C
+    ): Parser[C] = {
       // From book: map(product(p, p2))(f.tupled)
       product(p, p2).map(x ⇒ f(x._1, x._2))
+      flatMap(p)(x ⇒ {
+        p2.map(y ⇒ f(x, y))
+      })
     }
+
+    def flatMap[A, B](p: Parser[A])(f: A ⇒ Parser[B]): Parser[B]
+
+    def map[A, B](a: Parser[A])(f: A ⇒ B): Parser[B] = {
+      flatMap(a)(x ⇒ succeed(f(x)))
+    }
+
+    // """
+    // We now have an even smaller set of just six primitives: string , regex
+    // , slice , succeed , or , and flatMap . But we also have more power than
+    // before. With flatMap , instead of the less-general map and product , we
+    // can parse not just arbitrary context- free grammars like JSON , but
+    // context-sensitive grammars as well, including extremely complicated ones
+    // like C++ and PERL !
+    // """
 
   }
 
   // object Parsers {
-
   //   // ???: These are actually defined in the trait. What's the meaning of that
   //   // since they are used to instantiate a new parser?
   //   //
   //   // def char(c: Char): Parser[Char] = string(c.toString) map (_.charAt(0))
   //   // def succeed[A](a: A): Parser[A] = string("") map (_ ⇒ a)
-
   // }
 
   // Currently it breaks code:

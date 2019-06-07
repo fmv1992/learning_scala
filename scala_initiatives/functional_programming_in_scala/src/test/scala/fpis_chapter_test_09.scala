@@ -63,20 +63,39 @@ class FPISTestChapter09 extends ScalaInitiativesTest {
   // Base64 hint for exercise 9.3:
   // -
   // Answered from book.
-  test("9.3: ???.") {}
+  test("9.3: Define map in terms of or, map2 and succeed.") {}
 
   // Base64 hint for exercise 9.4:
   // LQ==
-  test("9.4: ???.") {}
+  test("9.4: Implement listOfN using map2 and succeed.") {}
 
   // Base64 hint for exercise 9.5:
   // LQ==
-  test("9.5: ???.") {}
+  test("9.5: Another approach to handle non-strictness and infinite recursion.") {
+    // `SKIPPED`: marked as optional.
+  }
 
   // Base64 hint for exercise 9.6:
   // R2l2ZW4gYSBzdHJpbmcgb2YgZGlnaXRzLCBgc2AsIHlvdSBjYW4gdXNlIGBzLnRvSW50YCB0byBj
   // b252ZXJ0IHRoYXQgdG8gYW4gYEludGAuCg==
-  test("9.6: ???.") {}
+  test("9.6: ???.") {
+    // Written exercises:
+    //
+    // Implemented with a for loop in the book.
+    //
+    // I did not understand the point of this exercise (what is it asking?)
+    //
+    // def Exercise9dot6(s: String) = {
+    //   val reg: Regex = "([0-9]+)([a-z])([a-z]+)".r
+    //   val p1: Parser[String] = regex(reg)
+    //   val p2: Parser[String] = flatMap(p1)( x ⇒ {
+    //     val rmi: Regex.MatchIterator = x.r.findAllIn(s)
+    //     val n: Int = rmi.group(1).toInt
+    //     val c: String = rmi.group(2)
+    //     string(n.toString) | string(c * n)
+    //   })
+    // }
+  }
 
   // Base64 hint for exercise 9.7:
   // VXNlIGBmbGF0TWFwYCBhbmQgYHN1Y2NlZWRgLg==
@@ -99,6 +118,8 @@ class FPISTestChapter09 extends ScalaInitiativesTest {
   // Base64 hint for exercise 9.10:
   // LQ==
   test("9.10: ???.") {}
+
+  // ???: Go back to 9.5.
 
   // Base64 hint for exercise 9.11:
   // SGVyZSBhcmUgdHdvIG9wdGlvbnM6IHdlIGNvdWxkIHJldHVybiB0aGUgbW9zdCByZWNlbnQgZXJy
