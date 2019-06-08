@@ -1,6 +1,6 @@
 package scalainitiatives.functional_programming_in_scala
 
-// import fpinscala
+import fpinscala.testing
 
 import FPISExerciseChapter10._
 
@@ -38,7 +38,20 @@ class FPISTestChapter10 extends ScalaInitiativesTest {
   // WW91IHdpbGwgbmVlZCB0byBnZW5lcmF0ZSB0aHJlZSB2YWx1ZXMgb2YgdHlwZSBgQWAgZm
   // 9yIHRlc3RpbmcgYXNzb2NpYXRpdml0eS4gV3JpdGUgYSBuZXcgYEdlbmAgY29tYmluYXRv
   // ciBmb3IgdGhpcyBpZiBuZWNlc3Nhcnku
-  test("10.4: Monoid laws.") {}
+  test("10.4: Monoid laws.") {
+    // println(fpinscala.testing.Gen.boolean.listOfN(10).sample.run(defaultRNG))
+    val p1 = Laws.applyingZero(booleanAnd, fpinscala.testing.Gen.boolean)
+    fpinscala.testing.Prop.run(p1)
+    val p2 =
+      Laws.associativity(intMultiplication, fpinscala.testing.Gen.choose(0, 10))
+    fpinscala.testing.Prop.run(p2)
+    val p3 = Laws.applyingZero(
+      faultyIntMultiplication,
+      fpinscala.testing.Gen.choose(0, 10)
+    )
+    // p3.run(100, 100, defaultRNG) shouldBe a [Falsified]
+    assert(p3.run(100, 100, defaultRNG).isFalsified)
+  }
 
   // Base64 hint for exercise 10.5:
   // WW91IGNhbiBgbWFwYCBhbmQgdGhlbiBgY29uY2F0ZW5hdGVgLCBidXQgdGhhdCB3aWxsIG

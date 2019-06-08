@@ -4,11 +4,14 @@ package scalainitiatives.functional_programming_in_scala
 // import scala.language.implicitConversions
 // import scala.util.matching.Regex
 
-// import fpinscala
+import fpinscala.testing._
+import fpinscala.state.RNG
 
 import scalainitiatives.common.ScalaInitiativesExercise
 
 object FPISExerciseChapter10 extends ScalaInitiativesExercise {
+
+  val defaultRNG: RNG = RNG.Simple(System.currentTimeMillis)
 
   trait Monoid[A] {
     def op(a1: A, a2: A): A
@@ -35,6 +38,11 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
     val zero = 1
   }
 
+  val faultyIntMultiplication: Monoid[Int] = new Monoid[Int] {
+    def op(a1: Int, a2: Int) = a1 * a2
+    val zero = 2
+  }
+
   val booleanOr: Monoid[Boolean] = new Monoid[Boolean] {
     def op(a1: Boolean, a2: Boolean) = a1 || a2
     val zero = false
@@ -59,6 +67,29 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
       a1 compose a2
     }
     val zero = identity(_)
+  }
+
+  // object Laws {
+  //   def equal[A](p1: Parser[A], p2: Parser[A])(in: Gen[String]): Prop =
+  //     forAll(in)(s ⇒ run(p1)(s) == run(p2)(s))
+  //   def mapLaw[A](p: Parser[A])(in: Gen[String]): Prop =
+  //     equal(p, p.map(a ⇒ a))(in)
+  // }
+  object Laws {
+
+    def applyingZero[A](m: Monoid[A], gen: Gen[A]): Prop = {
+      Prop.forAll(gen)(x ⇒ m.op(x, m.zero) == x)
+    }
+
+    def associativity[A](m: Monoid[A], gen: Gen[A]): Prop = {
+      val gen3A: Gen[(A, A, A)] = gen.listOfN(3).map(x ⇒ (x(0), x(1), x(2)))
+      Prop.forAll(gen3A)(x ⇒ {
+        val (x1, x2, x3) = x
+        (m.op(m.op(x1, x2), x3)
+          == m.op(x1, m.op(x2, x3)))
+      })
+    }
+    // def monoidLaws[A](m: Monoid[A], gen: Gen[A]): Prop
   }
 
 }
