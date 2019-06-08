@@ -148,7 +148,7 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
       val numbersign = (string("+") | string("-") | succeed("")).slice
       val dot = (string(".") | succeed("")).slice
 
-      def followedByComma[A](x: Parser[A]) = x ** many(",")
+      def followedByComma[A](x: Parser[A]) = x ** (string(",") | succeed(""))
 
       val jbool: Parser[String] = string("true") | string("false")
       val jnumber: Parser[String] =
@@ -163,10 +163,14 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
             .reduce(_ | _)
           + "]")
 
-      val jboolfm: Parser[JSON] = jbool.map(
+      // val jboolfm: Parser[JSON] = jbool.map((x: String) ⇒ x match {
+      //   case "true" ⇒ JBool(true)
+      //   case "false" ⇒ JBool(false)
+      //   case _ ⇒ throw new Exception()})
+      val jboolfm: Parser[JSON] = flatMap(jbool)(
         (x: String) ⇒ x match {
-            case "true" ⇒ JBool(true)
-            case "false" ⇒ JBool(false)
+            case "true" ⇒ succeed(JBool(true))
+            case "false" ⇒ succeed(JBool(true))
             case _ ⇒ throw new Exception()
           }
       )
