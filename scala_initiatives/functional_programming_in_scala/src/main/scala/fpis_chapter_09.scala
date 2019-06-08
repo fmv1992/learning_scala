@@ -133,16 +133,34 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
   trait JSON
 
   object JSON {
-    case object JNull extends JSON
-    case class JNumber(get: Double) extends JSON
-    case class JString(get: String) extends JSON
-    case class JBool(get: Boolean) extends JSON
     case class JArray(get: IndexedSeq[JSON]) extends JSON
+    case class JBool(get: Boolean) extends JSON
+    case class JNumber(get: Double) extends JSON
     case class JObject(get: Map[String, JSON]) extends JSON
+    case class JString(get: String) extends JSON
+    case object JNull extends JSON
 
     def jsonParser[Err, Parser[+ _]](P: Parsers[Err, Parser]): Parser[JSON] = {
       import P._
       val spaces = char(' ').many.slice
+      val digits = string("0987654321").many.slice
+      val numbersign = (string("+") | string("-") | succeed("")).slice
+      val dot = (string(".") | succeed("")).slice
+
+      def followedByComma[A](x: Parser[A]) = x ** many(",")
+
+      val jbool: Parser[String] = string("true") | string("false")
+      val jnumber: Parser[String] =
+        (numbersign ** digits ** dot ** (digits | succeed(""))).slice
+      val jstring: Parser[String] = regex("\".*\"".r)
+      val jobj: Parser[(String, JSON)] = jstring ** jsonParser(P)
+      val jnull: Parser[String] = string("null")
+      def jarr: Parser[String] =
+        ("["
+          + List(jbool, jnumber, jstring, jobj, jnull, jarr)
+            .map(followedByComma(_))
+            .reduce(_ | _)
+          + "]")
       // ...
       ???
     }
