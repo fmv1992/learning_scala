@@ -12,14 +12,19 @@ class FPISTestChapter10 extends ScalaInitiativesTest {
 
   // Base64 hint for exercise 10.1:
   // LQ==
-  test("10.1: Define monoid instances.") {}
+  test("10.1: Define monoid instances.") {
+    listMonoid.op(List('a'), List('b'))
+  }
 
   // Base64 hint for exercise 10.2:
   // QmVjYXVzZSB3ZSBhcmUgYWJzdHJhY3QgaW4gdGhlIHR5cGUgcGFyYW1ldGVyIGBBYCwgd2
   // UgYXJlIGxpbWl0ZWQgaW4gdGhlIG51bWJlciBvZiBwb3NzaWJsZSBpbXBsZW1lbnRhdGlv
   // bnMuIEJ1dCB0aGVyZSdzIG1vcmUgdGhhbiBvbmUgaW1wbGVtZW50YXRpb24gdGhhdCBtZW
   // V0cyB0aGUgbW9ub2lkIGxhd3Mu
-  test("10.2: Monoid for option.") {}
+  test("10.2: Monoid for option.") {
+    // Actually it just says combine instances. This is rather vague.
+    optionMonoid.op(Option(1), None)
+  }
 
   // Base64 hint for exercise 10.3:
   // QWdhaW4gd2UgYXJlIGxpbWl0ZWQgaW4gdGhlIG51bWJlciBvZiB3YXlzIHdlIGNhbiBjb2
