@@ -163,19 +163,20 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
             .reduce(_ | _)
           + "]")
 
-      // val jboolfm: Parser[JSON] = jbool.map((x: String) ⇒ x match {
-      //   case "true" ⇒ JBool(true)
-      //   case "false" ⇒ JBool(false)
-      //   case _ ⇒ throw new Exception()})
-      val jboolfm: Parser[JSON] = flatMap(jbool)(
+      val jboolfm: Parser[JSON] = jbool.map(
         (x: String) ⇒ x match {
-            case "true" ⇒ succeed(JBool(true))
-            case "false" ⇒ succeed(JBool(true))
+            case "true" ⇒ JBool(true)
+            case "false" ⇒ JBool(false)
             case _ ⇒ throw new Exception()
           }
       )
+      val jnumberfm = jnumber.map(x ⇒ JNumber(x.toDouble))
+      val jstringfm = jstring.map(JString(_))
+      val jobjfm = jobj.map(x ⇒ JObject(Map(x)))
+      val jnullfm = jnull.map(x ⇒ JNull)
+      val jarrfm = jarr.map(x ⇒ null)
 
-      ???
+      (jboolfm | jnumberfm | jstringfm | jnullfm | jobjfm | jarrfm)
     }
 
   }
