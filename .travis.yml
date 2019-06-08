@@ -8,8 +8,11 @@ scala:
 
 branches:
   only:
-    - master
     - dev
+    - dev_unstable
+    - master
+
+before_install: bash -xv ./other_code/travis_ci/install_fpinscala.sh
 
 script: cd ./scala_initiatives/ && sbt compile && sbt test
 
