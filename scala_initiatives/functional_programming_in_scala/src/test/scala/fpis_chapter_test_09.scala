@@ -80,7 +80,7 @@ class FPISTestChapter09 extends ScalaInitiativesTest {
   // Base64 hint for exercise 9.6:
   // R2l2ZW4gYSBzdHJpbmcgb2YgZGlnaXRzLCBgc2AsIHlvdSBjYW4gdXNlIGBzLnRvSW50YCB0byBj
   // b252ZXJ0IHRoYXQgdG8gYW4gYEludGAuCg==
-  test("9.6: ???.") {
+  test("9.6: Write a context-sensitive parser.") {
     // Written exercises:
     //
     // Implemented with a for loop in the book.
@@ -101,11 +101,15 @@ class FPISTestChapter09 extends ScalaInitiativesTest {
 
   // Base64 hint for exercise 9.7:
   // VXNlIGBmbGF0TWFwYCBhbmQgYHN1Y2NlZWRgLg==
-  test("9.7: ???.") {}
+  test("9.7: Implementation of product and map2 using flatMap.") {
+    // Done.
+  }
 
   // Base64 hint for exercise 9.8:
   // LQo=
-  test("9.8: ???.") {}
+  test("9.8: Map in terms of flatMap.") {
+    // Done.
+  }
 
   // Base64 hint for exercise 9.9:
   // Rm9yIHRoZSB0b2tlbnMgb2YgeW91ciBncmFtbWFyLCBpdCdzIG9mdGVuIGEgZ29vZCBpZGVhIHRv
@@ -116,65 +120,17 @@ class FPISTestChapter09 extends ScalaInitiativesTest {
   // aGUgc2VxdWVuY2UsIGFuZCB5b3UnbGwgcHJvYmFibHkgd2FudCB0byBpbnRyb2R1Y2UgY29tYmlu
   // YXRvcnMgZm9yIHRoaXMu
   test("9.9: Implement my JSON parser!") {
-
-    // Ok the examples from the book are much more complicated, they change the
-    // signatures defined so far and are not easily transposable.
-
-    // Examples from the answers.
-
-    /**
-      * JSON parsing example.
-      */
-    object JSONExample extends App {
-      val jsonTxt =
-        """
-        {
-          "Company name" : "Microsoft Corporation",
-          "Ticker"  : "MSFT",
-          "Active"  : true,
-          "Price"   : 30.66,
-          "Shares outstanding" : 8.38e9
-        }
-        """
-      // Adjust for array once.
-      //"Shares outstanding" : 8.38e9,
-      //"Related companies" : [ "HPQ", "IBM", "YHOO", "DELL", "GOOG" ]
-
-      val malformedJson1 = """
-        {
-          "Company name" ; "Microsoft Corporation"
-        }
-        """
-
-      val malformedJson2 = """
-        [
-        [ "HPQ", "IBM",
-        "YHOO", "DELL" ++
-        "GOOG"
-        ]
-        ]
-        """
-
-      // val P = fpinscala.parsing.Reference
-      // import fpinscala.parsing.ReferenceTypes.Parser
-
-      // def printResult[E](e: Either[E, JSON]) =
-      // e.fold(println, println)
-
-      val P = fpinscala.parsing.Reference
-      val json: Parsers[JSON] = JSON.jsonParser(P)
-      printResult { P.run(json)(jsonTxt) }
-      // println("--")
-      // printResult { P.run(json)(malformedJson1) }
-      // println("--")
-      // printResult { P.run(json)(malformedJson2) }
-    }
-
+    // Written answer:
+    //
+    // This part is almost impossible. The implementation in the book uses
+    // different signatures. There is no way to bridge this gap on your own.
   }
 
   // Base64 hint for exercise 9.10:
   // LQ==
-  test("9.10: ???.") {}
+  test("9.10: ???.") {
+    // `SKIPPED`: marked as optional.
+  }
 
   // ???: Go back to 9.5.
 
@@ -182,41 +138,57 @@ class FPISTestChapter09 extends ScalaInitiativesTest {
   // SGVyZSBhcmUgdHdvIG9wdGlvbnM6IHdlIGNvdWxkIHJldHVybiB0aGUgbW9zdCByZWNlbnQgZXJy
   // b3IgaW4gdGhlIGBvcmAgY2hhaW4sIG9yIHdlIGNvdWxkIHJldHVybiB3aGljaGV2ZXIgZXJyb3Ig
   // b2NjdXJyZWQgYWZ0ZXIgZ2V0dGluZyBmdXJ0aGVzdCBpbnRvIHRoZSBpbnB1dCBzdHJpbmcu
-  test("9.11: ???.") {}
+  test("9.11: ???.") {
+    // `SKIPPED`: marked as optional.
+  }
 
   // Base64 hint for exercise 9.12:
   // LQ==
-  test("9.12: ???.") {}
+  test("9.12: ???.") {
+    // `SKIPPED`: marked as optional.
+  }
 
   // Base64 hint for exercise 9.13:
   // LQ==
-  test("9.13: ???.") {}
+  test("9.13: ???.") {
+    // `SKIPPED`: marked as optional.
+  }
 
   // Base64 hint for exercise 9.14:
   // WW91IG1heSB3YW50IGBzdHJpbmdgIHRvIHJlcG9ydCB0aGUgaW1tZWRpYXRlIGNhdXNlIG9mIGZh
   // aWx1cmUgKHdoaWNoZXZlciBjaGFyYWN0ZXIgZGlkbid0IG1hdGNoKSwgYXMgd2VsbCBhcyB0aGUg
   // b3ZlcmFsbCBzdHJpbmcgYmVpbmcgcGFyc2VkLg==
-  test("9.14: ???.") {}
+  test("9.14: ???.") {
+    // `SKIPPED`: marked as optional.
+  }
 
   // Base64 hint for exercise 9.15:
   // LQ==
-  test("9.15: ???.") {}
+  test("9.15: ???.") {
+    // `SKIPPED`: marked as optional.
+  }
 
   // Base64 hint for exercise 9.16:
   // LQ==
-  test("9.16: ???.") {}
+  test("9.16: ???.") {
+    // `SKIPPED`: marked as optional.
+  }
 
   // Base64 hint for exercise 9.17:
   // VHJ5IGFkZGluZyBhbm90aGVyIHBpZWNlIG9mIHN0YXRlIHRvIGBMb2NhdGlvbmAsIGBpc1NsaWNl
   // ZGAuIFlvdSBtYXkgd2FudCB0byByZW5hbWUgYExvY2F0aW9uYCB0byBgUGFyc2VTdGF0ZWAsIGFz
   // IGl0J3Mgbm8gbG9uZ2VyIGp1c3QgdGhlIGxvY2F0aW9uIQ==
-  test("9.17: ???.") {}
+  test("9.17: ???.") {
+    // `SKIPPED`: marked as optional.
+  }
 
   // Base64 hint for exercise 9.18:
   // WW91IGNhbiBhZGQgYW4gYXR0cmlidXRlIGBvdGhlckZhaWx1cmVzOiBMaXN0W1BhcnNlRXJyb3Jd
   // YCBvbiBgUGFyc2VFcnJvcmAgaXRzZWxmLiBUaGlzIHdpbGwgYmUgYSBsaXN0IG9mIHBhcnNlIGVy
   // cm9ycyB0aGF0IG9jY3VycmVkIGluIG90aGVyIGJyYW5jaGVzIG9mIHRoZSBwYXJzZXIu
-  test("9.18: ???.") {}
+  test("9.18: ???.") {
+    // `SKIPPED`: marked as optional.
+  }
 
 }
 

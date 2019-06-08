@@ -42,8 +42,6 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
     ): ParserOps[String] = ParserOps(f(a))
     implicit def regex(r: Regex): Parser[String]
 
-    // def map[A,B](a: Parser[A])(f: A ⇒ B): Parser[B]
-
     case class ParserOps[A](p: Parser[A]) {
       def |[B >: A](p2: ⇒ Parser[B]): Parser[B] = self.or(p, p2)
       def or[B >: A](p2: ⇒ Parser[B]): Parser[B] = self.or(p, p2)
