@@ -1,5 +1,7 @@
 package scalainitiatives.functional_programming_in_scala
 
+import fpinscala.parsing
+
 import FPISExerciseChapter09._
 
 import scalainitiatives.common.ScalaInitiativesTest
@@ -113,7 +115,62 @@ class FPISTestChapter09 extends ScalaInitiativesTest {
   // KmAsIGl0J3MgY29tbW9uIHRvIHdhbnQgdG8gaWdub3JlIG9uZSBvZiB0aGUgcGFyc2VycyBpbiB0
   // aGUgc2VxdWVuY2UsIGFuZCB5b3UnbGwgcHJvYmFibHkgd2FudCB0byBpbnRyb2R1Y2UgY29tYmlu
   // YXRvcnMgZm9yIHRoaXMu
-  test("9.9: ???.") {}
+  test("9.9: Implement my JSON parser!") {
+
+    // Ok the examples from the book are much more complicated, they change the
+    // signatures defined so far and are not easily transposable.
+
+    // Examples from the answers.
+
+    /**
+      * JSON parsing example.
+      */
+    object JSONExample extends App {
+      val jsonTxt =
+        """
+        {
+          "Company name" : "Microsoft Corporation",
+          "Ticker"  : "MSFT",
+          "Active"  : true,
+          "Price"   : 30.66,
+          "Shares outstanding" : 8.38e9
+        }
+        """
+      // Adjust for array once.
+      //"Shares outstanding" : 8.38e9,
+      //"Related companies" : [ "HPQ", "IBM", "YHOO", "DELL", "GOOG" ]
+
+      val malformedJson1 = """
+        {
+          "Company name" ; "Microsoft Corporation"
+        }
+        """
+
+      val malformedJson2 = """
+        [
+        [ "HPQ", "IBM",
+        "YHOO", "DELL" ++
+        "GOOG"
+        ]
+        ]
+        """
+
+      // val P = fpinscala.parsing.Reference
+      // import fpinscala.parsing.ReferenceTypes.Parser
+
+      // def printResult[E](e: Either[E, JSON]) =
+      // e.fold(println, println)
+
+      val P = fpinscala.parsing.Reference
+      val json: Parsers[JSON] = JSON.jsonParser(P)
+      printResult { P.run(json)(jsonTxt) }
+      // println("--")
+      // printResult { P.run(json)(malformedJson1) }
+      // println("--")
+      // printResult { P.run(json)(malformedJson2) }
+    }
+
+  }
 
   // Base64 hint for exercise 9.10:
   // LQ==

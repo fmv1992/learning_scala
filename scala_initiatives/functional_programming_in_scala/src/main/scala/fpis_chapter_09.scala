@@ -10,7 +10,8 @@ import scalainitiatives.common.ScalaInitiativesExercise
 
 object FPISExerciseChapter09 extends ScalaInitiativesExercise {
 
-  trait Parsers[ParseError, Parser[+ _]] {
+  // trait Parsers[ParseError, Parser[+ _]] {
+  trait Parsers[Parser[+ _]] {
 
     // https://docs.scala-lang.org/tour/self-types.html
     self ⇒ // Dummy comment.
@@ -32,7 +33,7 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
 
     def or[A](s1: Parser[A], s2: Parser[A]): Parser[A]
 
-    def run[A](p: Parser[A])(input: String): Either[ParseError, A]
+    def run[A, ParseError](p: Parser[A])(input: String): Either[ParseError, A]
 
     implicit def string(s: String): Parser[String]
     implicit def operators[A](p: Parser[A]) = ParserOps[A](p)
@@ -134,6 +135,7 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
   trait JSON
 
   object JSON {
+
     case class JArray(get: IndexedSeq[JSON]) extends JSON
     case class JBool(get: Boolean) extends JSON
     case class JNumber(get: Double) extends JSON
@@ -141,7 +143,8 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
     case class JString(get: String) extends JSON
     case object JNull extends JSON
 
-    def jsonParser[Err, Parser[+ _]](P: Parsers[Err, Parser]): Parser[JSON] = {
+    // def jsonParser[Err, Parser[+ _]](P: Parsers[Err, Parser]): Parser[JSON] = {
+    def jsonParser[Parser[+ _]](P: Parsers[Parser]): Parser[JSON] = {
       import P._
       val spaces = char(' ').many.slice
       val digits = string("0987654321").many.slice
