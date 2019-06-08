@@ -49,6 +49,9 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
       def **[B, C](p2: ⇒ Parser[B]): Parser[(A, B)] = self.product(p, p2)
       def product[B, C](p2: ⇒ Parser[B]): Parser[(A, B)] = p ** p2
       def map[B](f: A ⇒ B): Parser[B] = self.map(p)(f)
+      def many = self.many(p)
+      def many1 = self.many(p)
+      def slice = self.slice(p)
     }
 
     def char(c: Char): Parser[Char] = string(c.toString) map (_.charAt(0))
@@ -124,8 +127,27 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
   //     forAll(in)(s ⇒ run(p1)(s) == run(p2)(s))
 
   //   def mapLaw[A](p: Parser[A])(in: Gen[String]): Prop =
-  //     equal(p, p.map(a => a))(in)
+  //     equal(p, p.map(a ⇒ a))(in)
   // }
+
+  trait JSON
+
+  object JSON {
+    case object JNull extends JSON
+    case class JNumber(get: Double) extends JSON
+    case class JString(get: String) extends JSON
+    case class JBool(get: Boolean) extends JSON
+    case class JArray(get: IndexedSeq[JSON]) extends JSON
+    case class JObject(get: Map[String, JSON]) extends JSON
+
+    def jsonParser[Err, Parser[+ _]](P: Parsers[Err, Parser]): Parser[JSON] = {
+      import P._
+      val spaces = char(' ').many.slice
+      // ...
+      ???
+    }
+
+  }
 
 }
 
