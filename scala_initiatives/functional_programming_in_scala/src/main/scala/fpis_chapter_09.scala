@@ -52,6 +52,7 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
       def many = self.many(p)
       def many1 = self.many(p)
       def slice = self.slice(p)
+      // def flatMap[A, B](f: A ⇒ Parser[B]) = self.flatMap(p)(f)
     }
 
     def char(c: Char): Parser[Char] = string(c.toString) map (_.charAt(0))
@@ -161,7 +162,15 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
             .map(followedByComma(_))
             .reduce(_ | _)
           + "]")
-      // ...
+
+      val jboolfm: Parser[JSON] = jbool.map(
+        (x: String) ⇒ x match {
+            case "true" ⇒ JBool(true)
+            case "false" ⇒ JBool(false)
+            case _ ⇒ throw new Exception()
+          }
+      )
+
       ???
     }
 
