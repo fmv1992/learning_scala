@@ -69,6 +69,23 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
     val zero = identity(_)
   }
 
+  def foldMap[A, B](as: List[A], m: Monoid[B])(f: A ⇒ B): B = {
+    as.map(f).fold(m.zero)(m.op)
+  }
+
+  // We can get the dual of any monoid just by flipping the `op`.
+  def dual[A](m: Monoid[A]): Monoid[A] = new Monoid[A] {
+    def op(x: A, y: A): A = m.op(y, x)
+    val zero = m.zero
+  }
+
+  def foldLeft[A, B](as: List[A])(z: B)(f: (B, A) ⇒ B): B = {
+    foldMap(as, dual(endoMonoid[B]))(a ⇒ b ⇒ f(b, a))(z)
+  }
+
+  def foldRight[A, B](as: List[A])(z: B)(f: (A, B) ⇒ B): B =
+    foldMap(as, endoMonoid[B])(f.curried)(z)
+
   // object Laws {
   //   def equal[A](p1: Parser[A], p2: Parser[A])(in: Gen[String]): Prop =
   //     forAll(in)(s ⇒ run(p1)(s) == run(p2)(s))

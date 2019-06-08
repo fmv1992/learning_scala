@@ -56,7 +56,7 @@ class FPISTestChapter10 extends ScalaInitiativesTest {
   // Base64 hint for exercise 10.5:
   // WW91IGNhbiBgbWFwYCBhbmQgdGhlbiBgY29uY2F0ZW5hdGVgLCBidXQgdGhhdCB3aWxsIG
   // dvIG92ZXIgdGhlIGxpc3QgdHdpY2UuIFVzZSBhIHNpbmdsZSBmb2xkIGluc3RlYWQu
-  test("10.5: ???.") {}
+  test("10.5: Implement foldMap.") {}
 
   // Base64 hint for exercise 10.6:
   // Tm90aWNlIHRoYXQgdGhlIHR5cGUgb2YgdGhlIGZ1bmN0aW9uIHRoYXQgaXMgcGFzc2VkIH
@@ -66,7 +66,9 @@ class FPISTestChapter10 extends ScalaInitiativesTest {
   // bnQgYGZvbGRSaWdodGAuIFRoZSBpbXBsZW1lbnRhdGlvbiBvZiBgZm9sZExlZnRgIGlzIH
   // RoZW4ganVzdCB0aGUgZHVhbC4gRG9uJ3Qgd29ycnkgaWYgdGhlc2UgaW1wbGVtZW50YXRp
   // b25zIGFyZSBub3QgdmVyeSBlZmZpY2llbnQu
-  test("10.6: ???.") {}
+  test("10.5: Define foldLeft and foldRight in terms of foldMap.") {
+    // Got these answers from the book. Too hard!
+  }
 
   // Base64 hint for exercise 10.7:
   // VGhlIHNlcXVlbmNlcyBvZiBsZW5ndGhzIDAgYW5kIDEgYXJlIHNwZWNpYWwgY2FzZXMgdG
