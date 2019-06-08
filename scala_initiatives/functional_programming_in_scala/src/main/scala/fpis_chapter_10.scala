@@ -19,7 +19,12 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
   }
 
   val stringMonoid = new Monoid[String] {
-    def op(a1: String, a2: String) = a1 + a2
+
+    def op(a1: String, a2: String) = {
+      println(a1)
+      println(a2)
+      a1 + a2
+    }
     val zero = ""
   }
 
@@ -85,6 +90,17 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
 
   def foldRight[A, B](as: List[A])(z: B)(f: (A, B) ⇒ B): B =
     foldMap(as, endoMonoid[B])(f.curried)(z)
+
+  def foldMapV[A, B](w: IndexedSeq[A], m: Monoid[B])(f: A ⇒ B): B = {
+    val l = w.length
+    if (l == 1) {
+      m.op(m.zero, f(w(0)))
+    } else {
+      val (h1, h2) = w.splitAt(l / 2)
+      val res = m.op(foldMapV(h1, m)(f), foldMapV(h2, m)(f))
+      res
+    }
+  }
 
   // object Laws {
   //   def equal[A](p1: Parser[A], p2: Parser[A])(in: Gen[String]): Prop =

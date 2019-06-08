@@ -73,7 +73,83 @@ class FPISTestChapter10 extends ScalaInitiativesTest {
   // Base64 hint for exercise 10.7:
   // VGhlIHNlcXVlbmNlcyBvZiBsZW5ndGhzIDAgYW5kIDEgYXJlIHNwZWNpYWwgY2FzZXMgdG
   // 8gY29uc2lkZXIu
-  test("10.7: ???.") {}
+  test("10.7: Implement foldMapV.") {
+    println(
+      foldMapV(Vector.tabulate(10)(x ⇒ x).map(_.toString), stringMonoid)(
+        identity(_)
+      )
+    )
+    println("-" * 79)
+    println(
+      foldMap(
+        List.tabulate(10)(x ⇒ x).map(_.toString): List[String],
+        stringMonoid
+      )(identity(_))
+    )
+    // Gives us:
+    //
+    // |
+    // | 0
+    // |
+    // | 1
+    // | 0
+    // | 1
+    // |
+    // | 2
+    // |
+    // | 3
+    // |
+    // | 4
+    // | 3
+    // | 4
+    // | 2
+    // | 34
+    // | 01
+    // | 234
+    // |
+    // | 5
+    // |
+    // | 6
+    // | 5
+    // | 6
+    // |
+    // | 7
+    // |
+    // | 8
+    // |
+    // | 9
+    // | 8
+    // | 9
+    // | 7
+    // | 89
+    // | 56
+    // | 789
+    // | 01234
+    // | 56789
+    // | 0123456789
+    // | -------------------------------------------------------------------------------
+    // |
+    // | 0
+    // | 0
+    // | 1
+    // | 01
+    // | 2
+    // | 012
+    // | 3
+    // | 0123
+    // | 4
+    // | 01234
+    // | 5
+    // | 012345
+    // | 6
+    // | 0123456
+    // | 7
+    // | 01234567
+    // | 8
+    // | 012345678
+    // | 9
+    // | 0123456789
+  }
 
   // Base64 hint for exercise 10.8:
   // VGhpbmsgYWJvdXQgd2hhdCBhIHBhcnRpYWwgYW5zd2VyIGxvb2tzIGxpa2UuIElmIHdlJ3
