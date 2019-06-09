@@ -262,6 +262,18 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
     }
   }
 
+  def productMonoid[A, B](mona: Monoid[A], monb: Monoid[B]): Monoid[(A, B)] = {
+    new Monoid[(A, B)] {
+      def op(a1: (A, B), a2: (A, B)): (A, B) = {
+        (
+          mona.op(a1._1, a2._1),
+          monb.op(a1._2, a2._2)
+        )
+      }
+      def zero: (A, B) = (mona.zero, monb.zero)
+    }
+  }
+
   // object Laws {
   //   def equal[A](p1: Parser[A], p2: Parser[A])(in: Gen[String]): Prop =
   //     forAll(in)(s ⇒ run(p1)(s) == run(p2)(s))

@@ -222,23 +222,35 @@ class FPISTestChapter10 extends ScalaInitiativesTest {
 
   // Base64 hint for exercise 10.14:
   // LQ==
-  test("10.14: ???.") {}
+  test("10.14: Implementation of Foldable[Option].") {
+    // `SKIPPED`: marked as optional.
+  }
 
   // Base64 hint for exercise 10.15:
   // LQ==
-  test("10.15: ???.") {}
+  test("10.15: Implementation of Foldable toList.") {
+    // `SKIPPED`: marked as optional.
+  }
 
   // Base64 hint for exercise 10.16:
   // LQ==
-  test("10.16: ???.") {}
+  test("10.16: Prove productMonoid.") {
+    // Only implemnted. Did not proved it on paper.
+  }
 
   // Base64 hint for exercise 10.17:
   // LQo=
-  test("10.17: ???.") {}
+  test(
+    "10.17: Write a monoid instance for functions whose results are monoids."
+  ) {
+    // `SKIPPED`: marked as optional.
+  }
 
   // Base64 hint for exercise 10.18:
   // VXNlIGBtYXBNZXJnZU1vbm9pZGAgYW5kIGBpbnRBZGRpdGlvbmAu
-  test("10.18: ???.") {}
+  test("10.18: Use monoids to compute a “bag” from an IndexedSeq.") {
+    // `SKIPPED`: marked as optional.
+  }
 
 }
 
