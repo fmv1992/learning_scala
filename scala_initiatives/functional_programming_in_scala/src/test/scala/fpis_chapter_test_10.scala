@@ -202,7 +202,9 @@ class FPISTestChapter10 extends ScalaInitiativesTest {
 
   // Base64 hint for exercise 10.12:
   // LQ==
-  test("10.12: ???.") {
+  test(
+    "10.12: Implementation Foldable[List], Foldable[IndexedSeq] and Foldable[Stream]."
+  ) {
     val l1 = (0 to 10).toList
     def f1(x: String, y: Int): String = x + "|" + y
     val v0: String = "LEFT"
@@ -216,7 +218,7 @@ class FPISTestChapter10 extends ScalaInitiativesTest {
 
   // Base64 hint for exercise 10.13:
   // LQ==
-  test("10.13: ???.") {}
+  test("10.13: Implementation of Foldable for trees.") {}
 
   // Base64 hint for exercise 10.14:
   // LQ==

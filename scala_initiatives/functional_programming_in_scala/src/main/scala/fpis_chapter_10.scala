@@ -230,6 +230,38 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
     }
   }
 
+  sealed trait Tree[+A]
+  case class Leaf[A](value: A) extends Tree[A]
+  case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
+
+  object TreeFoldable extends Foldable[Tree] {
+
+    def foldRight[A, B](as: Tree[A])(z: B)(f: (A, B) ⇒ B): B = {
+      val newTree = as match {
+        case Leaf(a) ⇒ Leaf(a)
+        case Branch(l, r) ⇒ Branch(r, l)
+      }
+      foldLeft(newTree)(z)((a, b) ⇒ f(b, a))
+    }
+
+    def foldLeft[A, B](as: Tree[A])(z: B)(f: (B, A) ⇒ B) = {
+      as match {
+        case Leaf(a) ⇒ f(z, a)
+        // Got this from book.
+        case Branch(l, r) ⇒ foldLeft(r)(foldLeft(l)(z)(f))(f)
+      }
+    }
+
+    def foldMap[A, B](as: Tree[A])(f: A ⇒ B)(mb: Monoid[B]): B = {
+      as match {
+        case Leaf(a) ⇒ f(a)
+        case Branch(l, r) ⇒ {
+          mb.op(foldMap(l)(f)(mb), foldMap(r)(f)(mb))
+        }
+      }
+    }
+  }
+
   // object Laws {
   //   def equal[A](p1: Parser[A], p2: Parser[A])(in: Gen[String]): Prop =
   //     forAll(in)(s ⇒ run(p1)(s) == run(p2)(s))
