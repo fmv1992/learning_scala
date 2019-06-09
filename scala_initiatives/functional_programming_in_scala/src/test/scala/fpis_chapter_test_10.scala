@@ -202,7 +202,17 @@ class FPISTestChapter10 extends ScalaInitiativesTest {
 
   // Base64 hint for exercise 10.12:
   // LQ==
-  test("10.12: ???.") {}
+  test("10.12: ???.") {
+    val l1 = (0 to 10).toList
+    def f1(x: String, y: Int): String = x + "|" + y
+    val v0: String = "LEFT"
+    val v1: String = "RIGHT"
+    assert(ListFoldable.foldLeft(l1)(v0)(f1) == l1.foldLeft(v0)(f1))
+    assert(
+      ListFoldable.foldRight(l1)(v1)((a, b) ⇒ f1(b, a))
+        == l1.foldRight(v1)((a, b) ⇒ f1(b, a))
+    )
+  }
 
   // Base64 hint for exercise 10.13:
   // LQ==

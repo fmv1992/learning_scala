@@ -1,7 +1,7 @@
 package scalainitiatives.functional_programming_in_scala
 
-// import scala.language.higherKinds
-// import scala.language.implicitConversions
+import scala.language.higherKinds
+import scala.language.implicitConversions
 // import scala.util.matching.Regex
 
 import fpinscala.testing._
@@ -159,7 +159,6 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
               }
           }
       }
-      println(res)
       res
     }
     val zero: WC = Stub("")
@@ -177,6 +176,58 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
       }
     }
     go(s).getWordCount
+  }
+
+  trait Foldable[F[_]] {
+    def foldRight[A, B](as: F[A])(z: B)(f: (A, B) ⇒ B): B
+    def foldLeft[A, B](as: F[A])(z: B)(f: (B, A) ⇒ B): B
+    def foldMap[A, B](as: F[A])(f: A ⇒ B)(mb: Monoid[B]): B
+
+    def concatenate[A](as: F[A])(m: Monoid[A]): A =
+      foldLeft(as)(m.zero)(m.op)
+  }
+
+  // scala -e 'println((1 to 1000000).foldRight(0)(_ + _))'  0.94s user 0.06s system 28% cpu 3.466 total
+  // scala -e 'println((1 to 1000000).foldLeft(0)(_ + _))'  0.72s user 0.05s system 67% cpu 1.141 total
+  object ListFoldable extends Foldable[List] {
+    override def foldRight[A, B](as: List[A])(z: B)(f: (A, B) ⇒ B) = {
+      foldLeft(as.reverse)(z)((a, b) ⇒ f(b, a))
+    }
+    override def foldLeft[A, B](as: List[A])(z: B)(f: (B, A) ⇒ B) = {
+      as.foldLeft(z)(f)
+    }
+    override def foldMap[A, B](as: List[A])(f: A ⇒ B)(mb: Monoid[B]): B = {
+      as.foldLeft(mb.zero)((a, b) ⇒ mb.op(a, f(b)))
+    }
+  }
+
+  object IndexedSeqFoldable extends Foldable[IndexedSeq] {
+    override def foldRight[A, B](as: IndexedSeq[A])(z: B)(f: (A, B) ⇒ B) = {
+      as.foldRight(z)(f)
+    }
+    override def foldLeft[A, B](as: IndexedSeq[A])(z: B)(f: (B, A) ⇒ B) = {
+      as.foldLeft(z)(f)
+    }
+    override def foldMap[A, B](
+        as: IndexedSeq[A]
+    )(f: A ⇒ B)(mb: Monoid[B]): B = {
+      // The book implements it with foldV:
+      // That is because this operation can be parallelized I wonder.
+      foldMapV(as, mb)(f)
+    }
+  }
+
+  object StreamFoldable extends Foldable[Stream] {
+    // I believe in this case it is preferable to use foldleft too.
+    override def foldRight[A, B](as: Stream[A])(z: B)(f: (A, B) ⇒ B) = {
+      as.foldRight(z)(f)
+    }
+    override def foldLeft[A, B](as: Stream[A])(z: B)(f: (B, A) ⇒ B) = {
+      as.foldLeft(z)(f)
+    }
+    override def foldMap[A, B](as: Stream[A])(f: A ⇒ B)(mb: Monoid[B]): B = {
+      as.map(f).fold(mb.zero)(mb.op(_, _))
+    }
   }
 
   // object Laws {
@@ -206,6 +257,6 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
 
 // Run this in vim:
 //
-// vim source: 1,$-10s/⇒/⇒/ge
+// vim source: 1,$-10s/=>/⇒/ge
 //
 // vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2 spell spelllang=en:
