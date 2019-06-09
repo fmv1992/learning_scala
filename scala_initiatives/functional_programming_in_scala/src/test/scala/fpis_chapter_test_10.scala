@@ -74,18 +74,13 @@ class FPISTestChapter10 extends ScalaInitiativesTest {
   // VGhlIHNlcXVlbmNlcyBvZiBsZW5ndGhzIDAgYW5kIDEgYXJlIHNwZWNpYWwgY2FzZXMgdG
   // 8gY29uc2lkZXIu
   test("10.7: Implement foldMapV.") {
-    println(
-      foldMapV(Vector.tabulate(10)(x ⇒ x).map(_.toString), stringMonoid)(
-        identity(_)
-      )
+    foldMapV(Vector.tabulate(10)(x ⇒ x).map(_.toString), stringMonoid)(
+      identity(_)
     )
-    println("-" * 79)
-    println(
-      foldMap(
-        List.tabulate(10)(x ⇒ x).map(_.toString): List[String],
-        stringMonoid
-      )(identity(_))
-    )
+    foldMap(
+      List.tabulate(10)(x ⇒ x).map(_.toString): List[String],
+      stringMonoid
+    )(identity(_))
     // Gives us:
     //
     // |
@@ -158,7 +153,10 @@ class FPISTestChapter10 extends ScalaInitiativesTest {
   // ZvciBldmVyeSBuZXcgZWxlbWVudCB3ZSBzZWUsIGlmIHRoZSBzZXF1ZW5jZSBpcyBpbiBm
   // YWN0IG9yZGVyZWQsIGl0IHNob3VsZCBub3QgZmFsbCBpbnNpZGUgdGhlIHJhbmdlIG9mIG
   // VsZW1lbnRzIHNlZW4gYWxyZWFkeS4=
-  test("10.8: ???.") {}
+  test("10.8: Parallel version of foldmap.") {
+    // `SKIPPED`: marked as optional and hard, and most of all: deal with the
+    // `Par` part of the library.
+  }
 
   // Base64 hint for exercise 10.9:
   // VHJ5IGNyZWF0aW5nIGEgZGF0YSB0eXBlIHdoaWNoIHRyYWNrcyB0aGUgX2ludGVydmFsXy
@@ -166,7 +164,19 @@ class FPISTestChapter10 extends ScalaInitiativesTest {
   // IGFuICd1bm9yZGVyZWQgc2VnbWVudCcgaGFzIGJlZW4gZm91bmQuCldoZW4gbWVyZ2luZy
   // B0aGUgdmFsdWVzIGZvciB0d28gc2VnbWVudHMsIHRoaW5rIGFib3V0IGhvdyB0aGVzZSB0
   // d28gcGllY2VzIG9mIGluZm9ybWF0aW9uIHNob3VsZCBiZSB1cGRhdGVkLgo=
-  test("10.9: ???.") {}
+  test("10.9: Implementation of isOrdered with foldmap.") {
+    // Hard: Use foldMap to detect whether a given IndexedSeq[Int] is ordered.
+    // You’ll need to come up with a creative Monoid .
+    assert(isOrdered(Vector.tabulate(10)(x ⇒ x)))
+    assert(!isOrdered(Vector(0, 1, 0)))
+    assert(isOrdered(Vector(0)))
+    assert(isOrdered(Vector(899, 899, 899)))
+    assert(isOrdered(Vector()))
+    assert(!isOrdered(Vector(9, 8, 7, 6, 5)))
+    assert(isOrdered(Vector(-10, -9, -8, 0, 1)))
+    assert(!isOrdered(Vector(-10, -9, -8, -100)))
+    assert(isOrdered(Vector(Int.MinValue, Int.MinValue + 1)))
+  }
 
   // Base64 hint for exercise 10.10:
   // QSBgU3R1YmAgc2hvdWxkIG5ldmVyIGNvbnRhaW4gYW55IHdoaXRlc3BhY2UuCg==

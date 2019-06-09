@@ -21,8 +21,6 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
   val stringMonoid = new Monoid[String] {
 
     def op(a1: String, a2: String) = {
-      println(a1)
-      println(a2)
       a1 + a2
     }
     val zero = ""
@@ -88,8 +86,10 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
     foldMap(as, dual(endoMonoid[B]))(a ⇒ b ⇒ f(b, a))(z)
   }
 
-  def foldRight[A, B](as: List[A])(z: B)(f: (A, B) ⇒ B): B =
+  def foldRight[A, B](as: List[A])(z: B)(f: (A, B) ⇒ B): B = {
+    // The `fold` above takes care of having always a B in place.
     foldMap(as, endoMonoid[B])(f.curried)(z)
+  }
 
   def foldMapV[A, B](w: IndexedSeq[A], m: Monoid[B])(f: A ⇒ B): B = {
     val l = w.length
@@ -99,6 +99,59 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
       val (h1, h2) = w.splitAt(l / 2)
       val res = m.op(foldMapV(h1, m)(f), foldMapV(h2, m)(f))
       res
+    }
+  }
+
+  def isOrdered(w: IndexedSeq[Int]): Boolean = {
+    type oi = Option[Int]
+    val m: Monoid[oi] = new Monoid[oi] {
+      def op(x1: oi, x2: oi) = {
+        x1.flatMap(a ⇒ x2.flatMap(b ⇒ if (a <= b) Option(b) else None))
+      }
+      val zero: oi = Some(Int.MinValue)
+    }
+    foldMap(w.toList, m)(x ⇒ Option(x)).isDefined
+  }
+
+  sealed trait WC
+  case class Stub(chars: String) extends WC
+  case class Part(lStub: String, words: Int, rStub: String) extends WC
+
+  val wcMonoid: Monoid[WC] = new Monoid[WC] {
+
+    def op(a1: WC, a2: WC): WC = {
+      a1 match {
+        case Stub(a) ⇒ a2 match {
+            case Stub(b) ⇒ Stub(a + b)
+            case Part(l, w, r) ⇒ Part(l, w, r + a)
+            case _ ⇒ throw new Exception()
+          }
+        case Part(l, w, r) ⇒ a2 match {
+            case Stub(b) ⇒ Part(l + b, w, r)
+            case Part(l2, w2, r2) ⇒ Part(l + l2, w + w2, r + r2)
+            case _ ⇒ throw new Exception()
+          }
+      }
+    }
+    val zero: WC = Stub("")
+  }
+
+  def countWithWC(s: String): Int = {
+    def go(sGo: String): WC = {
+      ???
+    }
+    // val l = s.length
+    // if (l == 1) {
+    //   // wcMonoid.op(wcMonoid.zero, Stub(s))
+    //   0
+    // } else {
+    //   val (h1, h2) = s.splitAt(l / 2)
+    //   val res = countWithWC(h1) + countWithWC(h2)
+    //   res.words
+    // }
+    go(s) match {
+      case Stub(_) ⇒ 0
+      case Part(_, w, _) ⇒ w
     }
   }
 
