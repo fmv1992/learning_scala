@@ -180,16 +180,25 @@ class FPISTestChapter10 extends ScalaInitiativesTest {
 
   // Base64 hint for exercise 10.10:
   // QSBgU3R1YmAgc2hvdWxkIG5ldmVyIGNvbnRhaW4gYW55IHdoaXRlc3BhY2UuCg==
-  test("10.10: ???.") {
-    // assert(countWithWC("abcde") == 0)
-    // println("-" * 79)
-    assert(countWithWC("a b c d e") == 5)
+  test("10.10: Implement WC monoid.") {
+    // Done.
   }
 
   // Base64 hint for exercise 10.11:
   // WW91IGNhbiB3cml0ZSBkZWZhdWx0IGltcGxlbWVudGF0aW9ucyBvbiB0aGUgYEZvbGRhYm
   // xlYCB0cmFpdCBhbiB0aGVuIGBvdmVycmlkZWAgdGhlbSBhcyBuZWNlc3Nhcnku
-  test("10.11: ???.") {}
+  test("10.11: Implement countWithWC.") {
+    // Written answer:
+    // Laws:
+    //  1.  Words with no space: wc == 1.
+    //  2.  All spaces: wc == 0.
+    //  3.  N non contiguous spaces: n + 1 words.
+    assert(countWithWC("abcde") == 0)
+    assert(countWithWC("a b c d e") == 5)
+    assert(countWithWC(" ") == 0)
+    // assert(countWithWC("  ") == 0)
+    // assert(countWithWC(" x  ") == 1)
+  }
 
   // Base64 hint for exercise 10.12:
   // LQ==

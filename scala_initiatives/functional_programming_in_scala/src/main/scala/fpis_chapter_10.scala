@@ -113,36 +113,50 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
     foldMap(w.toList, m)(x ⇒ Option(x)).isDefined
   }
 
-  sealed trait WC
-  case class Stub(chars: String) extends WC
-  case class Part(lStub: String, words: Int, rStub: String) extends WC
+  sealed trait WC {
+    def getWordCount: Int
+  }
+  case class Stub(chars: String) extends WC {
+    val getWordCount = 0
+  }
+  case class Part(lStub: String, words: Int, rStub: String) extends WC {
+
+    def getWordCount = {
+      if (lStub.endsWith(" ") && !rStub.isEmpty) {
+        words + 1
+      } else {
+        words
+      }
+    }
+  }
+
   val wcMonoid: Monoid[WC] = new Monoid[WC] {
+
     def op(a1: WC, a2: WC): WC = {
       val res = a1 match {
         case Stub(a) ⇒ a2 match {
-            // The key here is when implementing a stub + stub merge.
-            case Stub(b) ⇒ {
-              val joined = a + b
-              if (a.length == 1 && b.length == 1) {
-                Stub(joined)
+            case Stub(b) ⇒ if (a.endsWith(" ")) {
+                Part(a, 0, b)
               } else {
-              if (a.endsWith(" ")) {
-                Part(a.dropRight(1), 1, b)
+                Stub(a + b)
               }
-              else if (b.startsWith( " ")) {
-                Part(a, 1, b.drop(1))
+            case Part(l, w, r) ⇒ if (a.endsWith(" ")) {
+                Part(a + l, w + 1, r)
               } else {
-                Stub(joined)
+                Part(a + l, w, r)
               }
-              }
-            }
-            case Part(l, w, r) ⇒ Part(a + l, w,r)
-            case _ ⇒ throw new Exception()
           }
         case Part(l, w, r) ⇒ a2 match {
-            case Stub(b) ⇒ Part(l + b, w, r)
-            case Part(l2, w2, r2) ⇒ Part(l + l2, w + w2, r + r2)
-            case _ ⇒ throw new Exception()
+            case Stub(b) ⇒ if (l.endsWith(" ")) {
+                Part(l, w + 1, b)
+              } else {
+                Part(l + b, w, r)
+              }
+            case Part(l1, w1, r1) ⇒ if (l.endsWith(" ")) {
+                Part(l + l1, w + w1 + 1, r + r1)
+              } else {
+                Part(l + l1, w + w1, r + r1)
+              }
           }
       }
       println(res)
@@ -153,23 +167,16 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
 
   def countWithWC(s: String): Int = {
     def go(sGo: String): WC = {
-      println(sGo)
-      println("-" * 79)
       val l = sGo.length
       if (l == 1) {
-        val st = Stub(sGo)
-        println("⇒" + st)
-        wcMonoid.op(st, wcMonoid.zero)
+        wcMonoid.op(Stub(sGo), wcMonoid.zero)
       } else {
         val (h1, h2) = sGo.splitAt(l / 2)
         val res = wcMonoid.op(go(h1), go(h2))
         res
       }
     }
-    go(s) match {
-      case Stub(_) ⇒ 1
-      case Part(_, w, _) ⇒ w
-    }
+    go(s).getWordCount
   }
 
   // object Laws {
@@ -199,6 +206,6 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
 
 // Run this in vim:
 //
-// vim source: 1,$-10s/=>/⇒/ge
+// vim source: 1,$-10s/⇒/⇒/ge
 //
 // vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2 spell spelllang=en:
