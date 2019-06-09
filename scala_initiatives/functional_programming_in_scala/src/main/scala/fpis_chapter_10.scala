@@ -116,39 +116,44 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
   sealed trait WC
   case class Stub(chars: String) extends WC
   case class Part(lStub: String, words: Int, rStub: String) extends WC
-
   val wcMonoid: Monoid[WC] = new Monoid[WC] {
-
     def op(a1: WC, a2: WC): WC = {
-      a1 match {
+      val res = a1 match {
         case Stub(a) ⇒ a2 match {
-            case Stub(b) ⇒ Stub(a + b)
-            case Part(l, w, r) ⇒ Part(l, w, r + a)
-            case _ ⇒ throw new Exception()
+          case Stub(b) ⇒ {
+            val joined = a + b
+            val spacePos = Option(joined.indexOf(' ')).filter(x ⇒ x != -1 && x != joined.length - 1)
+            spacePos.flatMap(
+              x ⇒ Option(Part(joined, 1, ""))
+            ).getOrElse(Stub(joined))
           }
+          case Part(l, w, r) ⇒ Part(l, w + a.count(_ == ' '), r + a)
+          case _ ⇒ throw new Exception()
+        }
         case Part(l, w, r) ⇒ a2 match {
-            case Stub(b) ⇒ Part(l + b, w, r)
-            case Part(l2, w2, r2) ⇒ Part(l + l2, w + w2, r + r2)
-            case _ ⇒ throw new Exception()
-          }
-      }
+          case Stub(b) ⇒ Part(l + b, w + b.count(_ == ' '), r)
+          case Part(l2, w2, r2) ⇒ Part(l + l2, w + w2, r + r2)
+          case _ ⇒ throw new Exception()
+        }
+    }
+      println(res)
+      res
     }
     val zero: WC = Stub("")
   }
-
   def countWithWC(s: String): Int = {
     def go(sGo: String): WC = {
-      ???
+      val l = sGo.length
+      if (l == 1) {
+        // val c: Char = l.toCharArray(0)
+        // val atom: WC = if (c == ' ') Part("", 0, " ")
+        wcMonoid.op(wcMonoid.zero, Stub(sGo))
+      } else {
+        val (h1, h2) = sGo.splitAt(l / 2)
+        val res = wcMonoid.op(go(h1), go(h2))
+        res
+      }
     }
-    // val l = s.length
-    // if (l == 1) {
-    //   // wcMonoid.op(wcMonoid.zero, Stub(s))
-    //   0
-    // } else {
-    //   val (h1, h2) = s.splitAt(l / 2)
-    //   val res = countWithWC(h1) + countWithWC(h2)
-    //   res.words
-    // }
     go(s) match {
       case Stub(_) ⇒ 0
       case Part(_, w, _) ⇒ w

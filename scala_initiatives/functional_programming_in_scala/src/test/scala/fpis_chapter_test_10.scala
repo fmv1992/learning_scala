@@ -180,7 +180,11 @@ class FPISTestChapter10 extends ScalaInitiativesTest {
 
   // Base64 hint for exercise 10.10:
   // QSBgU3R1YmAgc2hvdWxkIG5ldmVyIGNvbnRhaW4gYW55IHdoaXRlc3BhY2UuCg==
-  test("10.10: ???.") {}
+  test("10.10: ???.") {
+    // assert(countWithWC("abcde") == 0)
+    // println("-" * 79)
+    assert(countWithWC("a b c d e") == 5)
+  }
 
   // Base64 hint for exercise 10.11:
   // WW91IGNhbiB3cml0ZSBkZWZhdWx0IGltcGxlbWVudGF0aW9ucyBvbiB0aGUgYEZvbGRhYm
