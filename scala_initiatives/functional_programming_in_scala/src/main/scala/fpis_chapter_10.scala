@@ -120,34 +120,46 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
     def op(a1: WC, a2: WC): WC = {
       val res = a1 match {
         case Stub(a) ⇒ a2 match {
-          case Stub(b) ⇒ {
-            val joined = a + b
-            val spacePos = Option(joined.indexOf(' ')).filter(x ⇒ x != -1 && x != joined.length - 1)
-            spacePos.flatMap(
-              x ⇒ Option(Part(joined, 1, ""))
-            ).getOrElse(Stub(joined))
+            // The key here is when implementing a stub + stub merge.
+            case Stub(b) ⇒ {
+              val joined = a + b
+              if (a.length == 1 && b.length == 1) {
+                Stub(joined)
+              } else {
+              if (a.endsWith(" ")) {
+                Part(a.dropRight(1), 1, b)
+              }
+              else if (b.startsWith( " ")) {
+                Part(a, 1, b.drop(1))
+              } else {
+                Stub(joined)
+              }
+              }
+            }
+            case Part(l, w, r) ⇒ Part(a + l, w,r)
+            case _ ⇒ throw new Exception()
           }
-          case Part(l, w, r) ⇒ Part(l, w + a.count(_ == ' '), r + a)
-          case _ ⇒ throw new Exception()
-        }
         case Part(l, w, r) ⇒ a2 match {
-          case Stub(b) ⇒ Part(l + b, w + b.count(_ == ' '), r)
-          case Part(l2, w2, r2) ⇒ Part(l + l2, w + w2, r + r2)
-          case _ ⇒ throw new Exception()
-        }
-    }
+            case Stub(b) ⇒ Part(l + b, w, r)
+            case Part(l2, w2, r2) ⇒ Part(l + l2, w + w2, r + r2)
+            case _ ⇒ throw new Exception()
+          }
+      }
       println(res)
       res
     }
     val zero: WC = Stub("")
   }
+
   def countWithWC(s: String): Int = {
     def go(sGo: String): WC = {
+      println(sGo)
+      println("-" * 79)
       val l = sGo.length
       if (l == 1) {
-        // val c: Char = l.toCharArray(0)
-        // val atom: WC = if (c == ' ') Part("", 0, " ")
-        wcMonoid.op(wcMonoid.zero, Stub(sGo))
+        val st = Stub(sGo)
+        println("⇒" + st)
+        wcMonoid.op(st, wcMonoid.zero)
       } else {
         val (h1, h2) = sGo.splitAt(l / 2)
         val res = wcMonoid.op(go(h1), go(h2))
@@ -155,7 +167,7 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
       }
     }
     go(s) match {
-      case Stub(_) ⇒ 0
+      case Stub(_) ⇒ 1
       case Part(_, w, _) ⇒ w
     }
   }
