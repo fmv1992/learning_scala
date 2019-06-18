@@ -416,9 +416,3 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
   }
 
 }
-
-// Run this in vim:
-//
-// vim source: call matchadd("ErrorXXX", '\<Cons\>', 2)
-//
-// vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:

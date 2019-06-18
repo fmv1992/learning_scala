@@ -3,32 +3,33 @@ package scalainitiatives.functional_programming_in_scala
 import scalainitiatives.common.ScalaInitiativesTest
 import FPISExerciseChapter03.{FPNil, FPCons, FPList}
 
-
 class FPISTestChapter03 extends ScalaInitiativesTest {
 
   // Declare constants.
   // 'oneToFiveFP' is already defined in ScalaInitiativesTest as a very common
   // value. This got renamed on 'fc2910a'+1 to
-  val oneToFiveFP: FPList[Int] = FPList(1,2,3,4,5)
+  val oneToFiveFP: FPList[Int] = FPList(1, 2, 3, 4, 5)
   val fiveToTen: FPList[Int] = FPList(5, 6, 7, 8, 9, 10)
-  val minusTentoTen: FPList[Int] = FPList( -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+  val minusTentoTen: FPList[Int] = FPList(-10, -9, -8, -7, -6, -5, -4, -3, -2,
+    -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
   val void: FPList[Nothing] = FPNil
 
-  test ("3.0: Test that the list used here is not Scala's list") {
+  test("3.0: Test that the list used here is not Scala's list") {
 
     assert(FPList.isNotScalaBuiltinList)
 
   }
 
-  test ("3.1: Pattern matching.") {
+  test("3.1: Pattern matching.") {
 
     // From fpinscala <https://github.com/fpinscala/fpinscala>.
-    val x = FPList(1,2,3,4,5) match {
-      case FPCons(x, FPCons(2, FPCons(4, _))) => x               // (1)
-      case FPNil => 42                                       // (2)
-      case FPCons(x, FPCons(y, FPCons(3, FPCons(4, _)))) => x + y  // (3)
-      case FPCons(h, t) => h + FPList.sum(t)                   // (4)
-      case _ => 101                                        // (5)
+    val x = FPList(1, 2, 3, 4, 5) match {
+      case FPCons(x, FPCons(2, FPCons(4, _))) ⇒ x // (1)
+      case FPNil ⇒ 42 // (2)
+      case FPCons(x, FPCons(y, FPCons(3, FPCons(4, _)))) ⇒ x + y // (3)
+      case FPCons(h, t) ⇒ h + FPList.sum(t) // (4)
+      case _ ⇒ 101 // (5)
     }
     //
     // Written answer:
@@ -42,7 +43,7 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
 
   }
 
-  test ("3.2: List's implementation of tail.") {
+  test("3.2: List's implementation of tail.") {
 
     assert(FPList.tail(oneToFiveFP) == FPList(2, 3, 4, 5))
     assert(FPList.tail(void) == void)
@@ -67,31 +68,34 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
 
   test("3.5: List's implementation of dropWhile.") {
 
-    assert(FPList.dropWhile(oneToFiveFP)(x => true) == void)
-    assert(FPList.dropWhile(oneToFiveFP)(x => false) == oneToFiveFP)
-    assert(FPList.dropWhile(oneToFiveFP)( _ < 5) == FPList(5))
-    assert(FPList.dropWhile(oneToFiveFP)( _ < 0) == oneToFiveFP)
+    assert(FPList.dropWhile(oneToFiveFP)(x ⇒ true) == void)
+    assert(FPList.dropWhile(oneToFiveFP)(x ⇒ false) == oneToFiveFP)
+    assert(FPList.dropWhile(oneToFiveFP)(_ < 5) == FPList(5))
+    assert(FPList.dropWhile(oneToFiveFP)(_ < 0) == oneToFiveFP)
 
   }
 
   test("Test '+' function.") {
 
     // Prepend.
-    assert(FPList.prepend(oneToFiveFP, 0) == FPList(0, 1,2,3,4,5))
+    assert(FPList.prepend(oneToFiveFP, 0) == FPList(0, 1, 2, 3, 4, 5))
     assert(FPList.prepend(FPNil, 0) == FPList(0))
 
     // MyAppend.
-    assert(FPList.myAppend(oneToFiveFP, 0) == FPList(1,2,3,4,5, 0))
+    assert(FPList.myAppend(oneToFiveFP, 0) == FPList(1, 2, 3, 4, 5, 0))
     assert(FPList.myAppend(FPNil, 0) == FPList(0))
 
     // +.
-    assert(FPList.+(oneToFiveFP, oneToFiveFP) == FPList(1,2,3,4,5, 1,2,3,4,5))
+    assert(
+      FPList.+(oneToFiveFP, oneToFiveFP) == FPList(1, 2, 3, 4, 5, 1, 2, 3, 4, 5)
+    )
     assert(FPList.+(oneToFiveFP, FPNil) == oneToFiveFP)
     assert(FPList.+(FPNil, oneToFiveFP) == oneToFiveFP)
     assert(FPList.+(FPNil, FPNil) == FPNil)
-    assert(FPList.+(
-      oneToFiveFP,
-      fiveToTen) == FPList(1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 10))
+    assert(
+      FPList.+(oneToFiveFP, fiveToTen) == FPList(1, 2, 3, 4, 5, 5, 6, 7, 8, 9,
+        10)
+    )
 
   }
 
@@ -110,17 +114,15 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
     //
     // ```
     //    x match {
-    //      case FPNil => FPNil
-    //      case FPCons(h, t) => t
+    //      case FPNil ⇒ FPNil
+    //      case FPCons(h, t) ⇒ t
     //    }
     // ```
     //
     // ???: create hard evidence for algorithmic complexity in this test.
     assert(oneToFiveFP == FPList.init(FPList(1, 2, 3, 4, 5, 6)))
-    val removedFourTimes = FPList.init(
-      FPList.init(
-        FPList.init(
-          FPList.init(oneToFiveFP))))
+    val removedFourTimes =
+      FPList.init(FPList.init(FPList.init(FPList.init(oneToFiveFP))))
     assert(FPList(1) == removedFourTimes)
     assert(void == FPList.init(void))
   }
@@ -129,10 +131,9 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
     // This might be possible by using the 'return' keyword.
     // Assuming this would work, with a large list it would scan the list until
     // it finds the value, returning it instantly.
-    println(FPList.foldRightWithShortCircuit(
-      FPList(-2, -1, 0, 1, 2),
-      1,
-      0)(_ * _))
+    println(
+      FPList.foldRightWithShortCircuit(FPList(-2, -1, 0, 1, 2), 1, 0)(_ * _)
+    )
     //
     // This prints:
     //
@@ -155,23 +156,27 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
     // FPCons(1,FPCons(2,FPCons(3,FPNil)))
     //
     // It tells us that foldRight and Cons are equivalent.
-    println(FPList.foldRight(FPList(1, 2, 3), FPNil:FPList[Int])(FPCons(_, _)))
+    println(FPList.foldRight(FPList(1, 2, 3), FPNil: FPList[Int])(FPCons(_, _)))
   }
 
   test("3.9: List's implementation of of length.") {
     assert(FPList.length(void) == 0)
     assert(FPList.length(oneToFiveFP) == 5)
     assert(FPList.length(minusTentoTen) == 21)
-    assert(! (FPList.length(minusTentoTen) == 22))
+    assert(!(FPList.length(minusTentoTen) == 22))
   }
 
   test("3.10: List's implementation of of tail recursive foldLeft.") {
-    assert(FPList.foldRight(oneToFiveFP, 1)(_ * _)
-      == FPList.foldLeft(oneToFiveFP, 1)(_ * _))
+    assert(
+      FPList.foldRight(oneToFiveFP, 1)(_ * _)
+        == FPList.foldLeft(oneToFiveFP, 1)(_ * _)
+    )
     assert(0 == FPList.foldLeft(minusTentoTen, 0)(_ + _))
   }
 
-  test("3.11: List's reimplementation of sum, product and length in terms of foldLeft.") {
+  test(
+    "3.11: List's reimplementation of sum, product and length in terms of foldLeft."
+  ) {
     // Sum with foldLeft.
     assert(FPList.sumFoldLeft(oneToFiveFP) == FPList.sum(oneToFiveFP))
     assert(FPList.sumFoldLeft(FPNil) == 0)
@@ -183,22 +188,26 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
     assert(FPList.productFoldLeft(FPList(1)) == 1)
 
     // Length with foldLeft.
-    assert(! (FPList.lengthFoldLeft(oneToFiveFP) == 6))
+    assert(!(FPList.lengthFoldLeft(oneToFiveFP) == 6))
     assert(FPList.lengthFoldLeft(oneToFiveFP) == 5)
     assert(FPList.lengthFoldLeft(minusTentoTen) == 21)
     assert(FPList.lengthFoldLeft(void) == 0)
 
   }
 
-  test("3.12: List's implementation of the reverse of a FPList in terms of folding.") {
+  test(
+    "3.12: List's implementation of the reverse of a FPList in terms of folding."
+  ) {
     assert(FPList.reverse(oneToFiveFP) == FPList(5, 4, 3, 2, 1))
     assert(FPList.reverse(void) == void)
     assert(FPList.reverse(FPList(1)) == FPList(1))
   }
 
   namedTest("Compare foldRight and foldLeft.") {
-    val joinAsStringRight: (Int, String) => String = (member: Int, agg: String) => agg + member.toString
-    val joinAsStringLeft: (String, Int) => String = (x, y) => joinAsStringRight(y, x)
+    val joinAsStringRight: (Int, String) ⇒ String =
+      (member: Int, agg: String) ⇒ agg + member.toString
+    val joinAsStringLeft: (String, Int) ⇒ String =
+      (x, y) ⇒ joinAsStringRight(y, x)
     println("Original sequence: " + oneToFiveFP)
     println(FPList.foldRight(oneToFiveFP, "start right →")(joinAsStringRight))
     println(FPList.foldLeft(oneToFiveFP, "start left →")(joinAsStringLeft))
@@ -218,15 +227,23 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
     //
     // ???: Not satisfactorily answered.
 
-    val nonCommutativeFunctionL: (String, Int) => String = (s, x) => s + "→" + x.toString + "←"
-    val foldLeftResult = FPList.foldLeft(oneToFiveFP, "seed")(nonCommutativeFunctionL)
+    val nonCommutativeFunctionL: (String, Int) ⇒ String =
+      (s, x) ⇒ s + "→" + x.toString + "←"
+    val foldLeftResult =
+      FPList.foldLeft(oneToFiveFP, "seed")(nonCommutativeFunctionL)
     assert(
-      (foldLeftResult == FPList.foldLeftUsingFR(oneToFiveFP, "seed")(nonCommutativeFunctionL))
+      (foldLeftResult == FPList.foldLeftUsingFR(oneToFiveFP, "seed")(
+        nonCommutativeFunctionL
+      ))
     )
-    val nonCommutativeFunctionR = (i: Int, s: String) => nonCommutativeFunctionL(s, i)
-    val foldRightResult = FPList.foldRight(oneToFiveFP, "seed")(nonCommutativeFunctionR)
+    val nonCommutativeFunctionR =
+      (i: Int, s: String) ⇒ nonCommutativeFunctionL(s, i)
+    val foldRightResult =
+      FPList.foldRight(oneToFiveFP, "seed")(nonCommutativeFunctionR)
     assert(
-      (foldRightResult == FPList.foldRightUsingFL(oneToFiveFP, "seed")(nonCommutativeFunctionR))
+      (foldRightResult == FPList.foldRightUsingFL(oneToFiveFP, "seed")(
+        nonCommutativeFunctionR
+      ))
     )
     println("FLResult: " + foldLeftResult)
     println("FRResult: " + foldRightResult)
@@ -271,9 +288,9 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
     //                | Commit: e871cb96a264b27693fa1300bcf180ee6f547e95
     // 1:             | def append[T](l1: FPList[T], l2: FPList[T]): FPList[T] = {
     // 2: [constant]  |   l1 match {
-    // 3: [linear]    |     case FPCons(h, t) => FPCons(h,
+    // 3: [linear]    |     case FPCons(h, t) ⇒ FPCons(h,
     //  :             |       foldRight(t, l2)(FPCons(_, _)))
-    // 4: [constant]  |     case FPNil => l2
+    // 4: [constant]  |     case FPNil ⇒ l2
     // 5:             |   }
     // 6:             | }
     //
@@ -282,7 +299,8 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
     // applies this function to the tail of the list, which is ~N.
     // Thus O(n) * O(k) = O(n)
     assert(
-      FPList.append(oneToFiveFP, oneToFiveFP) == FPList(1,2,3,4,5, 1,2,3,4,5)
+      FPList.append(oneToFiveFP, oneToFiveFP) == FPList(1, 2, 3, 4, 5, 1, 2, 3,
+        4, 5)
     )
     assert(
       FPList.append(FPNil, FPNil) == FPNil
@@ -294,7 +312,7 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
       FPList.append(FPNil, oneToFiveFP) == oneToFiveFP
     )
     assert(
-      FPList.append(oneToFiveFP, 6) == FPList(1,2,3,4,5,6)
+      FPList.append(oneToFiveFP, 6) == FPList(1, 2, 3, 4, 5, 6)
     )
   }
 
@@ -307,18 +325,18 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
     )
     val threeTimesOneToFive = FPList(oneToFiveFP, oneToFiveFP, oneToFiveFP)
     assert(
-      FPList.concatenateListOfLists(threeTimesOneToFive) == FPList(
-        1,2,3,4,5,1,2,3,4,5,1,2,3,4,5)
-      )
+      FPList.concatenateListOfLists(threeTimesOneToFive) == FPList(1, 2, 3, 4,
+        5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5)
+    )
     assert(
       FPList.concatenateListOfLists(FPList(FPList(1.0))) == FPList(1.0)
     )
     val nestedStringNil = FPList(FPList(FPNil: FPList[String]))
     assert(
       FPList.concatenateListOfLists(
-        FPList.concatenateListOfLists(
-          nestedStringNil)) == (FPNil: FPList[String])
-      )
+        FPList.concatenateListOfLists(nestedStringNil)
+      ) == (FPNil: FPList[String])
+    )
   }
 
   test("3.16: List's implementation of addOneToInt.") {
@@ -361,71 +379,82 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
   }
 
   test("3.19: List's implementation of filter.") {
-    assert(FPList.filter(oneToFiveFP)((x: Int) => x % 2 == 0) == FPList(2, 4))
-    assert(FPList.filter(FPNil)((x: Int) => true) == FPNil)
-    assert(FPList.filter(minusTentoTen)((x: Int) => false) == FPNil)
+    assert(FPList.filter(oneToFiveFP)((x: Int) ⇒ x % 2 == 0) == FPList(2, 4))
+    assert(FPList.filter(FPNil)((x: Int) ⇒ true) == FPNil)
+    assert(FPList.filter(minusTentoTen)((x: Int) ⇒ false) == FPNil)
     assert(
       FPList.filter(FPList("alice", "bob", "jalile", "adam"))(
-        (x: String) => x.startsWith("a")) == FPList("alice", "adam")
-      )
+        (x: String) ⇒ x.startsWith("a")
+      ) == FPList("alice", "adam")
+    )
   }
 
   test("3.20: List's implementation of flatMap.") {
-    assert(FPList.flatMap(oneToFiveFP)(i => FPList(i, i)) == FPList(1,1,2,2,3,3,4,4,5,5))
+    assert(
+      FPList.flatMap(oneToFiveFP)(i ⇒ FPList(i, i)) == FPList(1, 1, 2, 2, 3, 3,
+        4, 4, 5, 5)
+    )
     assert(
       FPList.toBuiltinScalaList(
-        FPList.flatMap(oneToFiveFP)(i => FPList("" + i + "|", "empty"))
+        FPList.flatMap(oneToFiveFP)(i ⇒ FPList("" + i + "|", "empty"))
       )
-    ==
-      List(
-        "1|",
-        "empty",
-        "2|",
-        "empty",
-        "3|",
-        "empty",
-        "4|",
-        "empty",
-        "5|",
-        "empty",
-        )
-      )
+        ==
+          List(
+            "1|",
+            "empty",
+            "2|",
+            "empty",
+            "3|",
+            "empty",
+            "4|",
+            "empty",
+            "5|",
+            "empty"
+          )
+    )
   }
 
   test("Test conversion to builtin Scala List") {
     assert(FPList.toBuiltinScalaList(oneToFiveFP) == List(1, 2, 3, 4, 5))
     assert(FPList.toBuiltinScalaList(FPNil) == Nil)
-    assert(FPList.toBuiltinScalaList(FPList(10D)) == List(10D))
+    assert(FPList.toBuiltinScalaList(FPList(10d)) == List(10d))
     assert(FPList.toBuiltinScalaList(FPList(1)) != List(2))
   }
 
   test("3.21: List's implementation of filter via flatMap.") {
-    import FPList.{filterUsingFlatMap => filterFM}
-    assert(filterFM(oneToFiveFP)((x: Int) => x % 2 == 0) == FPList(2, 4))
-    assert(filterFM(FPNil)((x: Int) => true) == FPNil)
-    assert(filterFM(minusTentoTen)((x: Int) => false) == FPNil)
+    import FPList.{filterUsingFlatMap ⇒ filterFM}
+    assert(filterFM(oneToFiveFP)((x: Int) ⇒ x % 2 == 0) == FPList(2, 4))
+    assert(filterFM(FPNil)((x: Int) ⇒ true) == FPNil)
+    assert(filterFM(minusTentoTen)((x: Int) ⇒ false) == FPNil)
     assert(
       filterFM(FPList("alice", "bob", "jalile", "adam"))(
-        (x: String) => x.startsWith("a")) == FPList("alice", "adam")
-      )
+        (x: String) ⇒ x.startsWith("a")
+      ) == FPList("alice", "adam")
+    )
   }
 
   test("3.22: List's implementation of adding paired lists.") {
-    assert(FPList.addPairedLists(oneToFiveFP, oneToFiveFP) ==
-      FPList(2, 4, 6, 8, 10))
-    assertThrows[IllegalArgumentException](FPList.addPairedLists(oneToFiveFP, FPCons(0, oneToFiveFP)))
+    assert(
+      FPList.addPairedLists(oneToFiveFP, oneToFiveFP) ==
+        FPList(2, 4, 6, 8, 10)
+    )
+    assertThrows[IllegalArgumentException](
+      FPList.addPairedLists(oneToFiveFP, FPCons(0, oneToFiveFP))
+    )
   }
 
   test("3.23: List's implementation of zipWith.") {
     val x1 = FPList("10", "100", "1000")
     val x2 = FPList('1', '2', '3')
-    val x3 = FPList(-100D, 1000L, 0)
+    val x3 = FPList(-100d, 1000L, 0)
     assert(
       FPList.toBuiltinScalaList(
         FPList.zipWith(
-          FPList.zipWith(x1, x2)((s, c) => (c.asDigit + s.toInt) * (c.asDigit)),
-          x3)(_ + _))
-      == List(-89, 1204, 3009)
+          FPList.zipWith(x1, x2)((s, c) ⇒ (c.asDigit + s.toInt) * (c.asDigit)),
+          x3
+        )(_ + _)
+      )
+        == List(-89, 1204, 3009)
     )
   }
 
@@ -434,7 +463,7 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
     // Group 1 of 2: at least one of them are nills.
     // Subgroup 1 of 2: Sup is nill.
     assert(hasSubsequence(FPNil, FPNil))
-    assert(! hasSubsequence(FPNil, oneToFiveFP))
+    assert(!hasSubsequence(FPNil, oneToFiveFP))
     // Subgroup 2 of 2: Sub is nill.
     assert(hasSubsequence(oneToFiveFP, FPNil))
 
@@ -454,12 +483,12 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
     assert(hasSubsequence(minusTentoTen, FPList(8, 9, 10)))
     assert(hasSubsequence(minusTentoTen, FPList(10)))
     // Subgroup 3 of 4: B contains A.
-    assert(! hasSubsequence(oneToFiveFP, minusTentoTen))
+    assert(!hasSubsequence(oneToFiveFP, minusTentoTen))
     // Subgroup 4 of 4: Disjoint lists.
     // Completely disjoint.
-    assert(! hasSubsequence(FPList(-1), FPList(5)))
+    assert(!hasSubsequence(FPList(-1), FPList(5)))
     // Not completely disjoint.
-    assert(! hasSubsequence(minusTentoTen, FPList(7, 8, 9)))
+    assert(!hasSubsequence(minusTentoTen, FPList(7, 8, 9)))
     // NOTE: '5efd106' that's why I love tests... While I was expanding them
     // I got the programming mistake from the line above. ☺
 
@@ -485,18 +514,18 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
     // |   // Debugging with print...
     // |   @annotation.tailrec
     // |   def go(l1: FPList[A], l2: FPList[A]): Boolean = {
-    // |     println("sup " + foldLeft(l1, "")((x: String, y: A) => x + "|" + y))
-    // |     println("sub " + foldLeft(l2, "")((x: String, y: A) => x + "|" + y))
+    // |     println("sup " + foldLeft(l1, "")((x: String, y: A) ⇒ x + "|" + y))
+    // |     println("sub " + foldLeft(l2, "")((x: String, y: A) ⇒ x + "|" + y))
     // |     l1 match {
-    // |       case FPNil => l1 == l2
-    // |       case FPCons(h1, t1) => l2 match {
-    // |         case FPNil => {
+    // |       case FPNil ⇒ l1 == l2
+    // |       case FPCons(h1, t1) ⇒ l2 match {
+    // |         case FPNil ⇒ {
     // |           t1 != FPNil
     // |           // true  // ???: Violates: FPISTestChapter03.this.minusTentoTen, FPISExerciseChapter03.FPList.apply[Int](7, 8, 9)
     // |           // false // ???: Violates: FPISTestChapter03.this.minusTentoTen, FPISExerciseChapter03.FPList.apply[Int](-10, -9, -8)
     // |           // throw new Exception()
     // |         }
-    // |         case FPCons(h2, t2) => if (h1 == h2) go(t1, t2) else go(t1, sub)
+    // |         case FPCons(h2, t2) ⇒ if (h1 == h2) go(t1, t2) else go(t1, sub)
     // |       }
     // |     }
     // |   }
@@ -527,54 +556,48 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
     // Thus our implementation is efficient.
   }
 
-  {  // Scope of Tree, Branch and Leaf.
+  { // Scope of Tree, Branch and Leaf.
     import FPISExerciseChapter03.{Tree, Branch, Leaf}
-    val tree1 = Branch(         // depth 1.
+    val tree1 = Branch( // depth 1.
       Branch(Leaf(1), Leaf(1)), // depth 2 and 3.
-      Branch(                   // depth 2.
-        Branch(                 // depth 3.
-          Leaf(1),              // depth 4.
-          Leaf(1)),             // depth 4.
-        Branch(                 // depth 3.
-          Branch(               // depth 4.
-            Leaf(1),            // depth 5.
-            Leaf(1)),           // depth 5.
-          Leaf(1))),            // depth 4.
-      )
+      Branch( // depth 2.
+        Branch( // depth 3.
+          Leaf(1), // depth 4.
+          Leaf(1)
+        ), // depth 4.
+        Branch( // depth 3.
+          Branch( // depth 4.
+            Leaf(1), // depth 5.
+            Leaf(1)
+          ), // depth 5.
+          Leaf(1)
+        )
+      ) // depth 4.
+    )
 
-    val tree2 = Leaf(1)  // depth 1.
+    val tree2 = Leaf(1) // depth 1.
 
-    val tree3 = Branch(  // depth 1.
-      Branch(            // depth 2.
-        Leaf(5),         // depth 3.
-        Leaf(6)),        // depth 3.
-      Leaf(10))          // depth 2.
-    val tree3AsDoubledTuple = Branch(
-      Branch(
-        Leaf((5, 5)),
-        Leaf((6, 6))),
-      Leaf((10, 10)))
+    val tree3 = Branch( // depth 1.
+      Branch( // depth 2.
+        Leaf(5), // depth 3.
+        Leaf(6)
+      ), // depth 3.
+      Leaf(10)
+    ) // depth 2.
+    val tree3AsDoubledTuple =
+      Branch(Branch(Leaf((5, 5)), Leaf((6, 6))), Leaf((10, 10)))
     val tree3Expanded = Branch(tree3, Leaf(1))
-    val tree3AsString = Branch(
-      Branch(
-        Leaf("5"),
-        Leaf("6")),
-      Leaf("10"))
+    val tree3AsString = Branch(Branch(Leaf("5"), Leaf("6")), Leaf("10"))
 
     val tree4 = Branch(Branch(Leaf(1), Leaf(2)), Leaf(3))
 
     val tree5 = Branch(
       Branch(Leaf(-1), Leaf(-1)),
       Branch(
-        Branch(
-          Leaf(-1),
-          Leaf(-1)),
-        Branch(
-          Branch(
-            Leaf(-1),
-            Leaf(-1)),
-          Leaf(-1))),
+        Branch(Leaf(-1), Leaf(-1)),
+        Branch(Branch(Leaf(-1), Leaf(-1)), Leaf(-1))
       )
+    )
 
     test("3.25: Tree's Implementation of size.") {
       assert(Tree.size(tree1) == 13)
@@ -585,7 +608,7 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
       assert(Tree.max(tree1) == 1)
       assert(Tree.max(tree2) == 1)
       assert(Tree.max(tree3) == 10)
-      assert(! (Tree.max(tree3) == 11))
+      assert(!(Tree.max(tree3) == 11))
     }
 
     test("3.27: Tree's Implementation of depth.") {
@@ -603,7 +626,7 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
       // Test some maps.
       assert(Tree.map(tree2)(_ + 999) == Leaf(1000))
       assert(Tree.map(tree3)(_.toString) == tree3AsString)
-      assert(tree3AsDoubledTuple == Tree.map(tree3)(x => (x, x)))
+      assert(tree3AsDoubledTuple == Tree.map(tree3)(x ⇒ (x, x)))
     }
 
     test("3.29: Tree's Implementation of fold.") {
@@ -631,39 +654,24 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
 
       // Map.
       val lot: List[Tree[Int]] = List(tree1, tree2, tree3, tree4, tree5)
-      val lof: List[Int => Int] = List(
+      val lof: List[Int ⇒ Int] = List(
         identity,
         _ + 2,
-        x => 0,
-        x => x * x,
-        )
-      lot.map(x => {
+        x ⇒ 0,
+        x ⇒ x * x
+      )
+      lot.map(x ⇒ {
         println("-" * 79)
         println("Original: " + x)
-        lof.map(f =>
-        {
+        lof.map(f ⇒ {
           val simpleMap = Tree.map(x)(f)
           val map = Tree.mapUsingFold(x)(f)
           println("Mapped:\n" + f + ":\n" + map)
           assert(simpleMap == map)
-        }
-        )
-      }
-      )
+        })
+      })
     }
 
-  }  // Scope of Tree, Branch and Leaf.
+  } // Scope of Tree, Branch and Leaf.
 
 }
-
-//  Run this in vim to avoid troubles:
-//
-// call matchadd("ErrorXXX", '\<List\>', 2)
-// call matchadd("ErrorXXX", '\<Cons\>', 2)
-// call matchadd("ErrorXXX", '\<Const\>', 2)
-// call matchadd("ErrorXXX", '\<Nil\>', 2)
-// iabbrev List FPList
-// iabbrev Cons FPCons
-// iabbrev Nil FPNil
-//
-// vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:

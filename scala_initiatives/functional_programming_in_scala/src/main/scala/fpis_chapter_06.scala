@@ -511,18 +511,3 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
   // Coin machine. --- }
 
 }
-
-// Run this in vim:
-//
-// ???: Why this is not automatic? It should be.
-// vim source: iabbrev t the
-//
-// vim source: 1,-10s/=>/⇒/ge
-// vim source: NeoCompleteEnable
-// vim source: iabbrev R RNG
-// vim source: iabbrev SR StateResult
-// vim source: iabbrev ST StateTransition
-// vim source: iabbrev Si SimpleRNG
-// vim source: iabbrev St State
-//
-// vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:

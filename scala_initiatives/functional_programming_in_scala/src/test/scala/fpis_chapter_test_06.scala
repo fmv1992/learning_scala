@@ -371,15 +371,3 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
   }
 
 }
-
-// Run this in vim:
-//
-// ???: Why this is not automatic? It should be.
-// vim source: iabbrev t the
-//
-// vim source: iabbrev R RNG
-// vim source: iabbrev Si SimpleRNG
-// vim source: 1,-10s/=>/⇒/ge
-// vim source: NeoCompleteEnable
-//
-// vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:

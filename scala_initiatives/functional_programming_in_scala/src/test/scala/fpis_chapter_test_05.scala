@@ -489,10 +489,3 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   }
 
 }
-
-// Run this in vim:
-//
-// vim source: iabbrev aa assert("5.x: ???.")
-// vim source: call matchadd("ErrorXXX", '\<Cons\>', 2)
-//
-// vim: set filetype=scala fileformat=unix foldmarker={,} nowrap tabstop=2 softtabstop=2:
