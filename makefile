@@ -17,7 +17,11 @@ SCALAC_CFLAGS = -cp $$PWD:$(ROOT_DIR)/code/my_scala_project/
 # ???: Google drive link to download ~/.sbt needed to compile this project.
 # https://drive.google.com/open?id=1FoY3kQi52PWllwc3ytYU9452qJ4ack1u
 
-all: test
+all: tmp/.fpinscala test
+
+tmp/.fpinscala:
+	bash ./other_code/travis_ci/install_fpinscala.sh
+	touch -m $@
 
 clean_fpis_chapter:
 ifdef LEARNING_SCALA_CHAPTER
