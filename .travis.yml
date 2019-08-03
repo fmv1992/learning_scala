@@ -12,8 +12,11 @@ branches:
     - dev_unstable
     - master
 
-before_install: bash -xv ./other_code/travis_ci/install_fpinscala.sh
+before_install:
+    - sudo update-java-alternatives -s java-1.8.0-openjdk-amd64
+    - bash -xv ./other_code/travis_ci/install_fpinscala.sh
 
-script: cd ./scala_initiatives/ && sbt compile && sbt test
+script:
+    - cd ./scala_initiatives/ && sbt compile && sbt test
 
 # vim: set fileformat=unix filetype=yaml nowrap nospell :
