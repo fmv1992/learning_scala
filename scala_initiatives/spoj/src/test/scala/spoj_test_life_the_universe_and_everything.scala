@@ -1,10 +1,13 @@
 import scalainitiatives.common.{Reader, Paths, Constants, ScalaInitiativesTestSPOJ}
 
 import org.scalatest._
+import org.scalatest.diagrams.Diagrams
 
 import spoj.Main
 
-class TestSPOJTestLifeTheUniverseAndEverything extends FunSuite with DiagrammedAssertions with ScalaInitiativesTestSPOJ {
+import org.scalatest.funsuite.AnyFunSuite
+
+class TestSPOJTestLifeTheUniverseAndEverything extends AnyFunSuite with Diagrams with ScalaInitiativesTestSPOJ {
 
   val testPathAsList = List(
     ".",

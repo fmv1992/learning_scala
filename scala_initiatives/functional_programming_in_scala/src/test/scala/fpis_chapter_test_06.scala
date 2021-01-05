@@ -1,6 +1,6 @@
 package scalainitiatives.functional_programming_in_scala
 
-// import scala.{Stream ⇒ _, _}
+// import scala.{Stream => _, _}
 
 import scalainitiatives.common.Statistics
 
@@ -19,7 +19,7 @@ import FPISExerciseChapter06.Turn
 
 import scalainitiatives.common.ScalaInitiativesTest
 
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 
 // Se matchers here:
 // http://www.scalatest.org/user_guide/using_matchers#checkingObjectIdentity
@@ -60,7 +60,7 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     // ???: Looks like there is confusion regarding the quality of the PRNG
     // described in the book...
     val intsFromBookFunction = SimpleRNG
-      .sequence(List.fill(10000)((x: RNG) ⇒ x.nextIntFromBook))(rng1)
+      .sequence(List.fill(10000)((x: RNG) => x.nextIntFromBook))(rng1)
       ._1
     assert(intsFromBookFunction.toSet.size == intsFromBookFunction.length)
     // ???: Why is the following not true?
@@ -83,7 +83,7 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
 
   test("6.2: Implementation of double.") {
     val doubles: Stream[Double] = StreamOfRNGs100.map(_.double._1)
-    assert(doubles.forall(x ⇒ (x >= 0) && (x < 1)))
+    assert(doubles.forall(x => (x >= 0) && (x < 1)))
     assert(doubles.toSet.size == doubles.length)
   }
 
@@ -122,7 +122,7 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
 
     val doubles: Stream[Double] =
       StreamOfRNGs100.map(SimpleRNG.doubleUsingMap(_)._1)
-    assert(doubles.forall(x ⇒ (x >= 0) && (x < 1)))
+    assert(doubles.forall(x => (x >= 0) && (x < 1)))
     assert(doubles.toSet.size == doubles.length)
   }
 
@@ -135,13 +135,13 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
 
   test("6.7: Implementation of sequence and intsUsingSequence.") {
     val (a, rng2) = rng1.nextInt
-    val seqFunc1 = SimpleRNG.sequence(List.fill(1)((x: RNG) ⇒ x.nextInt))
+    val seqFunc1 = SimpleRNG.sequence(List.fill(1)((x: RNG) => x.nextInt))
     val seqRes1 = seqFunc1(rng1)
     assert(rng2 === seqRes1._2)
     assert(List(a) === seqRes1._1)
 
     val (b, rng3) = rng2.nextInt
-    val seqFunc2 = SimpleRNG.sequence(List.fill(2)((x: RNG) ⇒ x.nextInt))
+    val seqFunc2 = SimpleRNG.sequence(List.fill(2)((x: RNG) => x.nextInt))
     val seqRes2 = seqFunc2(rng1)
     assert(rng3 === seqRes2._2)
     assert(List(a, b) === seqRes2._1)
@@ -149,9 +149,9 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     val (c, rng4) = SimpleRNG.double(rng3)
     val seqFunc3 = SimpleRNG.sequence(
       List(
-        (x: RNG) ⇒ x.nextInt,
-        (y: RNG) ⇒ y.nextInt,
-        (z: RNG) ⇒ SimpleRNG.double(z)
+        (x: RNG) => x.nextInt,
+        (y: RNG) => y.nextInt,
+        (z: RNG) => SimpleRNG.double(z)
       )
     )
     val seqRes3 = seqFunc3(rng1)
@@ -183,10 +183,10 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
   test("6.9: Implementation of map and map2 using flatMap.") {
     // Map.
     val vWithMapVanilla =
-      SimpleRNG.map(SimpleRNG.nonNegativeLessThan(9))(i ⇒ i * i + 100)(rng1)
+      SimpleRNG.map(SimpleRNG.nonNegativeLessThan(9))(i => i * i + 100)(rng1)
     val vWithMapUsingFM = SimpleRNG.mapUsingFlatMap(
       SimpleRNG.nonNegativeLessThan(9)
-    )(i ⇒ i * i + 100)(rng1)
+    )(i => i * i + 100)(rng1)
     assert(vWithMapVanilla == vWithMapUsingFM)
     assert(vWithMapVanilla._2 == rng1.nextInt._2)
 
@@ -226,11 +226,11 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
   // seed and a transformFromSeedToInitialState function) and a getNextState
   // function.
 
-  // val s1 = State((x: Int) ⇒ (x + 1, State((y: Int) ⇒ 2 * x))
-  // val immState = State(0, (x: Int) ⇒ (x, x))
-  val nextIntFunc = (x: Int) ⇒ (x + 1, x)
+  // val s1 = State((x: Int) => (x + 1, State((y: Int) => 2 * x))
+  // val immState = State(0, (x: Int) => (x, x))
+  val nextIntFunc = (x: Int) => (x + 1, x)
   val nextIntState = State(nextIntFunc)
-  val doubleIntFunc = (x: Int) ⇒ (x + 1, 2 * x)
+  val doubleIntFunc = (x: Int) => (x + 1, 2 * x)
   val doubleIntState = State(doubleIntFunc)
   //  1.  The double of the current state.
   //  2.  A new state, which is the next integer.
@@ -244,7 +244,7 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
   assert(b == 2)
 
   def int2StrAndBigIncrease(x: Int): StateTransition[Int, String] = {
-    (y: Int) ⇒ (y + 870, ("|" + y + "|") + "_goes_to_the_right")
+    (y: Int) => (y + 870, ("|" + y + "|") + "_goes_to_the_right")
   }
 
   test(
@@ -256,14 +256,14 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
 
     // Test map.
     assert(
-      State.map(nextIntState.run)((x: Int) ⇒ math.pow(x + 1d, 2))(s2)
+      State.map(nextIntState.run)((x: Int) => math.pow(x + 1d, 2))(s2)
         == (3, 9)
     )
 
     // Test map2.
     assert(
       State.map2(nextIntState.run, doubleIntState.run)(
-        (i1: Int, i2: Int) ⇒ List(i1, i2)
+        (i1: Int, i2: Int) => List(i1, i2)
       )(s2)
         == (doubleIntState.run(nextIntState.run(s2)._1)._1,
         List(2, 6))
@@ -290,9 +290,9 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     "6.10.1: Generalization of unit, map, map2, flatMap and sequence for a State class."
   ) {
     assert(nextIntState.unit(10) == (nextIntState, 10))
-    val cube = ((x: Int) ⇒ math.pow(x, 3))
+    val cube = ((x: Int) => math.pow(x, 3))
     assert(nextIntState.map(cube)(10) == (11, 1000))
-    val toL = (i1: Int, i2: Int) ⇒ List(i1, i2)
+    val toL = (i1: Int, i2: Int) => List(i1, i2)
     assert(
       State.map2(nextIntState.run, doubleIntState.run)(toL)(s2)
         == nextIntState.map2(doubleIntState.run)(toL)(s2)
