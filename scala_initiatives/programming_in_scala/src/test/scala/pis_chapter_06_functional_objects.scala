@@ -3,8 +3,10 @@ import scalainitiatives.common.{Reader, Paths, Constants, ScalaInitiativesTestPI
 import scalainitiatives.programming_in_scala.Rational
 
 import org.scalatest._
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.diagrams.Diagrams
 
-class PISChapter06FunctionalObjectsTest extends FunSuite with DiagrammedAssertions with ScalaInitiativesTestPIS {
+class PISChapter06FunctionalObjectsTest extends AnyFunSuite with Diagrams with ScalaInitiativesTestPIS {
 
   // Use the squared root of the maximum int because multiplication of two
   // rationals can go beyond it.

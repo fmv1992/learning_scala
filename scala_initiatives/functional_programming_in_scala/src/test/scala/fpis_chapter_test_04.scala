@@ -1,23 +1,23 @@
 package scalainitiatives.functional_programming_in_scala
 
-import scala.{Either ⇒ _, _}
-import scala.{Left ⇒ _, _}
-import scala.{None ⇒ _, _}
-import scala.{Option ⇒ _, _}
-import scala.{Right ⇒ _, _}
-import scala.{Some ⇒ _, _}
+import scala.{Either => _, _}
+import scala.{Left => _, _}
+import scala.{None => _, _}
+import scala.{Option => _, _}
+import scala.{Right => _, _}
+import scala.{Some => _, _}
 
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 
 import scalainitiatives.common.ScalaInitiativesTest
 
-import FPISExerciseChapter04.{Option ⇒ Option}
-import FPISExerciseChapter04.{Some ⇒ Some}
-import FPISExerciseChapter04.{None ⇒ None}
-import FPISExerciseChapter04.{Either ⇒ Either}
-import FPISExerciseChapter04.{Left ⇒ Left}
-import FPISExerciseChapter04.{Right ⇒ Right}
-// import FPISExerciseChapter04.{Try ⇒ Try}
+import FPISExerciseChapter04.{Option => Option}
+import FPISExerciseChapter04.{Some => Some}
+import FPISExerciseChapter04.{None => None}
+import FPISExerciseChapter04.{Either => Either}
+import FPISExerciseChapter04.{Left => Left}
+import FPISExerciseChapter04.{Right => Right}
+// import FPISExerciseChapter04.{Try => Try}
 
 // Se matchers here:
 // http://www.scalatest.org/user_guide/using_matchers#checkingObjectIdentity
@@ -70,18 +70,18 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
     nDouble.orElse(oStringOne) should be theSameInstanceAs oStringOne
 
     // Reimplement the filter function.
-    def isGreaterThanFive: Double ⇒ Boolean = _ > 5
-    def notIsGreaterThanFive: Double ⇒ Boolean = x ⇒ !(x > 5)
+    def isGreaterThanFive: Double => Boolean = _ > 5
+    def notIsGreaterThanFive: Double => Boolean = x => !(x > 5)
     assert(nDouble.filter(isGreaterThanFive) == nDouble)
     assert(oDoubleOne.filter(isGreaterThanFive) == nDouble)
     assert(oDoubleOne.filter(notIsGreaterThanFive) != nDouble)
-    assert(nDouble.filter(x ⇒ x > 5) == nDouble)
-    assert(oDoubleOne.filter(x ⇒ x == 1L) == oDoubleOne)
-    assert(oDoubleOne.filter(x ⇒ x != 1L) != oDoubleOne)
+    assert(nDouble.filter(x => x > 5) == nDouble)
+    assert(oDoubleOne.filter(x => x == 1L) == oDoubleOne)
+    assert(oDoubleOne.filter(x => x != 1L) != oDoubleOne)
   }
 
   test("4.2: Implementation of variance.") {
-    val repeat = Seq.tabulate(10)(i ⇒ 10d)
+    val repeat = Seq.tabulate(10)(i => 10d)
     assert(
       isClose(Option.variance(repeat).getOrElse(Int.MaxValue.toDouble), 0.0)
     )
@@ -127,11 +127,11 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
   test("4.5: implementation of traverse.") {
     // val oneToFive: List[Int] = (1 to 5).toList
     assert(
-      Option.traverse(oneToFive)(x ⇒ if (x == 3) None else Some(x))
+      Option.traverse(oneToFive)(x => if (x == 3) None else Some(x))
         == None
     )
     assert(
-      Option.traverse(oneToFive)(x ⇒ if (x == 6) None else Some(x))
+      Option.traverse(oneToFive)(x => if (x == 6) None else Some(x))
         == Some(List(5, 4, 3, 2, 1))
     )
 
@@ -165,7 +165,7 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
     // below get us nothing since we cannot make E related to any Exception...
     // In other words, these exercises are barely useful.
     //
-    // assert(l1.map(x ⇒ x + 1) == l1)
+    // assert(l1.map(x => x + 1) == l1)
     // Does not compile with:
     // "value + is not a member of Nothing"
     // assert(r1.map(_ + 1) == r2)
@@ -175,17 +175,17 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
 
     assert(r1.map(_ + 1) == r2)
     assert(l1.map(identity) == l1)
-    assert(l1.map(x ⇒ Left(3)) == l1) // Is unchanged.
+    assert(l1.map(x => Left(3)) == l1) // Is unchanged.
 
-    assert(r1.flatMap((x: Int) ⇒ Right((x + 3).toDouble)) == Right(4d))
-    assert(l1.flatMap((x: Int) ⇒ Right((x + 3).toDouble)) == l1)
+    assert(r1.flatMap((x: Int) => Right((x + 3).toDouble)) == Right(4d))
+    assert(l1.flatMap((x: Int) => Right((x + 3).toDouble)) == l1)
 
     assert(l1.orElse(r1) == r1)
     assert(r1.orElse(l1) == r1)
 
     assert(r1.map2(r1)(_ + _) == Right(2))
-    assert(l1.map2(r1)((x, y) ⇒ y) == l1)
-    assert(r1.map2(l1)((x, y) ⇒ y) == l1)
+    assert(l1.map2(r1)((x, y) => y) == l1)
+    assert(r1.map2(l1)((x, y) => y) == l1)
   }
 
   test("4.7: implementation of sequence and traverse.") {
@@ -202,9 +202,9 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
 
     // Test traverse.
     // val oneToFive: List[Int] = (1 to 5).toList
-    assert(Either.traverse(oneToFive)(x ⇒ if (x == 3) l1 else Right(x)) == l1)
+    assert(Either.traverse(oneToFive)(x => if (x == 3) l1 else Right(x)) == l1)
     assert(
-      Either.traverse(oneToFive)(x ⇒ if (x == 6) l1 else Right(2 * x))
+      Either.traverse(oneToFive)(x => if (x == 6) l1 else Right(2 * x))
         == Right(oneToFive.map(_ * 2))
     )
   }
@@ -251,7 +251,7 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
     //  1| mkName(name).           map2 (mkAge(age))(Person(_, _))
     //  2| mkName("").             map2 (mkAge(age))(Person(_, _))
     //  3| Left("Name is empty."). map2 (Left("Age is out of range."))(Person(_, _))
-    //  4| Left("Name is empty."). flatMap(aa ⇒ Left("Age is out of range.").map(bb ⇒ f(aa, bb)))
+    //  4| Left("Name is empty."). flatMap(aa => Left("Age is out of range.").map(bb => f(aa, bb)))
     //  flatMap then matches aa/this/Left("Name is empty."). to Left("Name is empty.").
     //
     // (1): In order to report both errors one could either group them in

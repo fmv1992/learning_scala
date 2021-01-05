@@ -1,18 +1,31 @@
- # Ignore everything
+# Ignore everything
 *
 
 # But not these files...
+!*.conf
 !*.md
+!*.properties
+!*.py
 !*.sbt
 !*.scala
 !*.sh
+!*.txt
+!*.vim
 !.gitignore
-!license.txt
+!.gitkeep
+!.properties
+!.sbt
 !makefile
-!license.txt
+!version
 # etc...
 
 # ...even if they are in subdirectories
 !*/
 
+# But do ignore these directories
+.metals/
+project/
+target/
 tmp/
+
+# vim: set fileformat=unix filetype=conf wrap :

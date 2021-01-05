@@ -1,6 +1,6 @@
 package scalainitiatives.common
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 import java.io.File
 import java.io.ByteArrayInputStream
@@ -11,28 +11,28 @@ trait ScalaInitiativesMain {}
 
 trait ScalaInitiativesUtilities {
 
-  def curry[A, B, C](f: (A, B) ⇒ C): A ⇒ (B ⇒ C) = {
-    (a: A) ⇒ (
-        (b: B) ⇒ f(a, b)
+  def curry[A, B, C](f: (A, B) => C): A => (B => C) = {
+    (a: A) => (
+        (b: B) => f(a, b)
     )
   }
 }
 
-trait ScalaInitiativesTest extends FunSuite {
+trait ScalaInitiativesTest extends AnyFunSuite {
 
   // Declare very common variables to all the tests.
   val oneToFive = (1 to 5).toList
 
   // // https://jaytaylor.com/notes/node/1348628729000.html
-  // def tupleize[A, B](f: A ⇒ B ⇒ C) = {
+  // def tupleize[A, B](f: A => B => C) = {
 
   //   // Function.tupled(f(_))
   //   f(_).tupled
 
   // }
   //
-  def namedTest(x: ⇒ String): (⇒ Any) ⇒ Unit = {
-    def lazyTestBody(testBody: ⇒ Any) = {
+  def namedTest(x: => String): (=> Any) => Unit = {
+    def lazyTestBody(testBody: => Any) = {
       lazy val testResult = test(x) {
         println("Starting: " + x + " " + System.nanoTime)
         testBody
@@ -69,10 +69,10 @@ trait ScalaInitiativesTest extends FunSuite {
     // Read the test files.
     val inputFiles = Paths.getFilesFromDir(folderPath)
     val dataFiles = inputFiles
-      .filter(x ⇒ Constants.Test.regexDataFiles.findFirstIn(x).isDefined)
+      .filter(x => Constants.Test.regexDataFiles.findFirstIn(x).isDefined)
       .sorted
     val resultFiles = inputFiles
-      .filter(x ⇒ Constants.Test.regexResultFiles.findFirstIn(x).isDefined)
+      .filter(x => Constants.Test.regexResultFiles.findFirstIn(x).isDefined)
       .sorted
 
     (dataFiles, resultFiles)
@@ -83,9 +83,9 @@ trait ScalaInitiativesTest extends FunSuite {
 
 trait ScalaInitiativesExercise {
 
-  def Try[A](a: ⇒ A): Either[Exception, A] = {
+  def Try[A](a: => A): Either[Exception, A] = {
     try Right(a)
-    catch { case e: Exception ⇒ Left(e) }
+    catch { case e: Exception => Left(e) }
   }
 
 }
@@ -134,7 +134,7 @@ object Paths {
   }
 
   def getPathFromSeq(arg: Seq[String]): String = {
-    arg.reduce((x, y) ⇒ new File(x, y).getPath)
+    arg.reduce((x, y) => new File(x, y).getPath)
   }
 
 }
@@ -156,8 +156,8 @@ trait ScalaInitiativesTestPIS extends ScalaInitiativesTest {
 trait ScalaInitiativesMainSPOJ extends ScalaInitiativesMain {
 
   def ReadApplyPrint[A, B](
-      parsingFunction: String ⇒ List[A],
-      coreFunction: List[A] ⇒ List[B]
+      parsingFunction: String => List[A],
+      coreFunction: List[A] => List[B]
   ): Unit = {
     // Parse stdin for input.
     val inputAsList: List[A] = parsingFunction("")
@@ -183,7 +183,7 @@ trait ScalaInitiativesTestSPOJ extends ScalaInitiativesTest {
 
   def printFileToStdInAndComputeMainFunction(
       path: String,
-      function: Array[String] ⇒ Unit
+      function: Array[String] => Unit
   ): Unit = {
     printFileToStdIn(path)
     function(Array(""))
