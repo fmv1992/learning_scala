@@ -50,12 +50,19 @@ lazy val fpis = (project in file("functional_programming_in_scala"))
   .settings(commonSettings)
   .dependsOn(common)
 
+// Functional Programming in Scala.
+// Website: https://www.manning.com/books/functional-programming-in-scala
+lazy val project_euler = (project in file("./project_euler"))
+  .settings(commonSettings)
+  .dependsOn(common)
+
 // Root project.
 lazy val root = (project in file("."))
   .settings(commonSettings)
   .aggregate(
     common,
-    spoj,
+    fpis,
     programmingInScala,
-    fpis
+    project_euler,
+    spoj
   )
