@@ -23,7 +23,8 @@ lazy val commonSettings = Seq(
   // Removed on commit 'cd9d482' to enable 'trait ScalaInitiativesTest' define
   // 'namedTest'.
   libraryDependencies ++= Seq(
-    "org.scalatest" %% "scalatest" % "3.0.5",
+    // "org.scalatest" %% "scalatest" % "3.1.0" % Test,
+    "org.scalatest" %% "scalatest" % "3.1.0",
     "fpinscala" %% "fpinscala" % "dc04eb6"
   ),
   scalacOptions ++= Seq("-feature", "-deprecation", "-Xfatal-warnings")

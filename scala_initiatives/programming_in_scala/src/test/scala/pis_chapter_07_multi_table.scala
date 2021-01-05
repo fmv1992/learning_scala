@@ -3,8 +3,10 @@ import scalainitiatives.common.{Reader, Paths, Constants, ScalaInitiativesTestPI
 import scalainitiatives.programming_in_scala.{printMultiTable, Interval}
 
 import org.scalatest._
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.diagrams.Diagrams
 
-class PISChapter07printMultiTableTest extends FunSuite with DiagrammedAssertions with ScalaInitiativesTestPIS {
+class PISChapter07printMultiTableTest extends AnyFunSuite with Diagrams with ScalaInitiativesTestPIS {
 
   test("Simple test call.") {
 
