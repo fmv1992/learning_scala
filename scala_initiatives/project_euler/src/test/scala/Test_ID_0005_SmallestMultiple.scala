@@ -10,7 +10,7 @@ class Test_ID_0005_SmallestMultiple extends AnyFunSuite {
   }
 
   test("Test solution.") {
-    assert(ID_0005_SmallestMultiple.core(1, 20) === Unit)
+    assert(ID_0005_SmallestMultiple.core(1, 20) === 232792560)
   }
 
 }
