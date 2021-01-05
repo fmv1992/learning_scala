@@ -14,6 +14,31 @@ object Common {
     }
   }
 
+  def decomposeIntoPrimes(
+      l: Long
+  ): scala.collection.immutable.SortedMap[Long, Long] = {
+
+    def go(n: Long, d: Long): Long = {
+      if (n % d == 0 && n >= d) {
+        go(n / d, d) + 1L
+      } else {
+        0L
+      }
+    }
+
+    val primes = primeSeq().takeWhile(_.toLong <= l)
+    scala.collection.immutable.SortedMap(
+      primes
+        .map((x: Int) =>
+          (
+            x.toLong,
+            go(l, x)
+          )
+        )
+        .filter(_._2 != 0L): _*
+    )
+  }
+
   def primeSeq(start: Int = 0): Stream[Int] = {
     Stream.from(start).filter((x: Int) => isPrime(x.toLong))
   }
