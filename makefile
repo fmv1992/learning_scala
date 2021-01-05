@@ -2,10 +2,6 @@
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-# Find all scala files.
-SBT_FILES := $(shell find ./scala_initiatives -iname "build.sbt")
-SBT_FOLDERS := $(dir $(SBT_FILES))
-
 # Ignore these files.
 IGNORE_FILES := ./code/project_euler/id_0451/modular_inverses.scala
 SCALA_FILES := $(filter-out $(IGNORE_FILES), $(SCALA_FILES))
@@ -40,14 +36,10 @@ clean:
 	find . -type d -empty -delete
 	rm ./tmp/.testcomplete || true
 
-test: $(SBT_FILES) tmp/.testcomplete
+test:
+	cd ./scala_initiatives && sbt test
 
 tmp/.testcomplete:
-	touch $@
-
-$(SBT_FILES): $(shell find $(dir $@) -iname '*.scala') ./tmp/.testcomplete
-	cd $(dir $@) && sbt compile
-	cd $(dir $@) && sbt test
 	touch $@
 
 dev:
