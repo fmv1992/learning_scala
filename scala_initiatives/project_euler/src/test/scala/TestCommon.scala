@@ -23,7 +23,7 @@ class TestCommon extends AnyFunSuite {
     assert(!Common.isPrime(bigPrime01 * bigPrime02))
   }
 
-  ignore("Test `isPrime` with big numbers.") {
+  test("Test `isPrime` with big numbers.") {
     val bigPrime01 = 16148168401L
     val bigPrime02 = 115249L
     assert(Common.isPrime(bigPrime01))
@@ -52,8 +52,8 @@ class TestCommon extends AnyFunSuite {
         List(0, 2),
         List(0, 3),
         List(1, 2),
-        List(1, 3),
-        )
+        List(1, 3)
+      )
     )
   }
 

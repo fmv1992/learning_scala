@@ -2,17 +2,33 @@ package fmv1992.project_euler
 
 object Common {
 
+  private def streamLong(from: Long): Stream[Long] =
+    from #:: streamLong(from + 1L)
+
   def isPrime(l: Long): Boolean = {
     // "A prime number (or a prime) is a natural number greater than 1 that is
     // not a product of two smaller natural numbers.".
     if (l <= 1L) {
       false
     } else {
-      // One does not need to test n > ceil(l/2) because the smallest non
-      // identity divisor is 2.
-      val upperBound: Long = l / 2L
-      def streamLong(from: Long): Stream[Long] = from #:: streamLong(from + 1L)
-      !(streamLong(2L).takeWhile(_ <= upperBound).exists(l % _ == 0))
+      // Consider an algorithm that in order to test if p is prime tests from
+      // [2, p].
+      //
+      // Now while considering a number x, if p is not divisible by x (and
+      // neither by (n < x)) then that same number is not divisible by (x * x)
+      // nor any number (n < (x * x)). This property comes from the symmetry
+      // that if p = a * b = b * a . And our algorithm thus goes from O(n) to
+      // O(n ** (1/2)).
+      if (l == 2L) {
+        true
+      } else {
+        val upperBound: Long = l / 2L
+        def streamLong(from: Long): Stream[Long] =
+          from #:: streamLong(from + 1L)
+        !(streamLong(2L)
+          .takeWhile(_ <= scala.math.ceil(scala.math.sqrt(l)))
+          .exists(l % _ == 0))
+      }
     }
   }
 
@@ -31,7 +47,7 @@ object Common {
     val primes = primeSeq().takeWhile(_.toLong <= l)
     scala.collection.immutable.SortedMap(
       primes
-        .map((x: Int) =>
+        .map((x: Long) =>
           (
             x.toLong,
             go(l, x)
@@ -41,8 +57,8 @@ object Common {
     )
   }
 
-  def primeSeq(start: Int = 0): Stream[Int] = {
-    Stream.from(start).filter((x: Int) => isPrime(x.toLong))
+  def primeSeq(start: Long = 0): Stream[Long] = {
+    streamLong(start).filter((x: Long) => isPrime(x.toLong))
   }
 
   def crossProduct[A](iterOfSeqs: Seq[A]*): Seq[Seq[Any]] = {
