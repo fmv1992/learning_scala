@@ -11,10 +11,24 @@ class TestCommon extends AnyFunSuite {
     assert(Common.isPrime(3L))
     assert(!Common.isPrime(4L))
     assert(!Common.isPrime(6L))
+    assert(!Common.isPrime(35L))
     assert(!Common.isPrime(7918))
     assert(Common.isPrime(7919L))
     assert(!Common.isPrime(7920))
-    assert(Common.isPrime(115249L))
+
+    val bigPrime01 = 19531L
+    val bigPrime02 = 55987L
+    assert(Common.isPrime(bigPrime01))
+    assert(Common.isPrime(bigPrime02))
+    assert(!Common.isPrime(bigPrime01 * bigPrime02))
+  }
+
+  ignore("Test `isPrime` with big numbers.") {
+    val bigPrime01 = 16148168401L
+    val bigPrime02 = 115249L
+    assert(Common.isPrime(bigPrime01))
+    assert(Common.isPrime(bigPrime02))
+    assert(!Common.isPrime(bigPrime01 * bigPrime02))
   }
 
   test("Test `primeSeq`.") {

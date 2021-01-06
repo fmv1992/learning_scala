@@ -10,8 +10,9 @@ object Common {
     } else {
       // One does not need to test n > ceil(l/2) because the smallest non
       // identity divisor is 2.
-      val upperBound = l / 2
-      !(2L to upperBound).exists(l % _ == 0)
+      val upperBound: Long = l / 2L
+      def streamLong(from: Long): Stream[Long] = from #:: streamLong(from + 1L)
+      !(streamLong(2L).takeWhile(_ <= upperBound).exists(l % _ == 0))
     }
   }
 
