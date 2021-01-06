@@ -32,4 +32,15 @@ class TestCommon extends AnyFunSuite {
     assert(Common.decomposeIntoPrimes(20L) === Map(2L -> 2L, 5L -> 1L))
   }
 
+  test("Test `crossProduct`.") {
+    assert(
+      Common.crossProduct(List(0, 1), List(2, 3)).toList === List(
+        List(0, 2),
+        List(0, 3),
+        List(1, 2),
+        List(1, 3),
+        )
+    )
+  }
+
 }
