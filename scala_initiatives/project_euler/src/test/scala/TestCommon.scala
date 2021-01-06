@@ -23,6 +23,8 @@ class TestCommon extends AnyFunSuite {
     assert(!Common.isPrime(bigPrime01 * bigPrime02))
   }
 
+  // This test was enabled due to `comm0c2e64e` ("primality test now from O(n)
+  // → O(n ** (1/2))").
   test("Test `isPrime` with big numbers.") {
     val bigPrime01 = 16148168401L
     val bigPrime02 = 115249L
