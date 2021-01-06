@@ -57,6 +57,9 @@ class TestCommon extends AnyFunSuite {
         List(1, 3)
       )
     )
+    assert(
+      Common.crossProduct(Nil) === Nil
+    )
   }
 
 }

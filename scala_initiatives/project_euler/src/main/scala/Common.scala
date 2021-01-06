@@ -62,9 +62,25 @@ object Common {
   }
 
   def crossProduct[A](iterOfSeqs: Seq[A]*): Seq[Seq[Any]] = {
-    ???
-    // // https://stackoverflow.com/questions/14740199/cross-product-in-scala
-    // It is a composition of a match and a for loop.
+    // iterOfSeqs.toList match {
+    //   case l :: Nil => l.map(x => Seq(x))
+    //   // case l :: Nil => Seq(l)
+    //   case l :: otherL => {
+    //     for (e <- l) yield {
+    //       Seq(e) ++ crossProduct(otherL: _*)
+    //     }
+    //   }
+    //   case Nil => Seq.empty
+    // }
+    iterOfSeqs.toList match {
+      case l :: Nil => l.map(x => Seq(x))
+      case l :: otherL => {
+        for (e <- l; onel <- crossProduct(otherL: _*)) yield {
+          Seq(e) ++ onel
+        }
+      }
+      case Nil => Seq.empty
+    }
   }
 
 }
