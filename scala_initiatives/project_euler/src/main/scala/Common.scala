@@ -62,25 +62,19 @@ object Common {
   }
 
   def crossProduct[A](iterOfSeqs: Seq[A]*): Seq[Seq[Any]] = {
-    // iterOfSeqs.toList match {
-    //   case l :: Nil => l.map(x => Seq(x))
-    //   // case l :: Nil => Seq(l)
-    //   case l :: otherL => {
-    //     for (e <- l) yield {
-    //       Seq(e) ++ crossProduct(otherL: _*)
-    //     }
-    //   }
-    //   case Nil => Seq.empty
-    // }
-    iterOfSeqs.toList match {
-      case l :: Nil => l.map(x => Seq(x))
-      case l :: otherL => {
-        for (e <- l; onel <- crossProduct(otherL: _*)) yield {
-          Seq(e) ++ onel
+    def go(iter: Seq[Seq[A]]) = {
+
+      iter.toList match {
+        case l :: Nil => l.map(x => Seq(x))
+        case l :: otherL => {
+          for (e <- l; onel <- crossProduct(otherL: _*)) yield {
+            Seq(e) ++ onel
+          }
         }
+        case Nil => Seq.empty
       }
-      case Nil => Seq.empty
     }
+    go(iterOfSeqs.filter(!_.isEmpty))
   }
 
 }
