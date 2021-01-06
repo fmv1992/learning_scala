@@ -96,7 +96,7 @@ class TestCommon extends AnyFunSuite {
     )
   }
 
-  test("Test `crossProduct` cornecase.") {
+  test("Test `crossProduct` corner case.") {
     assert(
       Common.crossProduct(
         (0 to 2),
@@ -116,7 +116,91 @@ class TestCommon extends AnyFunSuite {
           Seq(2, 'c', 999)
         )
     )
+  }
 
+  test("Test `crossProduct` more complex cases.") {
+    assert(
+      Common.crossProduct(
+        Vector.empty,
+        List.range(0, 7),
+        Vector.empty,
+        "abcde".toList,
+        Vector.empty,
+        List('↑', '↓'),
+        Vector.empty
+      ) === List(
+        List(0, 'a', '↑'),
+        List(0, 'a', '↓'),
+        List(0, 'b', '↑'),
+        List(0, 'b', '↓'),
+        List(0, 'c', '↑'),
+        List(0, 'c', '↓'),
+        List(0, 'd', '↑'),
+        List(0, 'd', '↓'),
+        List(0, 'e', '↑'),
+        List(0, 'e', '↓'),
+        List(1, 'a', '↑'),
+        List(1, 'a', '↓'),
+        List(1, 'b', '↑'),
+        List(1, 'b', '↓'),
+        List(1, 'c', '↑'),
+        List(1, 'c', '↓'),
+        List(1, 'd', '↑'),
+        List(1, 'd', '↓'),
+        List(1, 'e', '↑'),
+        List(1, 'e', '↓'),
+        List(2, 'a', '↑'),
+        List(2, 'a', '↓'),
+        List(2, 'b', '↑'),
+        List(2, 'b', '↓'),
+        List(2, 'c', '↑'),
+        List(2, 'c', '↓'),
+        List(2, 'd', '↑'),
+        List(2, 'd', '↓'),
+        List(2, 'e', '↑'),
+        List(2, 'e', '↓'),
+        List(3, 'a', '↑'),
+        List(3, 'a', '↓'),
+        List(3, 'b', '↑'),
+        List(3, 'b', '↓'),
+        List(3, 'c', '↑'),
+        List(3, 'c', '↓'),
+        List(3, 'd', '↑'),
+        List(3, 'd', '↓'),
+        List(3, 'e', '↑'),
+        List(3, 'e', '↓'),
+        List(4, 'a', '↑'),
+        List(4, 'a', '↓'),
+        List(4, 'b', '↑'),
+        List(4, 'b', '↓'),
+        List(4, 'c', '↑'),
+        List(4, 'c', '↓'),
+        List(4, 'd', '↑'),
+        List(4, 'd', '↓'),
+        List(4, 'e', '↑'),
+        List(4, 'e', '↓'),
+        List(5, 'a', '↑'),
+        List(5, 'a', '↓'),
+        List(5, 'b', '↑'),
+        List(5, 'b', '↓'),
+        List(5, 'c', '↑'),
+        List(5, 'c', '↓'),
+        List(5, 'd', '↑'),
+        List(5, 'd', '↓'),
+        List(5, 'e', '↑'),
+        List(5, 'e', '↓'),
+        List(6, 'a', '↑'),
+        List(6, 'a', '↓'),
+        List(6, 'b', '↑'),
+        List(6, 'b', '↓'),
+        List(6, 'c', '↑'),
+        List(6, 'c', '↓'),
+        List(6, 'd', '↑'),
+        List(6, 'd', '↓'),
+        List(6, 'e', '↑'),
+        List(6, 'e', '↓')
+      )
+    )
   }
 
 }

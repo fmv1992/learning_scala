@@ -63,7 +63,6 @@ object Common {
 
   def crossProduct[A](iterOfSeqs: Seq[A]*): Seq[Seq[Any]] = {
     def go(iter: Seq[Seq[A]]) = {
-
       iter.toList match {
         case l :: Nil => l.map(x => Seq(x))
         case l :: otherL => {
