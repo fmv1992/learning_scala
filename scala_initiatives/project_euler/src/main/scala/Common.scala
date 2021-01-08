@@ -61,19 +61,26 @@ object Common {
     streamLong(start).filter((x: Long) => isPrime(x.toLong))
   }
 
-  def crossProduct[A](iterOfSeqs: Seq[A]*): Seq[Seq[Any]] = {
-    def go(iter: Seq[Seq[A]]) = {
-      iter.toList match {
-        case l :: Nil => l.map(x => Seq(x))
-        case l :: otherL => {
-          for (e <- l; onel <- crossProduct(otherL: _*)) yield {
-            Seq(e) ++ onel
+  def crossProduct[A](iterOfSeqs: Seq[A]*): Stream[Stream[A]] = {
+    def go(iter: Stream[Stream[A]]): Stream[Stream[A]] = {
+      iter match {
+        case l #:: tail if tail.isEmpty =>
+          l.toStream.map(x => Stream(x)): Stream[Stream[A]]
+        case l #:: tail => {
+          for (e <- l; onel <- crossProduct(tail: _*)) yield {
+            (e #:: onel): Stream[A]
           }
+          // l.map(x => {
+          //   crossProduct(tail: _*).flatMap(y => {
+          //     x #:: y
+          //   })
+          // }
+          // )
         }
-        case Nil => Seq.empty
+        case _ if iter.isEmpty => Stream.empty: Stream[Stream[A]]
       }
     }
-    go(iterOfSeqs.filter(!_.isEmpty))
+    go(iterOfSeqs.toStream.map(_.toStream).filter(!_.isEmpty))
   }
 
 }

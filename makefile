@@ -39,6 +39,9 @@ clean:
 test:
 	cd ./scala_initiatives && sbt test
 
+sbt:
+	cd ./scala_initiatives && sbt
+
 tmp/.testcomplete:
 	touch $@
 
