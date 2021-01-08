@@ -30,10 +30,10 @@ object ID_0205_DiceGame {
     def peterPossibilities: Stream[Stream[Long]] =
       Common.crossProduct(Seq.fill(9)(peterDice): _*)
     def colinPossibilities: Stream[Stream[Long]] =
-      Common.crossProduct(Seq.fill(6)(peterDice): _*)
+      Common.crossProduct(Seq.fill(6)(colinDice): _*)
 
     val peterSum = peterPossibilities.map(_.sum)
-    val colinSum = peterPossibilities.map(_.sum)
+    val colinSum = colinPossibilities.map(_.sum)
 
     val peterCount =
       peterSum.foldLeft(Map.empty: Map[Long, Long])((m, sum) =>
@@ -56,6 +56,7 @@ object ID_0205_DiceGame {
     val probability = eventGrid.foldLeft(0d)((acc, pairedEvents) => {
       val peterEvent = pairedEvents(0)
       val colinEvent = pairedEvents(1)
+      require(pairedEvents.length == 2)
       if (peterEvent._1 > colinEvent._1) {
         acc + peterEvent._2 * colinEvent._2
       } else {
