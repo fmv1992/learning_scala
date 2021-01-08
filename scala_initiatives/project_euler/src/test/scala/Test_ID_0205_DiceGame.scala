@@ -5,7 +5,7 @@ import org.scalatest.funsuite.AnyFunSuite
 class Test_ID_0205_DiceGame extends AnyFunSuite {
 
   test("Test solution.") {
-    assert(ID_0205_DiceGame.core() === 1d)
+    assert(ID_0205_DiceGame.coretoStr() === "0.4583455")
   }
 
 }

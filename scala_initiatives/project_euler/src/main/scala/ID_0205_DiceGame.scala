@@ -24,29 +24,49 @@ object ID_0205_DiceGame {
   }
 
   def core(): Double = {
-    val peterDice = 1 to 4
-    val colinDice = 1 to 6
+    val peterDice = (1 to 4).map(_.toLong)
+    val colinDice = (1 to 6).map(_.toLong)
 
-    def peterPossibilities: Stream[Stream[Int]] =
+    def peterPossibilities: Stream[Stream[Long]] =
       Common.crossProduct(Seq.fill(9)(peterDice): _*)
-    def colinPossibilities: Stream[Stream[Int]] =
+    def colinPossibilities: Stream[Stream[Long]] =
       Common.crossProduct(Seq.fill(6)(peterDice): _*)
 
     val peterSum = peterPossibilities.map(_.sum)
     val colinSum = peterPossibilities.map(_.sum)
 
-    val combinationsPeterColin = Common.crossProduct(peterSum, colinSum)
-    val winsAndTotals =
-      combinationsPeterColin.foldLeft((0L, 0L))((folded, pc) =>
-        if (pc(0) > pc(1)) {
-          (folded._1 + 1L, folded._2 + 1L)
-        } else {
-          (folded._1, folded._2 + 1L)
-        }
+    val peterCount =
+      peterSum.foldLeft(Map.empty: Map[Long, Long])((m, sum) =>
+        m.updated(sum, m.getOrElse(sum, 0L) + 1L)
       )
+    val peterTotal = peterCount.values.sum.toDouble
+    val peterProbDistr = peterCount.mapValues(_ / peterTotal)
 
-    val probability = winsAndTotals._1.toDouble / winsAndTotals._2
+    val colinCount =
+      colinSum.foldLeft(Map.empty: Map[Long, Long])((m, sum) =>
+        m.updated(sum, m.getOrElse(sum, 0L) + 1L)
+      )
+    val colinTotal = colinCount.values.sum.toDouble
+    val colinProbDistr = colinCount.mapValues(_ / colinTotal)
+
+    def eventGrid = Common.crossProduct(
+      peterProbDistr.toSeq,
+      colinProbDistr.toSeq
+    ): Stream[Stream[(Long, Double)]]
+    val probability = eventGrid.foldLeft(0d)((acc, pairedEvents) => {
+      val peterEvent = pairedEvents(0)
+      val colinEvent = pairedEvents(1)
+      if (peterEvent._1 > colinEvent._1) {
+        acc + peterEvent._2 * colinEvent._2
+      } else {
+        acc
+      }
+    })
     probability
+  }
+
+  def coretoStr(): String = {
+    f"${core()}%1.7f"
   }
 
   // def getMaximumAfterNRolls(n: Int , diceSize:Int):

@@ -70,12 +70,6 @@ object Common {
           for (e <- l; onel <- crossProduct(tail: _*)) yield {
             (e #:: onel): Stream[A]
           }
-          // l.map(x => {
-          //   crossProduct(tail: _*).flatMap(y => {
-          //     x #:: y
-          //   })
-          // }
-          // )
         }
         case _ if iter.isEmpty => Stream.empty: Stream[Stream[A]]
       }
