@@ -16,7 +16,6 @@ inThisBuild(
 
 lazy val commonSettings = Seq(
   version := "0.0.1-SNAPSHOT",
-  // scalaVersion := "2.13.4",
   scalaVersion := "2.12.12",
   pollInterval := scala.concurrent.duration.FiniteDuration(50L, "ms"),
   maxErrors := 10,
@@ -38,8 +37,31 @@ lazy val commonSettings = Seq(
   scalacOptions ++= Seq("-feature", "-deprecation", "-Xfatal-warnings")
 )
 
+lazy val scala213Options = Seq(
+//  scalaVersion := "2.13.4",
+//  semanticdbEnabled := true, // enable SemanticDB
+//  semanticdbVersion := scalafixSemanticdb.revision, // use Scalafix compatible version
+//  addCompilerPlugin(scalafixSemanticdb),
+//  scalafixScalaBinaryVersion := "2.13.4",
+//  libraryDependencies ++= Seq(
+//    "org.scala-lang.modules" %% "scala-collection-compat" % "2.3.2",
+//    "com.sandinh" %% "scala-rewrites" % "0.1.10-sd"
+//  ),
+//  libraryDependencies += "org.scalameta" %% "scalameta" % "4.4.4"
+  scalaVersion := "2.13.4", // 2.11.12, or 2.13.4
+  semanticdbEnabled := true, // enable SemanticDB
+  semanticdbVersion := scalafixSemanticdb.revision, // use Scalafix compatible version
+  // scalacOptions += "-Ywarn-unused-import" // required by `RemoveUnused` rule
+  //
+  //
+  libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.3.2",
+  scalafixDependencies in ThisBuild += "org.scala-lang.modules" %% "scala-collection-migrations" % "2.3.2"
+)
+
 // Common to all projects.
-lazy val common = (project in file("common")).settings(commonSettings)
+lazy val common = (project in file("common"))
+  .settings(commonSettings)
+  .settings(scala213Options)
 
 // Spoj project.
 // Website: https://www.spoj.com
@@ -76,9 +98,7 @@ lazy val fpis = (project in file("functional_programming_in_scala"))
 // Website: https://www.manning.com/books/functional-programming-in-scala
 lazy val project_euler = (project in file("./project_euler"))
   .settings(commonSettings)
-  .settings(
-    libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.3.2"
-  )
+  .settings(scala213Options)
   .dependsOn(common)
 
 // Root project.
