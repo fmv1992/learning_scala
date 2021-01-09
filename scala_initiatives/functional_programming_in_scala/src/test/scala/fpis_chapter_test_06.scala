@@ -34,7 +34,7 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
     .take(100)
   val rng1: SimpleRNG = SimpleRNG(1)
 
-  val nextZeroRNG: RNG = SimpleRNG((0XFFFFFFFFFFFFL - 0XBL) / 0X5DEECE66DL)
+  val nextZeroRNG: RNG = SimpleRNG((0xffffffffffffL - 0xbL) / 0x5deece66dL)
 
   test("6.0: Basic tests.") {
     // NOTE: Could not do it... See (note6.2).
@@ -229,9 +229,9 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
   // val s1 = State((x: Int) => (x + 1, State((y: Int) => 2 * x))
   // val immState = State(0, (x: Int) => (x, x))
   val nextIntFunc: Int => (Int, Int) = (x: Int) => (x + 1, x)
-  val nextIntState: State[Int,Int] = State(nextIntFunc)
+  val nextIntState: State[Int, Int] = State(nextIntFunc)
   val doubleIntFunc: Int => (Int, Int) = (x: Int) => (x + 1, 2 * x)
-  val doubleIntState: State[Int,Int] = State(doubleIntFunc)
+  val doubleIntState: State[Int, Int] = State(doubleIntFunc)
   //  1.  The double of the current state.
   //  2.  A new state, which is the next integer.
 
@@ -262,8 +262,8 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
 
     // Test map2.
     assert(
-      State.map2(nextIntState.run, doubleIntState.run)(
-        (i1: Int, i2: Int) => List(i1, i2)
+      State.map2(nextIntState.run, doubleIntState.run)((i1: Int, i2: Int) =>
+        List(i1, i2)
       )(s2)
         == (doubleIntState.run(nextIntState.run(s2)._1)._1,
         List(2, 6))

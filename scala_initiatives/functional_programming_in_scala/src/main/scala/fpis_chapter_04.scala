@@ -39,13 +39,13 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
     //    5. `filter`.
 
     def map[B](f: A => B): Option[B] = this match {
-      case None => None
+      case None    => None
       case Some(a) => Some(f(a))
     }
 
     // ???: Supertype.
     def getOrElse[B >: A](default: => B): B = this match {
-      case None => default
+      case None    => default
       case Some(a) => a
     }
 
@@ -56,7 +56,7 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
 
     def filter(f: A => Boolean): Option[A] = this match {
       case Some(a) if f(a) => this
-      case _ => None
+      case _               => None
     }
 
     def lift[A, B](f: A => B): Option[A] => Option[B] = _ map f
@@ -88,8 +88,9 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
     def map2[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = {
       a match {
         case None => None
-        case Some(x) => b match {
-            case None => None
+        case Some(x) =>
+          b match {
+            case None    => None
             case Some(y) => Some(f(x, y))
           }
       }
@@ -108,10 +109,12 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
       def go(x: List[Option[A]], acc: Option[List[A]]): Option[List[A]] = {
         acc match {
           case None => None // Option[List[A]]: Stop recursion.
-          case Some(lacc) => x match {
+          case Some(lacc) =>
+            x match {
               case Nil => acc // Option[List[A]]
-              case h :: t => h match {
-                  case None => None // Option[List[A]]
+              case h :: t =>
+                h match {
+                  case None    => None // Option[List[A]]
                   case Some(y) => go(t, Some(y :: lacc))
                 }
             }
@@ -125,12 +128,13 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
       def go(x: List[A], acc: Option[List[B]]): Option[List[B]] = {
         acc match {
           case None => None
-          case Some(lacc) => x match {
+          case Some(lacc) =>
+            x match {
               case Nil => acc
               case h :: t => {
                 val funcH = f(h)
                 funcH match {
-                  case None => None
+                  case None    => None
                   case Some(y) => go(t, Some(y :: lacc))
                 }
               }
@@ -173,21 +177,21 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
 
     def map[B](f: A => B): Either[E, B] = {
       this match {
-        case Left(x) => Left(x)
+        case Left(x)  => Left(x)
         case Right(x) => Right(f(x))
       }
     }
 
     def flatMap[EE >: E, B](f: A => Either[EE, B]): Either[EE, B] = {
       this match {
-        case Left(x) => Left(x)
+        case Left(x)  => Left(x)
         case Right(x) => f(x)
       }
     }
 
     def orElse[EE >: E, B >: A](b: => Either[EE, B]): Either[EE, B] = {
       this match {
-        case Left(x) => b
+        case Left(x)  => b
         case Right(x) => Right(x)
       }
     }
@@ -207,8 +211,9 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
       ): Either[E, List[A]] = {
         l match {
           case Nil => acc
-          case h :: t => h match {
-              case Left(x) => Left(x)
+          case h :: t =>
+            h match {
+              case Left(x)  => Left(x)
               case Right(x) => go(t, acc.map(z => List(x) ++ z))
             }
         }
@@ -228,7 +233,7 @@ object FPISExerciseChapter04 extends ScalaInitiativesExercise {
           case h :: t => {
             val fHead = f(h)
             fHead match {
-              case Left(x) => Left(x)
+              case Left(x)  => Left(x)
               case Right(x) => go(t, acc.map(z => List(x) ++ z))
             }
           }

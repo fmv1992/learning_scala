@@ -12,7 +12,7 @@ object EntryPoint {
   def main(args: Array[String]): Unit = {
     rePrint
   }
-  def rePrint(): Unit ={
+  def rePrint(): Unit = {
     val line = Console.readLine.stripLineEnd
     if (line != stopCode) {
       println(line)

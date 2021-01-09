@@ -25,14 +25,14 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
     // From fpinscala --------------------------------------------------------|
 
     def sum(ints: FPList[Int]): Int = ints match {
-      case FPNil => 0
+      case FPNil         => 0
       case FPCons(x, xs) => x + sum(xs)
     }
 
     def product(ds: FPList[Double]): Double = ds match {
-      case FPNil => 1.0
+      case FPNil          => 1.0
       case FPCons(0.0, _) => 0.0
-      case FPCons(x, xs) => x * product(xs)
+      case FPCons(x, xs)  => x * product(xs)
     }
 
     def apply[A](as: A*): FPList[A] =
@@ -53,7 +53,7 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       def freezeF: FPList[A] => B = l => foldRight(l, z)(f)
 
       as match {
-        case FPNil => z
+        case FPNil         => z
         case FPCons(x, xs) => f(x, freezeF(xs))
       }
     }
@@ -66,7 +66,7 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
 
     def tail[A](x: FPList[A]): FPList[A] = {
       x match {
-        case FPNil => FPNil
+        case FPNil        => FPNil
         case FPCons(h, t) => t
       }
     }
@@ -98,16 +98,16 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
 
     def dropWhile[A](l: FPList[A])(f: A => Boolean): FPList[A] = {
       l match {
-        case FPNil => FPNil
+        case FPNil        => FPNil
         case FPCons(h, t) => if (f(h)) dropWhile(t)(f) else FPCons(h, t)
       }
     }
 
     def init[A](l: FPList[A]): FPList[A] = {
       l match {
-        case FPNil => FPNil
+        case FPNil            => FPNil
         case FPCons(h, FPNil) => FPNil
-        case FPCons(h, t) => FPCons(h, init(t))
+        case FPCons(h, t)     => FPCons(h, init(t))
       }
     }
 
@@ -116,7 +116,8 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
     ): B = {
       as match {
         case FPNil => z
-        case FPCons(x, xs) => if (x == ss) {
+        case FPCons(x, xs) =>
+          if (x == ss) {
             println("Has short circuit!")
             return ss
           } else {
@@ -142,7 +143,7 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       @annotation.tailrec
       def go(subas: FPList[A], state: B): B = {
         subas match {
-          case FPNil => state
+          case FPNil         => state
           case FPCons(x, xs) => go(xs, f(state, x))
         }
       }
@@ -168,7 +169,8 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       val reversedFunction = (a: A, b: B) => f(b, a)
       as match {
         case FPNil => z
-        case FPCons(h, t) => foldLeftUsingFR(t, foldRight(FPCons(h, FPNil), z)(reversedFunction))(
+        case FPCons(h, t) =>
+          foldLeftUsingFR(t, foldRight(FPCons(h, FPNil), z)(reversedFunction))(
             f
           )
       }
@@ -183,7 +185,7 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
     def append[T](l1: FPList[T], l2: FPList[T]): FPList[T] = {
       l1 match {
         case FPCons(h, t) => FPCons(h, foldRight(t, l2)(FPCons(_, _)))
-        case FPNil => l2
+        case FPNil        => l2
       }
     }
 
@@ -198,14 +200,14 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
     def addOneInt(l: FPList[Int]): FPList[Int] = {
       l match {
         case FPCons(h, t) => FPCons(h + 1, addOneInt(t))
-        case FPNil => FPNil
+        case FPNil        => FPNil
       }
     }
 
     def doubleToString(l: FPList[Double]): FPList[String] = {
       l match {
         case FPCons(h, t) => FPCons(h.toString, doubleToString(t))
-        case FPNil => FPNil
+        case FPNil        => FPNil
       }
     }
 
@@ -215,7 +217,7 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       val freezeF: FPList[A] => FPList[B] = x => mapNonTailRec(x)(f)
       l match {
         case FPCons(h, t) => FPCons(f(h), freezeF(t))
-        case FPNil => FPNil
+        case FPNil        => FPNil
       }
     }
 
@@ -225,7 +227,7 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       def go(accList: FPList[B], goTail: FPList[A]): FPList[B] = {
         goTail match {
           case FPCons(h, t) => go(append(accList, f(h)), t)
-          case FPNil => accList
+          case FPNil        => accList
         }
       }
 
@@ -259,8 +261,9 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       require(length(l1) == length(l2))
       l1 match {
         case FPNil => FPNil
-        case FPCons(h1, t1) => l2 match {
-            case FPNil => FPNil
+        case FPCons(h1, t1) =>
+          l2 match {
+            case FPNil          => FPNil
             case FPCons(h2, t2) => FPCons(h1 + h2, addPairedLists(t1, t2))
           }
       }
@@ -274,8 +277,9 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       require(length(l1) == length(l2))
       l1 match {
         case FPNil => FPNil
-        case FPCons(h1, t1) => l2 match {
-            case FPNil => FPNil
+        case FPCons(h1, t1) =>
+          l2 match {
+            case FPNil          => FPNil
             case FPCons(h2, t2) => FPCons(f(h1, h2), zipWith(t1, t2)(f))
           }
       }
@@ -287,7 +291,8 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
       def go(l1: FPList[A], l2: FPList[A]): Boolean = {
         l1 match {
           case FPNil => l1 == l2
-          case FPCons(h1, t1) => l2 match {
+          case FPCons(h1, t1) =>
+            l2 match {
               case FPNil => {
                 t1 != FPNil
               }
@@ -305,7 +310,7 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
     // My custom functions -------------------------------------------------| {
     def myAppend[A](l: FPList[A], v: A): FPList[A] = {
       l match {
-        case FPNil => apply(v): FPList[A]
+        case FPNil        => apply(v): FPList[A]
         case FPCons(h, t) => prepend(myAppend(t, v), h)
       }
     }
@@ -327,7 +332,7 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
 
     def myMap[A, B](as: FPList[A])(f: A => B): FPList[B] = {
       as match {
-        case FPNil => FPNil
+        case FPNil        => FPNil
         case FPCons(h, t) => FPCons(f(h), myMap(t)(f))
       }
     }
@@ -336,7 +341,7 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
         as: FPList[A]
     ): scala.collection.immutable.List[A] = {
       as match {
-        case FPNil => Nil
+        case FPNil        => Nil
         case FPCons(h, t) => h :: toBuiltinScalaList(t)
       }
     }
@@ -357,21 +362,21 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
 
     def size[A](t: Tree[A]): Int = {
       t match {
-        case Leaf(v) => 1
+        case Leaf(v)      => 1
         case Branch(l, r) => 1 + size(l) + size(r)
       }
     }
 
     def max(t: Tree[Int]): Int = {
       t match {
-        case Leaf(v) => v
+        case Leaf(v)      => v
         case Branch(l, r) => max(l).max(max(r))
       }
     }
 
     def depth[A](t: Tree[A]): Int = {
       t match {
-        case Leaf(v) => 1
+        case Leaf(v)      => 1
         case Branch(l, r) => depth(l).max(depth(r)) + 1
       }
     }
@@ -379,7 +384,7 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
     def map[A, B](t: Tree[A])(f: A => B): Tree[B] = {
       val freezeF: Tree[A] => Tree[B] = map(_)(f)
       t match {
-        case Leaf(v) => Leaf(f(v))
+        case Leaf(v)      => Leaf(f(v))
         case Branch(l, r) => Branch(freezeF(l), freezeF(r))
       }
     }
@@ -387,7 +392,8 @@ object FPISExerciseChapter03 extends ScalaInitiativesExercise {
     def fold[A, B](t: Tree[A])(fLeaf: Leaf[A] => B)(fBranch: (B, B) => B): B = {
       t match {
         case Leaf(v) => fLeaf(Leaf(v))
-        case Branch(l, r) => fBranch(fold(l)(fLeaf)(fBranch), fold(r)(fLeaf)(fBranch))
+        case Branch(l, r) =>
+          fBranch(fold(l)(fLeaf)(fBranch), fold(r)(fLeaf)(fBranch))
       }
     }
 

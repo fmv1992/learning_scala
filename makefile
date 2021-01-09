@@ -21,7 +21,10 @@ tmp/.fpinscala:
 	bash ./other_code/travis_ci/install_fpinscala.sh
 	touch -m $@
 
-scalafix:
+format:
+	find . \( -iname '*.scala' -o -iname '*.sbt' \) -print0 \
+        | xargs --verbose -0 \
+            scalafmt --config ./scala_initiatives/.scalafmt.conf
 	cd ./scala_initiatives && sbt 'scalafixAll'
 
 clean_fpis_chapter:

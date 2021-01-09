@@ -73,7 +73,9 @@ class FPISTestChapter09 extends ScalaInitiativesTest {
 
   // Base64 hint for exercise 9.5:
   // LQ==
-  test("9.5: Another approach to handle non-strictness and infinite recursion.") {
+  test(
+    "9.5: Another approach to handle non-strictness and infinite recursion."
+  ) {
     // `SKIPPED`: marked as optional.
   }
 

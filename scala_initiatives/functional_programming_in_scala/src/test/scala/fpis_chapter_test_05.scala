@@ -32,7 +32,8 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     })
 
   def getErrorStream: () => Stream[Int] =
-    () => Stream.cons(
+    () =>
+      Stream.cons(
         -12,
         Stream.cons({ throw new Exception(); -11 }, Stream(_minus10to10: _*))
       )

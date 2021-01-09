@@ -59,8 +59,8 @@ object FPISExerciseChapter02 extends ScalaInitiativesExercise {
     (a: A, b: B) => f(a)(b)
   }
 
-  def Exercise2Dot5Compose[A, B, C](f: B => C, g: A => B): A => C = {
-    x => f(g(x))
+  def Exercise2Dot5Compose[A, B, C](f: B => C, g: A => B): A => C = { x =>
+    f(g(x))
   }
 
 }

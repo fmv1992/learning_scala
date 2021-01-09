@@ -134,25 +134,31 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
 
     def op(a1: WC, a2: WC): WC = {
       val res = a1 match {
-        case Stub(a) => a2 match {
-            case Stub(b) => if (a.endsWith(" ")) {
+        case Stub(a) =>
+          a2 match {
+            case Stub(b) =>
+              if (a.endsWith(" ")) {
                 Part(a, 0, b)
               } else {
                 Stub(a + b)
               }
-            case Part(l, w, r) => if (a.endsWith(" ")) {
+            case Part(l, w, r) =>
+              if (a.endsWith(" ")) {
                 Part(a + l, w + 1, r)
               } else {
                 Part(a + l, w, r)
               }
           }
-        case Part(l, w, r) => a2 match {
-            case Stub(b) => if (l.endsWith(" ")) {
+        case Part(l, w, r) =>
+          a2 match {
+            case Stub(b) =>
+              if (l.endsWith(" ")) {
                 Part(l, w + 1, b)
               } else {
                 Part(l + b, w, r)
               }
-            case Part(l1, w1, r1) => if (l.endsWith(" ")) {
+            case Part(l1, w1, r1) =>
+              if (l.endsWith(" ")) {
                 Part(l + l1, w + w1 + 1, r + r1)
               } else {
                 Part(l + l1, w + w1, r + r1)
@@ -238,7 +244,7 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
 
     def foldRight[A, B](as: Tree[A])(z: B)(f: (A, B) => B): B = {
       val newTree = as match {
-        case Leaf(a) => Leaf(a)
+        case Leaf(a)      => Leaf(a)
         case Branch(l, r) => Branch(r, l)
       }
       foldLeft(newTree)(z)((a, b) => f(b, a))

@@ -1,4 +1,9 @@
-import scalainitiatives.common.{Reader, Paths, Constants, ScalaInitiativesTestSPOJ}
+import scalainitiatives.common.{
+  Reader,
+  Paths,
+  Constants,
+  ScalaInitiativesTestSPOJ
+}
 
 import org.scalatest._
 import org.scalatest.diagrams.Diagrams
@@ -7,19 +12,20 @@ import spoj.Main
 
 import org.scalatest.funsuite.AnyFunSuite
 
-class TestSPOJTestLifeTheUniverseAndEverything extends AnyFunSuite with Diagrams with ScalaInitiativesTestSPOJ {
+class TestSPOJTestLifeTheUniverseAndEverything
+    extends AnyFunSuite
+    with Diagrams
+    with ScalaInitiativesTestSPOJ {
 
-  val testPathAsList: List[String] = List(
-    ".",
-    "spoj",
-    "data",
-    "spoj_test_life_the_universe_and_everything")
+  val testPathAsList: List[String] =
+    List(".", "spoj", "data", "spoj_test_life_the_universe_and_everything")
   val testPathAsString: String = Paths.getPathFromSeq(testPathAsList)
   val (dataFiles, resultFiles) = loadTestFiles(testPathAsString)
 
   test("Test main function.") {
-    dataFiles.foreach(x => printFileToStdInAndComputeMainFunction(
-      x, Main.main _))
+    dataFiles.foreach(x =>
+      printFileToStdInAndComputeMainFunction(x, Main.main _)
+    )
   }
 
   test("Test core function.") {
@@ -28,8 +34,7 @@ class TestSPOJTestLifeTheUniverseAndEverything extends AnyFunSuite with Diagrams
     val resultAsList = resultFiles.map(Reader.parseIntsFromFileOrStdin _)
 
     // Compute core function.
-    val computedResults = dataAsList.map(
-      Main.filterBefore42 _)
+    val computedResults = dataAsList.map(Main.filterBefore42 _)
 
     assert(computedResults == resultAsList)
   }

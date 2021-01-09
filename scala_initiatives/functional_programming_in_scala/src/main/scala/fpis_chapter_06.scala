@@ -31,7 +31,7 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
   case class SimpleRNG(seed: Long) extends LinearCongruentialGenerator {
 
     def nextIntFromBook: (Int, RNG) = {
-      val newSeed = (seed * 0X5DEECE66DL + 0XBL) & 0XFFFFFFFFFFFFL
+      val newSeed = (seed * 0x5deece66dL + 0xbL) & 0xffffffffffffL
       val nextRNG = SimpleRNG(newSeed)
       val n = (newSeed >>> 16).toInt
       (n, nextRNG)
@@ -42,9 +42,9 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       // 2019-03-16: "Java's java.util.Random, POSIX [ln]rand48, glibc
       // [ln]rand48[_r]"
       // Ints are from  range: ???.
-      val modulus = 0XFFFFFFFFFFFFL
-      val multiplier = 0X5DEECE66DL
-      val increment = 0XBL
+      val modulus = 0xffffffffffffL
+      val multiplier = 0x5deece66dL
+      val increment = 0xbL
       val newSeed = (seed * multiplier + increment) & modulus
 
       val nextRNG = SimpleRNG(newSeed)
@@ -115,11 +115,11 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
     def nonNegativeEven: Rand[Int] = map(nonNegativeInt)(i => i - i % 2)
 
     // NOTE: Returns a function!
-    def map[A, B](s: Rand[A])(f: A => B): Rand[B] = {
-      rng => {
-          val (a, rng2) = s(rng)
-          (f(a), rng2)
-        }
+    def map[A, B](s: Rand[A])(f: A => B): Rand[B] = { rng =>
+      {
+        val (a, rng2) = s(rng)
+        (f(a), rng2)
+      }
     }
 
     def both[A, B](ra: Rand[A], rb: Rand[B]): Rand[(A, B)] = {
@@ -130,12 +130,12 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
     val randDoubleInt: Rand[(Double, Int)] = both(double, int)
 
-    def nonNegativeLessThan(n: Int): Rand[Int] = {
-      rng => val (i, rng2) = nonNegativeInt(rng)
-        val mod = i % n
-        if (i + (n - 1) - mod >= 0)
-          (mod, rng2)
-        else nonNegativeLessThan(n)(rng)
+    def nonNegativeLessThan(n: Int): Rand[Int] = { rng =>
+      val (i, rng2) = nonNegativeInt(rng)
+      val mod = i % n
+      if (i + (n - 1) - mod >= 0)
+        (mod, rng2)
+      else nonNegativeLessThan(n)(rng)
     }
 
     def rollDie: Rand[Int] = map(nonNegativeLessThan(6))(_ + 1)
@@ -217,7 +217,8 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
     }
 
     def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = {
-      rng1 => {
+      rng1 =>
+        {
           val (a, rng2) = ra(rng1)
           val (b, rng3) = rb(rng2)
           (f(a, b), rng3)
@@ -242,12 +243,12 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       sequence(List.fill(count)((x: RNG) => x.nextInt))(rng)
     }
 
-    def flatMap[A, B](f: Rand[A])(g: A => Rand[B]): Rand[B] = {
-      (rng1: RNG) => {
-          val (v1, rng2) = f(rng1)
-          val (v2, rng3) = g(v1)(rng2)
-          (v2, rng3)
-        }
+    def flatMap[A, B](f: Rand[A])(g: A => Rand[B]): Rand[B] = { (rng1: RNG) =>
+      {
+        val (v1, rng2) = f(rng1)
+        val (v2, rng3) = g(v1)(rng2)
+        (v2, rng3)
+      }
     }
 
     def nonNegativeLessThanUsingFlatMap(n: Int): Rand[Int] = {
@@ -276,7 +277,8 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
     ): Rand[C] = {
 
       def delayedF: A => (RNG => Tuple2[C, RNG]) =
-        x => (r => {
+        x =>
+          (r => {
             val (b, rng2) = rb(r)
             (f(x, b), rng2)
           })
@@ -314,8 +316,8 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
     def map2[B, C](t2: StateTransition[S, B])(
         f: (A, B) => C
-    ): StateTransition[S, C] = {
-      (s1: S) => State.map2(this.run, t2)(f)(s1)
+    ): StateTransition[S, C] = { (s1: S) =>
+      State.map2(this.run, t2)(f)(s1)
     }
 
     def flatMap[B](g: A => StateTransition[S, B]): StateTransition[S, B] = {
@@ -335,37 +337,37 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
 
   object State {
 
-    def unit[S, A](a: A): StateTransition[S, A] = {
-      (s1: S) => (s1, a)
+    def unit[S, A](a: A): StateTransition[S, A] = { (s1: S) =>
+      (s1, a)
     }
 
     def map[S, A, B](
         transform: StateTransition[S, A]
-    )(f: A => B): StateTransition[S, B] = {
-      (s1: S) => {
-          val (s2, a) = transform(s1)
-          (s2, f(a))
-        }
+    )(f: A => B): StateTransition[S, B] = { (s1: S) =>
+      {
+        val (s2, a) = transform(s1)
+        (s2, f(a))
+      }
     }
 
     def map2[S, A, B, C](t1: StateTransition[S, A], t2: StateTransition[S, B])(
         f: (A, B) => C
-    ): StateTransition[S, C] = {
-      (s1: S) => {
-          val (s2, a) = t1(s1)
-          val (s3, b) = t2(s2)
-          (s3, f(a, b))
-        }
+    ): StateTransition[S, C] = { (s1: S) =>
+      {
+        val (s2, a) = t1(s1)
+        val (s3, b) = t2(s2)
+        (s3, f(a, b))
+      }
     }
 
     def flatMap[S, A, B](
         f: StateTransition[S, A]
-    )(g: A => StateTransition[S, B]): StateTransition[S, B] = {
-      (s1: S) => {
-          val (s2, a) = f(s1)
-          val (s3, b) = g(a)(s2)
-          (s3, b)
-        }
+    )(g: A => StateTransition[S, B]): StateTransition[S, B] = { (s1: S) =>
+      {
+        val (s2, a) = f(s1)
+        val (s3, b) = g(a)(s2)
+        (s3, b)
+      }
     }
 
     def sequence[S, A](
@@ -426,8 +428,8 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
       i match {
         case Coin => processCoin
         case Turn => processTurn
-        case Buy => processCoin._1.processTurn
-        case _ => throw new Exception()
+        case Buy  => processCoin._1.processTurn
+        case _    => throw new Exception()
       }
     }
 
@@ -443,7 +445,7 @@ object FPISExerciseChapter06 extends ScalaInitiativesExercise {
         val (m, acc) = s
         val (newM, r) = m.processInput(i)
         r match {
-          case None => (newM, acc)
+          case None    => (newM, acc)
           case Some(v) => (newM, v +: acc)
         }
       }

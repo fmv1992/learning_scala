@@ -1,25 +1,25 @@
 package scalainitiatives.programming_in_scala
 
 case class Interval(
-  val rowsInterval: List[Int],
-  val columnsInterval: List[Int]) {
+    val rowsInterval: List[Int],
+    val columnsInterval: List[Int]
+) {
 
-    require(this.rowsInterval.length == 2)
-    require(this.columnsInterval.length == 2)
+  require(this.rowsInterval.length == 2)
+  require(this.columnsInterval.length == 2)
 
-    val r0: Int = rowsInterval(0)
-    val r1: Int = rowsInterval(1)
+  val r0: Int = rowsInterval(0)
+  val r1: Int = rowsInterval(1)
 
-    val c0: Int = columnsInterval(0)
-    val c1: Int = columnsInterval(1)
+  val c0: Int = columnsInterval(0)
+  val c1: Int = columnsInterval(1)
 
-  }
+}
 
 case class printMultiTable(val interval: Interval, val padding: Int) {
 
-  def this(rows: Int, columns: Int, padding: Int) = this(
-    new Interval(List(0, rows), List(0, columns)),
-    padding)
+  def this(rows: Int, columns: Int, padding: Int) =
+    this(new Interval(List(0, rows), List(0, columns)), padding)
 
   def listOfIntsToString(x: List[Int], padding: Int): List[String] = {
 
@@ -37,14 +37,16 @@ case class printMultiTable(val interval: Interval, val padding: Int) {
 
     val listOfLists = getListOfLists()
 
-    val maxFoundWidth = listOfLists.map(x => x.max).reduce(
-      (x, y) => if (x.toString.length > y.toString.length)
-      { x.toString.length }
-      else { y.toString.length })
+    val maxFoundWidth = listOfLists
+      .map(x => x.max)
+      .reduce((x, y) =>
+        if (x.toString.length > y.toString.length) { x.toString.length }
+        else { y.toString.length }
+      )
     val maxWidth = maxFoundWidth + padding
 
-    val linesAsString: List[List[String]] = listOfLists.map(
-      x => listOfIntsToString(x, maxWidth))
+    val linesAsString: List[List[String]] =
+      listOfLists.map(x => listOfIntsToString(x, maxWidth))
 
     val joinedLines = linesAsString.map(_.mkString("")).mkString("\n")
 

@@ -125,17 +125,17 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
 
   }
 
-  def forAll[A](as: Gen[A])(f: A => Boolean): Prop = Prop {
-    (novar, n, rng) => randomStream(as)(rng)
-        .zip(Stream.from(0))
-        .take(n)
-        .map {
-          case (a, i) => try {
-              if (f(a)) Passed else Falsified(a.toString, i)
-            } catch { case e: Exception => Falsified(buildMsg(a, e), i) }
-        }
-        .find(_.isFalsified)
-        .getOrElse(Passed)
+  def forAll[A](as: Gen[A])(f: A => Boolean): Prop = Prop { (novar, n, rng) =>
+    randomStream(as)(rng)
+      .zip(Stream.from(0))
+      .take(n)
+      .map { case (a, i) =>
+        try {
+          if (f(a)) Passed else Falsified(a.toString, i)
+        } catch { case e: Exception => Falsified(buildMsg(a, e), i) }
+      }
+      .find(_.isFalsified)
+      .getOrElse(Passed)
   }
 
   def forAll[A](g: SGen[A])(f: A => Boolean): Prop = {
@@ -143,15 +143,16 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
   }
 
   def forAll[A](g: Int => Gen[A])(f: A => Boolean): Prop = Prop {
-    (max: MaxSize, n: TestCases, rng: PRNG) => val casesPerSize = (n + (max - 1)) / max
+    (max: MaxSize, n: TestCases, rng: PRNG) =>
+      val casesPerSize = (n + (max - 1)) / max
       def props: Stream[Prop] =
         Stream.from(0).take((n min max) + 1).map(i => forAll(g(i))(f))
       val prop: Prop =
         props
-          .map(
-            p => Prop {
-                (max, _, rng) => p.run(max, casesPerSize, rng)
-              }
+          .map(p =>
+            Prop { (max, _, rng) =>
+              p.run(max, casesPerSize, rng)
+            }
           )
           .toList
           .reduce(_ && _)
@@ -170,20 +171,20 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
 
     def apply(a: Int): PRNG = PRNG(a.toLong)
 
-    def nextInt: State[PRNG, Int] = {
-      (prng: PRNG) => {
-          val newSeed = (prng.seed * 0X5DEECE66DL + 0XBL) & 0XFFFFFFFFFFFFL
-          val nextRNG = PRNG(newSeed)
-          val n = (newSeed >>> 16).toInt
-          (nextRNG, n)
-        }
+    def nextInt: State[PRNG, Int] = { (prng: PRNG) =>
+      {
+        val newSeed = (prng.seed * 0x5deece66dL + 0xbL) & 0xffffffffffffL
+        val nextRNG = PRNG(newSeed)
+        val n = (newSeed >>> 16).toInt
+        (nextRNG, n)
+      }
     }
 
-    def nextDouble: State[PRNG, Double] = {
-      (prng: PRNG) => {
-          val (p, n) = nextInt(prng)
-          (p, Int.MaxValue.toDouble / n)
-        }
+    def nextDouble: State[PRNG, Double] = { (prng: PRNG) =>
+      {
+        val (p, n) = nextInt(prng)
+        (p, Int.MaxValue.toDouble / n)
+      }
     }
 
   }
@@ -202,14 +203,14 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
     }
 
     def listOfNWithFlatMap(size: Gen[Int]): Gen[List[A]] = {
-      this.flatMap(
-        a => Gen((x: PRNG) => {
-            val (p1, i) = size.sample(x)
-            def s: Stream[(PRNG, A)] =
-              Stream.iterate((p1, a))(x => this.sample(x._1))
-            val str = s.take(i)
-            (str.last._1, str.map(_._2).toList)
-          })
+      this.flatMap(a =>
+        Gen((x: PRNG) => {
+          val (p1, i) = size.sample(x)
+          def s: Stream[(PRNG, A)] =
+            Stream.iterate((p1, a))(x => this.sample(x._1))
+          val str = s.take(i)
+          (str.last._1, str.map(_._2).toList)
+        })
       )
     }
 

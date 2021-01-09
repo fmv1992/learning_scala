@@ -11,7 +11,7 @@ import scalainitiatives.common.ScalaInitiativesExercise
 object FPISExerciseChapter09 extends ScalaInitiativesExercise {
 
   // trait Parsers[ParseError, Parser[+ _]] {
-  trait Parsers[Parser[+ _]] {
+  trait Parsers[Parser[+_]] {
 
     // https://docs.scala-lang.org/tour/self-types.html
     self => // Dummy comment.
@@ -37,8 +37,8 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
 
     implicit def string(s: String): Parser[String]
     implicit def operators[A](p: Parser[A]): ParserOps[A] = ParserOps[A](p)
-    implicit def asStringParser[A](a: A)(
-        implicit f: A => Parser[String]
+    implicit def asStringParser[A](a: A)(implicit
+        f: A => Parser[String]
     ): ParserOps[String] = ParserOps(f(a))
     implicit def regex(r: Regex): Parser[String]
 
@@ -142,7 +142,7 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
     case object JNull extends JSON
 
     // def jsonParser[Err, Parser[+ _]](P: Parsers[Err, Parser]): Parser[JSON] = {
-    def jsonParser[Parser[+ _]](P: Parsers[Parser]): Parser[JSON] = {
+    def jsonParser[Parser[+_]](P: Parsers[Parser]): Parser[JSON] = {
       import P._
       val spaces = char(' ').many.slice
       val digits = string("0987654321").many.slice
@@ -164,12 +164,12 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
             .reduce(_ | _)
           + "]")
 
-      val jboolfm: Parser[JSON] = jbool.map(
-        (x: String) => x match {
-            case "true" => JBool(true)
-            case "false" => JBool(false)
-            case _ => throw new Exception()
-          }
+      val jboolfm: Parser[JSON] = jbool.map((x: String) =>
+        x match {
+          case "true"  => JBool(true)
+          case "false" => JBool(false)
+          case _       => throw new Exception()
+        }
       )
       val jnumberfm = jnumber.map(x => JNumber(x.toDouble))
       val jstringfm = jstring.map(JString(_))

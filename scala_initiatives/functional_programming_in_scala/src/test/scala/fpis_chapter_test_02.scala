@@ -28,8 +28,8 @@ class FPISTestChapter02 extends ScalaInitiativesTest {
     val lists = pairs01.map(x => x._1)
     val bools = pairs01.map(x => x._2)
     val sortFunction = (a: Int, b: Int) => a < b
-    val computed = lists.map(
-      x => FPISExerciseChapter02.Exercise2Dot2isSorted(x, sortFunction)
+    val computed = lists.map(x =>
+      FPISExerciseChapter02.Exercise2Dot2isSorted(x, sortFunction)
     )
   }
 

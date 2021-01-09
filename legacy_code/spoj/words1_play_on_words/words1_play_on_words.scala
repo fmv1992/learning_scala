@@ -18,8 +18,8 @@ case class Point(start: Int, end: Int) { // --- {{{
 
 object Answer { // --- {{{
 
-  val answer = Map(false -> "The door cannot be opened.",
-    true -> "Ordering is possible.")
+  val answer =
+    Map(false -> "The door cannot be opened.", true -> "Ordering is possible.")
 
   def answer(ans: Vector[Boolean]): Unit = {
 
@@ -55,16 +55,17 @@ object EntryPoint { // --- {{{
     }
 
     def findClosedCircuit(
-      origin: Vector[Int],
-      currentPoint: Vector[Int],
-      currentPath: Vector[Vector[Int]],
-      remainingPaths: Vector[Vector[Int]]): Unit = {
-        val linkToOrigin = paths.find(x => isConnected(x, origin))
-        if (linkToOrigin.isEmpty) {
-          // val linkToNext = remainingPaths.find(x => isConnected(x, currentPath))
-        } else {
-          // currentPath ++ link
-        }
+        origin: Vector[Int],
+        currentPoint: Vector[Int],
+        currentPath: Vector[Vector[Int]],
+        remainingPaths: Vector[Vector[Int]]
+    ): Unit = {
+      val linkToOrigin = paths.find(x => isConnected(x, origin))
+      if (linkToOrigin.isEmpty) {
+        // val linkToNext = remainingPaths.find(x => isConnected(x, currentPath))
+      } else {
+        // currentPath ++ link
+      }
     }
 
     val closedCircuit = mapPaths.find(x => x._1 == startPos)
@@ -84,7 +85,11 @@ object EntryPoint { // --- {{{
     // println(nWords)
     val words = (1 to nWords).map(x => StdIn.readLine.stripLineEnd)
     // println(words)
-    val wordsToVector = words.map((x: String) => (Vector(x(0).toInt, x(x.length -1).toInt)): Vector[Int]).toVector
+    val wordsToVector = words
+      .map((x: String) =>
+        (Vector(x(0).toInt, x(x.length - 1).toInt)): Vector[Int]
+      )
+      .toVector
     // println(wordsToVector)
     wordsToVector
   }

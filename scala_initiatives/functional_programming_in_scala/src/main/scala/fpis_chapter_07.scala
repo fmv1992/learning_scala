@@ -99,7 +99,8 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
       }
 
     def fork[A](a: => Par[A]): Par[A] =
-      es => es.submit(new Callable[A] {
+      es =>
+        es.submit(new Callable[A] {
           def call = a(es).get
         })
 
@@ -123,8 +124,8 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
         UnitFuture(f(af, bf))
       }
 
-    def asyncF[A, B](f: A => B): A => Par[B] = {
-      (a: A) => lazyUnit(f(a))
+    def asyncF[A, B](f: A => B): A => Par[B] = { (a: A) =>
+      lazyUnit(f(a))
     }
 
     def sequence[A](ps: List[Par[A]]): Par[List[A]] = {
@@ -143,7 +144,8 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
       // CORRECT: Despite the book indication this is not blocking. It does not
       // use the form of a function; it can be accomplished with matching or
       // foldRight or a balanced parallelization.
-      (es: ExecutorService) => {
+      (es: ExecutorService) =>
+        {
           UnitFuture(ps.map(x => x(es).get))
         }
     }
@@ -151,7 +153,8 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
     def parFilter[A](as: List[A])(f: A => Boolean): Par[List[A]] = {
       // CORRECT: Use other primitives from the code. This does not have this
       // "function" form.
-      (es: ExecutorService) => {
+      (es: ExecutorService) =>
+        {
           UnitFuture(
             as.map(x => (asyncF(f)(x)))
               .zip(as)
@@ -162,14 +165,16 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
     }
 
     def choiceN[A](n: Par[Int])(choices: List[Par[A]]): Par[A] = {
-      (es: ExecutorService) => {
+      (es: ExecutorService) =>
+        {
           val index: Int = run(es)(n).get
           run(es)(choices(index))
         }
     }
 
     def choice[A](cond: Par[Boolean])(t: Par[A], f: Par[A]): Par[A] = {
-      (es: ExecutorService) => {
+      (es: ExecutorService) =>
+        {
           val ind: Par[Int] = if (run(es)(cond).get) {
             unit(0)
           } else {
@@ -181,7 +186,8 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
     }
 
     def chooser[A, B](pa: Par[A])(choices: A => Par[B]): Par[B] = {
-      (es: ExecutorService) => {
+      (es: ExecutorService) =>
+        {
           choices(run(es)(pa).get)(es)
         }
     }
@@ -193,7 +199,8 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
     def choiceAsBind[A](cond: Par[Boolean])(t: Par[A], f: Par[A]): Par[A] = {
       // CORRECT: Use other primitives from the code. This does not have this
       // "function" form. Use `bind` or `flatMap` directly.
-      (es: ExecutorService) => {
+      (es: ExecutorService) =>
+        {
           bind(null)(x => if (cond(es).get) t else f)(es)
         }
     }
@@ -201,19 +208,21 @@ object FPISExerciseChapter07 extends ScalaInitiativesExercise {
     def choiceNAsBind[A](n: Par[Int])(choices: List[Par[A]]): Par[A] = {
       // CORRECT: Use other primitives from the code. This does not have this
       // "function" form. Use `bind` or `flatMap` directly.
-      (es: ExecutorService) => {
+      (es: ExecutorService) =>
+        {
           bind(n)(x => choices(x))(es)
         }
     }
 
-    def join[A](a: Par[Par[A]]): Par[A] = {
-      (es: ExecutorService) => {
-          (a(es).get)(es)
-        }
+    def join[A](a: Par[Par[A]]): Par[A] = { (es: ExecutorService) =>
+      {
+        (a(es).get)(es)
+      }
     }
 
     def bindWithJoin[A, B](pa: Par[A])(choices: A => Par[B]): Par[B] = {
-      (es: ExecutorService) => {
+      (es: ExecutorService) =>
+        {
           run(es)(join(map(pa)(choices)))
         }
     }

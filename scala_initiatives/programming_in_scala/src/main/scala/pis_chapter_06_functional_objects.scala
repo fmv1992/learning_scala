@@ -12,7 +12,7 @@ case class Rational(private val n: Int, private val d: Int) {
   } else if (n > 0 && d > 0) {
     (n / g, d / g)
   } else {
-    (- n.abs / g, d.abs / g)
+    (-n.abs / g, d.abs / g)
   }
   //  if (numer < 0 && denom < 0) {println("-" * 79) ; println(n, d); println(numer, denom)}
 
@@ -31,7 +31,7 @@ case class Rational(private val n: Int, private val d: Int) {
   def +(that: Int): Rational = new Rational(that, 1) + this
 
   def *(that: Rational): Rational =
-    new Rational(numer * that.numer,  denom * that.denom)
+    new Rational(numer * that.numer, denom * that.denom)
   def *(that: Int): Rational = this * new Rational(that)
 
   def -(that: Rational): Rational = this + (that * -1)
@@ -46,7 +46,7 @@ case class Rational(private val n: Int, private val d: Int) {
   override def equals(other: Any): Boolean = other match {
     case that: Rational =>
       (that canEqual this) &&
-      (this.numer == that.numer) && (this.denom == that.denom)
+        (this.numer == that.numer) && (this.denom == that.denom)
     case _ =>
       false
   }

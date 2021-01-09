@@ -59,7 +59,7 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = {
       lazy val o: Option[(A, S)] = f(z)
       o match {
-        case None => Empty
+        case None         => Empty
         case Some((a, s)) => Stream.cons(a, unfold(s)(f))
       }
     }
@@ -96,7 +96,7 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     def toList: List[A] = {
       def go(s: Stream[A], acc: List[A]): List[A] = {
         s match {
-          case Empty => acc
+          case Empty      => acc
           case Cons(h, t) => h() :: go(t(), acc)
         }
       }
@@ -107,8 +107,9 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
       def go(ngo: Int, newS: Stream[A]): Stream[A] = {
         if (ngo > 0) newS match {
           case Cons(h, t) => Stream.cons(h(), go(ngo - 1, t()))
-          case Empty => Empty
-        } else Empty
+          case Empty      => Empty
+        }
+        else Empty
       }
       go(n, this)
     }
@@ -117,7 +118,7 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
       def go(ngo: Int, newS: Stream[A]): Stream[A] = {
         if (ngo > 0) {
           newS match {
-            case Empty => Empty
+            case Empty      => Empty
             case Cons(h, t) => go(ngo - 1, t())
           }
         } else newS
@@ -128,7 +129,8 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     def takeWhile(p: A => Boolean): Stream[A] = {
       this match {
         case Empty => Empty
-        case Cons(h, t) => if (p(h())) Stream.cons(h(), t().takeWhile(p)) else Empty
+        case Cons(h, t) =>
+          if (p(h())) Stream.cons(h(), t().takeWhile(p)) else Empty
       }
     }
 
@@ -226,25 +228,26 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     def mapUsingUnfold[B](f: A => B): Stream[B] = {
       unfold(this)(_ match {
         case Cons(h, t) => Option((f(h()), t()))
-        case Empty => None
+        case Empty      => None
       })
     }
 
     def takeUsingUnfold(n: Int): Stream[A] = {
-      unfold((this, n))(
-        x => x._1 match {
-            case Cons(h, t) => if (x._2 > 0) Option((h(), (t(), x._2 - 1))) else None
-            case Empty => None
-          }
+      unfold((this, n))(x =>
+        x._1 match {
+          case Cons(h, t) =>
+            if (x._2 > 0) Option((h(), (t(), x._2 - 1))) else None
+          case Empty => None
+        }
       )
     }
 
     def takeWhileUsingUnfold(p: A => Boolean): Stream[A] = {
-      unfold(this)(
-        s => s match {
-            case Cons(h, t) => if (p(h())) Option((h(), t())) else None
-            case Empty => None
-          }
+      unfold(this)(s =>
+        s match {
+          case Cons(h, t) => if (p(h())) Option((h(), t())) else None
+          case Empty      => None
+        }
       )
     }
 
@@ -252,12 +255,13 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     def zipWith[B, C](that: Stream[B])(f: (A, B) => C): Stream[C] = {
 
       def liftedF: (Option[A], Option[B]) => Option[C] = {
-        (a: Option[A], b: Option[B]) => a.flatMap(
-            (ax: A) => (
-                b.flatMap(
-                  (bx: B) => ((Try(f(ax, bx)).toOption: Option[C])): Option[C]
-                ): Option[C]
-              )
+        (a: Option[A], b: Option[B]) =>
+          a.flatMap((ax: A) =>
+            (
+              b.flatMap((bx: B) =>
+                ((Try(f(ax, bx)).toOption: Option[C])): Option[C]
+              ): Option[C]
+            )
           )
       }
 
@@ -267,11 +271,11 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
         val computed = liftedF(s1.headOption, s2.headOption)
         // println(s1.take(10).toList)
         // println(s2.take(10).toList)
-        computed.map(
-          x => (
-              x,
-              (s1.tailOption.getOrElse(Empty), s2.tailOption.getOrElse(Empty))
-            )
+        computed.map(x =>
+          (
+            x,
+            (s1.tailOption.getOrElse(Empty), s2.tailOption.getOrElse(Empty))
+          )
         )
       })
 
@@ -301,11 +305,11 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     }
 
     def tails: Stream[Stream[A]] = {
-      unfold(this)(
-        (s: Stream[A]) => (s match {
-            case Empty => None
-            case Cons(h, t) => Option((s, t()))
-          }): Option[(Stream[A], Stream[A])]
+      unfold(this)((s: Stream[A]) =>
+        (s match {
+          case Empty      => None
+          case Cons(h, t) => Option((s, t()))
+        }): Option[(Stream[A], Stream[A])]
       ) :+ Stream()
       //                                    ↑↑
       // NOTE: Another option could be to pass a new state of (Stream[A],
@@ -361,19 +365,19 @@ object FPISExerciseChapter05 extends ScalaInitiativesExercise {
     def foldRight[B](z: => B)(f: (A, => B) => B): B = {
       this match {
         case Cons(h, t) => f(h(), t().foldRight(z)(f))
-        case _ => z
+        case _          => z
       }
     }
 
     def exists(p: A => Boolean): Boolean = foldRight(false)((a, b) => p(a) || b)
 
     def headOption: Option[A] = this match {
-      case Empty => None
+      case Empty      => None
       case Cons(h, t) => Some(h())
     }
 
     def tailOption: Option[Stream[A]] = this match {
-      case Empty => None
+      case Empty      => None
       case Cons(h, t) => Some(t())
     }
 

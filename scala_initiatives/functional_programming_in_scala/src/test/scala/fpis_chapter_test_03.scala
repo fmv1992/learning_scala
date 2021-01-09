@@ -25,11 +25,11 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
 
     // From fpinscala <https://github.com/fpinscala/fpinscala>.
     val x = FPList(1, 2, 3, 4, 5) match {
-      case FPCons(x, FPCons(2, FPCons(4, _))) => x // (1)
-      case FPNil => 42 // (2)
+      case FPCons(x, FPCons(2, FPCons(4, _)))            => x // (1)
+      case FPNil                                         => 42 // (2)
       case FPCons(x, FPCons(y, FPCons(3, FPCons(4, _)))) => x + y // (3)
-      case FPCons(h, t) => h + FPList.sum(t) // (4)
-      case _ => 101 // (5)
+      case FPCons(h, t)                                  => h + FPList.sum(t) // (4)
+      case _                                             => 101 // (5)
     }
     //
     // Written answer:
@@ -383,8 +383,8 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
     assert(FPList.filter(FPNil)((x: Int) => true) == FPNil)
     assert(FPList.filter(minusTentoTen)((x: Int) => false) == FPNil)
     assert(
-      FPList.filter(FPList("alice", "bob", "jalile", "adam"))(
-        (x: String) => x.startsWith("a")
+      FPList.filter(FPList("alice", "bob", "jalile", "adam"))((x: String) =>
+        x.startsWith("a")
       ) == FPList("alice", "adam")
     )
   }
@@ -427,8 +427,8 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
     assert(filterFM(FPNil)((x: Int) => true) == FPNil)
     assert(filterFM(minusTentoTen)((x: Int) => false) == FPNil)
     assert(
-      filterFM(FPList("alice", "bob", "jalile", "adam"))(
-        (x: String) => x.startsWith("a")
+      filterFM(FPList("alice", "bob", "jalile", "adam"))((x: String) =>
+        x.startsWith("a")
       ) == FPList("alice", "adam")
     )
   }

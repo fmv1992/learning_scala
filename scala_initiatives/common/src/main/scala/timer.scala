@@ -28,9 +28,8 @@ object Timer {
       nRepeats: Int = 10
   ): Seq[Double] = {
 
-    val rts: Seq[Seq[Double]] = Seq.tabulate(nRepeats)(
-      x => iterArgs.map(runningTime(function, _))
-    )
+    val rts: Seq[Seq[Double]] =
+      Seq.tabulate(nRepeats)(x => iterArgs.map(runningTime(function, _)))
     val rtsZipped = rts.transpose
 
     rtsZipped.map(aggFunc)

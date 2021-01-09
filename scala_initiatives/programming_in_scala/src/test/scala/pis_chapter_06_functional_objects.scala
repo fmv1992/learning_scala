@@ -1,4 +1,9 @@
-import scalainitiatives.common.{Reader, Paths, Constants, ScalaInitiativesTestPIS}
+import scalainitiatives.common.{
+  Reader,
+  Paths,
+  Constants,
+  ScalaInitiativesTestPIS
+}
 
 import scalainitiatives.programming_in_scala.Rational
 
@@ -6,7 +11,10 @@ import org.scalatest._
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.diagrams.Diagrams
 
-class PISChapter06FunctionalObjectsTest extends AnyFunSuite with Diagrams with ScalaInitiativesTestPIS {
+class PISChapter06FunctionalObjectsTest
+    extends AnyFunSuite
+    with Diagrams
+    with ScalaInitiativesTestPIS {
 
   // Use the squared root of the maximum int because multiplication of two
   // rationals can go beyond it.
@@ -14,23 +22,23 @@ class PISChapter06FunctionalObjectsTest extends AnyFunSuite with Diagrams with S
 
   def getNRandomInts(n: Int): List[Int] = {
     val x = Range(0, n).map(x =>
-        squaredRootOfMaxInt
-        / 2 - scala.util.Random.nextInt(squaredRootOfMaxInt))
+      squaredRootOfMaxInt
+        / 2 - scala.util.Random.nextInt(squaredRootOfMaxInt)
+    )
     x.toList
   }
 
   def getNRandomRationals(n: Int): List[Rational] = {
     val numerators = 0 :: getNRandomInts(n)
     val denominators = getNRandomInts(n).filter(_ != 0)
-    val rationals = (
-      numerators zip denominators).map(x => new Rational(x._1, x._2)).toList
+    val rationals =
+      (numerators zip denominators).map(x => new Rational(x._1, x._2)).toList
     assert(rationals.contains(new Rational(0)))
     rationals
   }
 
   val zero = new Rational(0)
   val one = new Rational(1)
-
 
   test("Test instantiation of rationals.") {
     // Random values.
@@ -55,7 +63,8 @@ class PISChapter06FunctionalObjectsTest extends AnyFunSuite with Diagrams with S
     assert(new Rational(0, 1) == new Rational(0, 57901))
 
     // Test identity operations on some rationals.
-    val someRationals: List[Rational] = getNRandomRationals(nTests).filter(_ != zero)
+    val someRationals: List[Rational] =
+      getNRandomRationals(nTests).filter(_ != zero)
     someRationals.foreach(x => assert(x == x * 1))
     someRationals.foreach(x => assert(zero == x * 0))
     someRationals.foreach(x => assert(x - x == zero))
@@ -70,8 +79,10 @@ class PISChapter06FunctionalObjectsTest extends AnyFunSuite with Diagrams with S
     assert(new Rational(7, 10) / new Rational(17, 13) == new Rational(91, 170))
     assert(new Rational(21, 3) / 7 == one)
     assert(new Rational(113, 3) / 9 == new Rational(113, 27))
-    assert(new Rational(1, 1) * new Rational(-1, -1)  * new Rational(1, 1)
-      == new Rational(1, 1))
+    assert(
+      new Rational(1, 1) * new Rational(-1, -1) * new Rational(1, 1)
+        == new Rational(1, 1)
+    )
 
     // Test some operations on integers.
     assert(one + 1 == new Rational(2))
@@ -87,8 +98,9 @@ class PISChapter06FunctionalObjectsTest extends AnyFunSuite with Diagrams with S
     assert(one != 1)
     assert(one.toString == "1/1")
     assert(zero.toString == "0/1")
-    getNRandomRationals(nTests).foreach(
-      x => assert(x.toString == x.numer + "/" + x.denom))
+    getNRandomRationals(nTests).foreach(x =>
+      assert(x.toString == x.numer + "/" + x.denom)
+    )
 
   }
 

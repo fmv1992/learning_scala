@@ -24,7 +24,7 @@
 class ChecksumAccumulator {
   private var sum = 0
   def add(b: Byte) = sum += b
-  def checksum() = ~(sum & 0xFF) + 1
+  def checksum() = ~(sum & 0xff) + 1
 }
 
 // In file ChecksumAccumulator.scala
@@ -43,8 +43,8 @@ object ChecksumAccumulator {
       val acc = new ChecksumAccumulator
       for (c <- s)
         acc.add(c.toByte)
-        val cs = acc.checksum()
-        cache += (s -> cs)
-        cs
+      val cs = acc.checksum()
+      cache += (s -> cs)
+      cs
     }
 }

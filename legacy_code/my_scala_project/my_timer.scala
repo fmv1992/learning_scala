@@ -2,7 +2,11 @@ package my_scala_project
 
 object Operations {
 
-  def elementWiseOperation[A](func: Tuple2[A, A] => A, x1: Seq[A], x2: Seq[A]): Seq[A] = {
+  def elementWiseOperation[A](
+      func: Tuple2[A, A] => A,
+      x1: Seq[A],
+      x2: Seq[A]
+  ): Seq[A] = {
     x1.zip(x2).map(func)
   }
 
@@ -11,14 +15,12 @@ object Operations {
   // https://stackoverflow.com/questions/4056452/how-do-i-implement-a-generic-mathematical-function-in-scala
   // and
   // https://stackoverflow.com/questions/485896/how-does-one-write-the-pythagoras-theorem-in-scala
-  def elementWiseSubtraction[A](x1: Seq[A], x2: Seq[A])(implicit n: Numeric[A]): Seq[A] = {
+  def elementWiseSubtraction[A](x1: Seq[A], x2: Seq[A])(implicit
+      n: Numeric[A]
+  ): Seq[A] = {
     import n.mkNumericOps
-    elementWiseOperation(
-      (x: Tuple2[A, A]) => (x._1 - x._2),
-      x1,
-      x2)
+    elementWiseOperation((x: Tuple2[A, A]) => (x._1 - x._2), x1, x2)
   }
-
 
   //// def mean[A](x1: A): Double = {
   ////   x1.sum / x1.length
