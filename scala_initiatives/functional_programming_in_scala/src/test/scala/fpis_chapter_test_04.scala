@@ -151,10 +151,10 @@ class FPISTestChapter04 extends ScalaInitiativesTest with Matchers {
     assert(Option.sequence(longList) == Option.sequenceUsingTraverse(longList))
   }
 
-  val l1 = Left(1)
-  val r1 = Right(1)
-  val l2 = Left(2)
-  val r2 = Right(2)
+  val l1: Left[Int] = Left(1)
+  val r1: Right[Int] = Right(1)
+  val l2: Left[Int] = Left(2)
+  val r2: Right[Int] = Right(2)
   test("4.x: Basic tests on custom Either.") {
     assert(l1.isCustomEither)
     assert(r1.isCustomEither)

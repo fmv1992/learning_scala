@@ -23,10 +23,10 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
     def isFalsified = true
   }
 
-  case class PropOld(run: (TestCases, PRNG) ⇒ Result) {
+  case class PropOld(run: (TestCases, PRNG) => Result) {
 
     def &&(that: PropOld): PropOld = {
-      PropOld((t, p) ⇒ {
+      PropOld((t, p) => {
         val r1 = this.run(t, p)
         val r2 = that.run(t, p)
         if (r1.isFalsified) {
@@ -43,7 +43,7 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
     }
 
     def ||(that: PropOld): PropOld = {
-      PropOld((t, p) ⇒ {
+      PropOld((t, p) => {
         val r1 = this.run(t, p)
         val r2 = that.run(t, p)
         if (r1.isFalsified) {
@@ -62,7 +62,7 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
   }
 
   def randomStream[A](g: Gen[A])(rng: PRNG): Stream[A] = {
-    Stream.iterate(g.sample(rng))(x ⇒ g.sample(x._1)).map(_._2)
+    Stream.iterate(g.sample(rng))(x => g.sample(x._1)).map(_._2)
   }
 
   def buildMsg[A](s: A, e: Exception): String = {
@@ -71,14 +71,14 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
       s"stack trace:\n ${e.getStackTrace.mkString("\n")}"
   }
 
-  case class SGen[+A](forSize: Int ⇒ Gen[A])
+  case class SGen[+A](forSize: Int => Gen[A])
 
   object SGen {
 
     def listOf[A](g: Gen[A]): SGen[List[A]] = {
-      SGen(i ⇒ {
-        Gen(p ⇒ {
-          g.listOfNWithFlatMap(Gen(x ⇒ (x, i))).sample(p)
+      SGen(i => {
+        Gen(p => {
+          g.listOfNWithFlatMap(Gen(x => (x, i))).sample(p)
         })
       })
     }
@@ -87,10 +87,10 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
 
   type MaxSize = Int
 
-  case class Prop(run: (MaxSize, TestCases, PRNG) ⇒ Result) {
+  case class Prop(run: (MaxSize, TestCases, PRNG) => Result) {
 
     def &&(that: Prop): Prop = {
-      Prop((m, t, p) ⇒ {
+      Prop((m, t, p) => {
         val r1 = this.run(m, t, p)
         val r2 = that.run(m, t, p)
         if (r1.isFalsified) {
@@ -107,7 +107,7 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
     }
 
     def ||(that: Prop): Prop = {
-      Prop((m, t, p) ⇒ {
+      Prop((m, t, p) => {
         val r1 = this.run(m, t, p)
         val r2 = that.run(m, t, p)
         if (r1.isFalsified) {
@@ -125,32 +125,32 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
 
   }
 
-  def forAll[A](as: Gen[A])(f: A ⇒ Boolean): Prop = Prop {
-    (novar, n, rng) ⇒ randomStream(as)(rng)
+  def forAll[A](as: Gen[A])(f: A => Boolean): Prop = Prop {
+    (novar, n, rng) => randomStream(as)(rng)
         .zip(Stream.from(0))
         .take(n)
         .map {
-          case (a, i) ⇒ try {
+          case (a, i) => try {
               if (f(a)) Passed else Falsified(a.toString, i)
-            } catch { case e: Exception ⇒ Falsified(buildMsg(a, e), i) }
+            } catch { case e: Exception => Falsified(buildMsg(a, e), i) }
         }
         .find(_.isFalsified)
         .getOrElse(Passed)
   }
 
-  def forAll[A](g: SGen[A])(f: A ⇒ Boolean): Prop = {
-    forAll(x ⇒ g.forSize(x))(f)
+  def forAll[A](g: SGen[A])(f: A => Boolean): Prop = {
+    forAll(x => g.forSize(x))(f)
   }
 
-  def forAll[A](g: Int ⇒ Gen[A])(f: A ⇒ Boolean): Prop = Prop {
-    (max: MaxSize, n: TestCases, rng: PRNG) ⇒ val casesPerSize = (n + (max - 1)) / max
+  def forAll[A](g: Int => Gen[A])(f: A => Boolean): Prop = Prop {
+    (max: MaxSize, n: TestCases, rng: PRNG) => val casesPerSize = (n + (max - 1)) / max
       def props: Stream[Prop] =
-        Stream.from(0).take((n min max) + 1).map(i ⇒ forAll(g(i))(f))
+        Stream.from(0).take((n min max) + 1).map(i => forAll(g(i))(f))
       val prop: Prop =
         props
           .map(
-            p ⇒ Prop {
-                (max, _, rng) ⇒ p.run(max, casesPerSize, rng)
+            p => Prop {
+                (max, _, rng) => p.run(max, casesPerSize, rng)
               }
           )
           .toList
@@ -162,7 +162,7 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
 
   // PRNG and State. --- {
 
-  type State[S, +A] = S ⇒ (S, A)
+  type State[S, +A] = S => (S, A)
 
   case class PRNG(seed: Long)
 
@@ -171,7 +171,7 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
     def apply(a: Int): PRNG = PRNG(a.toLong)
 
     def nextInt: State[PRNG, Int] = {
-      (prng: PRNG) ⇒ {
+      (prng: PRNG) => {
           val newSeed = (prng.seed * 0X5DEECE66DL + 0XBL) & 0XFFFFFFFFFFFFL
           val nextRNG = PRNG(newSeed)
           val n = (newSeed >>> 16).toInt
@@ -180,7 +180,7 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
     }
 
     def nextDouble: State[PRNG, Double] = {
-      (prng: PRNG) ⇒ {
+      (prng: PRNG) => {
           val (p, n) = nextInt(prng)
           (p, Int.MaxValue.toDouble / n)
         }
@@ -192,8 +192,8 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
 
   case class Gen[+A](sample: State[PRNG, A]) {
 
-    def flatMap[B](f: A ⇒ Gen[B]): Gen[B] = {
-      Gen((x1: PRNG) ⇒ {
+    def flatMap[B](f: A => Gen[B]): Gen[B] = {
+      Gen((x1: PRNG) => {
         val (p1, a1) = this.sample(x1)
         val g1 = f(a1)
         val (p2, a2) = g1.sample(p1)
@@ -203,10 +203,10 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
 
     def listOfNWithFlatMap(size: Gen[Int]): Gen[List[A]] = {
       this.flatMap(
-        a ⇒ Gen((x: PRNG) ⇒ {
+        a => Gen((x: PRNG) => {
             val (p1, i) = size.sample(x)
             def s: Stream[(PRNG, A)] =
-              Stream.iterate((p1, a))(x ⇒ this.sample(x._1))
+              Stream.iterate((p1, a))(x => this.sample(x._1))
             val str = s.take(i)
             (str.last._1, str.map(_._2).toList)
           })
@@ -214,7 +214,7 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
     }
 
     def unsized: SGen[A] = {
-      SGen(x ⇒ this)
+      SGen(x => this)
     }
 
   }
@@ -222,7 +222,7 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
   object Gen {
 
     def choose(start: Int, stopExclusive: Int): Gen[Int] = {
-      Gen((x: PRNG) ⇒ {
+      Gen((x: PRNG) => {
         val (p, ni) = PRNG.nextInt(x)
         // ???: This "abs" may distort our prng.
         val newInt = ni.abs % (stopExclusive - start) + start
@@ -230,26 +230,26 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
       })
     }
 
-    def unit[A](a: ⇒ A): Gen[A] = Gen(x ⇒ (x, a))
+    def unit[A](a: => A): Gen[A] = Gen(x => (x, a))
 
     def boolean: Gen[Boolean] = {
-      Gen((x: PRNG) ⇒ {
+      Gen((x: PRNG) => {
         val (p: PRNG, i) = Gen.choose(0, 2).sample(x)
         if (i == 0) (p, true) else (p, false)
       })
     }
 
     def listOfN[A](n: Int, g: Gen[A]): Gen[List[A]] = {
-      Gen((x: PRNG) ⇒ {
+      Gen((x: PRNG) => {
         def s: Stream[(PRNG, A)] =
-          Stream.iterate(g.sample(x))(x ⇒ g.sample(x._1))
+          Stream.iterate(g.sample(x))(x => g.sample(x._1))
         val nElements = s.take(n).toVector
         (nElements.last._1, nElements.map(_._2).toList)
       })
     }
 
     def union[A](g1: Gen[A], g2: Gen[A]): Gen[A] = {
-      Gen((x: PRNG) ⇒ {
+      Gen((x: PRNG) => {
         val (p, i) = Gen.boolean.sample(x)
         if (i) g1.sample(p) else g2.sample(p)
       })
@@ -262,7 +262,7 @@ object FPISExerciseChapter08 extends ScalaInitiativesExercise {
 
       val cutoff1: Double = d1 / (d1 + d2)
 
-      Gen((x: PRNG) ⇒ {
+      Gen((x: PRNG) => {
         val (p1: PRNG, d: Double) = PRNG.nextDouble(x)
         val g: Gen[A] = if (cutoff1 < d) g1 else g2
         g.sample(p1)

@@ -9,12 +9,12 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class TestSPOJTestLifeTheUniverseAndEverything extends AnyFunSuite with Diagrams with ScalaInitiativesTestSPOJ {
 
-  val testPathAsList = List(
+  val testPathAsList: List[String] = List(
     ".",
     "spoj",
     "data",
     "spoj_test_life_the_universe_and_everything")
-  val testPathAsString = Paths.getPathFromSeq(testPathAsList)
+  val testPathAsString: String = Paths.getPathFromSeq(testPathAsList)
   val (dataFiles, resultFiles) = loadTestFiles(testPathAsString)
 
   test("Test main function.") {

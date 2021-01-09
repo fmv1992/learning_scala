@@ -4,6 +4,7 @@ import org.scalatest.funsuite.AnyFunSuite
 
 import java.io.File
 import java.io.ByteArrayInputStream
+import scala.util.matching.Regex
 
 // Common to all projects. --- {
 
@@ -21,7 +22,7 @@ trait ScalaInitiativesUtilities {
 trait ScalaInitiativesTest extends AnyFunSuite {
 
   // Declare very common variables to all the tests.
-  val oneToFive = (1 to 5).toList
+  val oneToFive: List[Int] = (1 to 5).toList
 
   // // https://jaytaylor.com/notes/node/1348628729000.html
   // def tupleize[A, B](f: A => B => C) = {
@@ -93,11 +94,11 @@ trait ScalaInitiativesExercise {
 object Constants {
 
   private val maxExp10 = scala.math.floor(scala.math.log10(Int.MaxValue))
-  val maxInt10 = scala.math.pow(10, maxExp10)
+  val maxInt10: Double = scala.math.pow(10, maxExp10)
 
   object Test {
-    val regexDataFiles = """data_\d+\.txt$""".r
-    val regexResultFiles = """expected_answer_\d+\.txt$""".r
+    val regexDataFiles: Regex = """data_\d+\.txt$""".r
+    val regexResultFiles: Regex = """expected_answer_\d+\.txt$""".r
   }
 }
 
@@ -109,12 +110,12 @@ object Reader {
     val lines = if (new File(path).exists) {
       val src = io.Source.fromFile(path)
       try {
-        src.getLines.toList
+        src.getLines().toList
       } finally {
         src.close()
       }
     } else {
-      io.Source.stdin.getLines.toList
+      io.Source.stdin.getLines().toList
     }
     lines
   }

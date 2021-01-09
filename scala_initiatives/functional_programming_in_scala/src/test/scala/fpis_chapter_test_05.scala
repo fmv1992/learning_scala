@@ -1,6 +1,6 @@
 package scalainitiatives.functional_programming_in_scala
 
-import scala.{Stream ⇒ _, _}
+import scala.{Stream => _, _}
 
 import FPISExerciseChapter05.Stream
 import FPISExerciseChapter05.Cons
@@ -17,22 +17,22 @@ import scalainitiatives.common.ScalaInitiativesTest
 class FPISTestChapter05 extends ScalaInitiativesTest {
 
   // Declare constants.
-  val _minus10to10 = (-10 to 10).toList
+  val _minus10to10: List[Int] = (-10 to 10).toList
   val s1: Stream[Int] = Stream(1)
-  val minus10to10 = Stream(_minus10to10: _*)
-  val s2 = Stream(1, 2, 3)
+  val minus10to10: Stream[Int] = Stream(_minus10to10: _*)
+  val s2: Stream[Int] = Stream(1, 2, 3)
 
-  val neverEndingStream = Stream
+  val neverEndingStream: Stream[Int] = Stream
     .from(10)
-    .map(x ⇒ {
+    .map(x => {
       // Thread.sleep(1e9.toLong);
       // ???
       throw new Exception()
       x
     })
 
-  def getErrorStream: () ⇒ Stream[Int] =
-    () ⇒ Stream.cons(
+  def getErrorStream: () => Stream[Int] =
+    () => Stream.cons(
         -12,
         Stream.cons({ throw new Exception(); -11 }, Stream(_minus10to10: _*))
       )
@@ -89,19 +89,19 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     getErrorStream()
     getErrorStream().append(s1)
     getErrorStream().drop(100)
-    getErrorStream().filter(x ⇒ true)
-    getErrorStream().flatMap(x ⇒ Stream.cons(x, Empty))
+    getErrorStream().filter(x => true)
+    getErrorStream().flatMap(x => Stream.cons(x, Empty))
     getErrorStream().headOption
-    getErrorStream().map(x ⇒ x)
-    getErrorStream().mapUsingUnfold(x ⇒ x)
+    getErrorStream().map(x => x)
+    getErrorStream().mapUsingUnfold(x => x)
     getErrorStream().tailOption
     getErrorStream().tails
     getErrorStream().take(100)
     getErrorStream().takeUsingUnfold(100)
-    getErrorStream().takeWhile(x ⇒ true)
-    getErrorStream().takeWhileUsingFoldRight(x ⇒ true)
-    getErrorStream().takeWhileUsingUnfold(x ⇒ true)
-    getErrorStream().zipWith(getErrorStream())((x, y) ⇒ x + y)
+    getErrorStream().takeWhile(x => true)
+    getErrorStream().takeWhileUsingFoldRight(x => true)
+    getErrorStream().takeWhileUsingUnfold(x => true)
+    getErrorStream().zipWith(getErrorStream())((x, y) => x + y)
     val minus10to10WithError = (Stream(_minus10to10: _*)
       ++ Stream.cons({ println("tne"); throw new Exception(); 11 }, Empty))
     minus10to10WithError ++ getErrorStream()
@@ -207,7 +207,7 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   //   // assert((s2 ++ Stream(10)).toList == Stream(1, 2, 3, 10).toList)
   //   // assert((Stream() ++ s1) == s1)
 
-  //   val randList = List.tabulate(10)(x ⇒ scala.util.Random.nextInt)
+  //   val randList = List.tabulate(10)(x => scala.util.Random.nextInt)
   //   assert(Stream(randList: _*).toList == Stream(randList: _*).toList)
   // }
 
@@ -242,8 +242,8 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
       minus10to10.takeWhile(_ < -5).toList
         == List(-10, -9, -8, -7, -6)
     )
-    assert(s1.takeWhile(x ⇒ false).toList == Nil)
-    assert(Empty.takeWhile(Nothing ⇒ true) == Empty)
+    assert(s1.takeWhile(x => false).toList == Nil)
+    assert(Empty.takeWhile(Nothing => true) == Empty)
     assert(s2.takeWhile(_ != 3).toList == List(1, 2))
   }
 
@@ -259,8 +259,8 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
       minus10to10.takeWhileUsingFoldRight(_ < -5).toList
         == List(-10, -9, -8, -7, -6)
     )
-    assert(s1.takeWhileUsingFoldRight(x ⇒ false).toList == Nil)
-    assert(Empty.takeWhileUsingFoldRight(Nothing ⇒ true) == Empty)
+    assert(s1.takeWhileUsingFoldRight(x => false).toList == Nil)
+    assert(Empty.takeWhileUsingFoldRight(Nothing => true) == Empty)
     assert(s2.takeWhileUsingFoldRight(_ != 3).toList == List(1, 2))
   }
 
@@ -285,10 +285,10 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
 
     // Assert flatMap.
     assert(
-      s2.flatMap(i ⇒ Stream(i, i)).toList == Stream(1, 1, 2, 2, 3, 3).toList
+      s2.flatMap(i => Stream(i, i)).toList == Stream(1, 1, 2, 2, 3, 3).toList
     )
     assert(
-      minus10to10.flatMap(i ⇒ Stream(i)).toList == minus10to10
+      minus10to10.flatMap(i => Stream(i)).toList == minus10to10
         .map(identity _)
         .toList
     )
@@ -313,10 +313,10 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
   test("5.11: Implementation of unfold.") {
     assert(
       Stream.constant(0).take(100).toList
-        == Stream.unfold(0)(x ⇒ Option(x, x)).take(100).toList
+        == Stream.unfold(0)(x => Option(x, x)).take(100).toList
     )
     assert(
-      Stream.unfold(10)(x ⇒ if (x < 20) Option(x / 3, x + 1) else None).toList
+      Stream.unfold(10)(x => if (x < 20) Option(x / 3, x + 1) else None).toList
         == Stream(3, 3, 4, 4, 4, 5, 5, 5, 6, 6).toList
     )
     //          10, 11, 12, 13, 14, 15, 16, 17, 18,19,
@@ -331,7 +331,7 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     val t4 = (Stream.fibUsingUnfold.take(20), Stream.fib.take(20))
     val l = List(t1, t2, t3, t4)
 
-    l.foreach(t ⇒ assert(t._1.toList == t._2.toList))
+    l.foreach(t => assert(t._1.toList == t._2.toList))
 
   }
 
@@ -354,13 +354,13 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
         .toList
     )
     assert(
-      s1.takeWhile(x ⇒ false).toList == s1
-        .takeWhileUsingUnfold(x ⇒ false)
+      s1.takeWhile(x => false).toList == s1
+        .takeWhileUsingUnfold(x => false)
         .toList
     )
     assert(
-      Empty.takeWhile(Nothing ⇒ true) == Empty
-        .takeWhileUsingUnfold(Nothing ⇒ true)
+      Empty.takeWhile(Nothing => true) == Empty
+        .takeWhileUsingUnfold(Nothing => true)
     )
     assert(
       s2.takeWhile(_ != 3).toList == s2.takeWhileUsingUnfold(_ != 3).toList
@@ -444,19 +444,19 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     // signature:
     //
     // ```
-    // def unfold[A, S](z: S)(f: S ⇒ Option[(A, S)]): Stream[A] = †
+    // def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = †
     // ```
     //
     // This returns a Stream[A]. However if we use:
     //
     // ```
-    // def scanRight(z: ⇒ A)(f: (A, A) ⇒ A): Stream[A] = †
+    // def scanRight(z: => A)(f: (A, A) => A): Stream[A] = †
     // ```
     //
     // We get:
     //
-    // [error] ⋯/learning_scala/scala_initiatives/functional_programming_in_scala/src/main/scala/fpis_chapter_05.scala:315:27: covariant type A occurs in contravariant position in type (A, A) ⇒ A of value f
-    // [error]     def scanRight(z: ⇒ A)(f: (A, A) ⇒ A): Stream[A] = †
+    // [error] ⋯/learning_scala/scala_initiatives/functional_programming_in_scala/src/main/scala/fpis_chapter_05.scala:315:27: covariant type A occurs in contravariant position in type (A, A) => A of value f
+    // [error]     def scanRight(z: => A)(f: (A, A) => A): Stream[A] = †
     // [error]                           ^
     //
     // The reasons for this are not entirely clear to me... If wre are
@@ -468,17 +468,17 @@ class FPISTestChapter05 extends ScalaInitiativesTest {
     // (3): The functions that we defined that return a different Stream type
     // are (as of commit: 'f6ab100'):
     //
-    // def ++[B>:A](s1: ⇒ Stream[B]): Stream[B] = †
-    // def :+[B>:A](s1: ⇒ B): Stream[B] = †
-    // def append[B>:A, X: scala.reflect.ClassTag, Y: scala.reflect.ClassTag](s1: ⇒ Stream[B]): Stream[B] = †
-    // def append[B>:A, X: scala.reflect.ClassTag](v: ⇒ B): Stream[B] = †
-    // def flatMap[B](f: A ⇒ Stream[B]): Stream[B] = †
-    // def mapUsingUnfold[B](f: A ⇒ B): Stream[B] = †
-    // def map[B](f: A ⇒ B): Stream[B] = †
-    // def scanRight[B>:A](z: ⇒ B)(f: (A, B) ⇒ B): Stream[B] = †
+    // def ++[B>:A](s1: => Stream[B]): Stream[B] = †
+    // def :+[B>:A](s1: => B): Stream[B] = †
+    // def append[B>:A, X: scala.reflect.ClassTag, Y: scala.reflect.ClassTag](s1: => Stream[B]): Stream[B] = †
+    // def append[B>:A, X: scala.reflect.ClassTag](v: => B): Stream[B] = †
+    // def flatMap[B](f: A => Stream[B]): Stream[B] = †
+    // def mapUsingUnfold[B](f: A => B): Stream[B] = †
+    // def map[B](f: A => B): Stream[B] = †
+    // def scanRight[B>:A](z: => B)(f: (A, B) => B): Stream[B] = †
     // def startsWith[B](s: Stream[B]): Boolean = †
     // def zipAll[B](s2: Stream[B]): Stream[(Option[A],Option[B])] = †
-    // def zipWith[B, C](that: Stream[B])(f: (A, B) ⇒ C): Stream[C] = †
+    // def zipWith[B, C](that: Stream[B])(f: (A, B) => C): Stream[C] = †
     //
     // The alternatives are:
     //

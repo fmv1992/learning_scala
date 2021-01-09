@@ -18,7 +18,7 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
     def zero: A
   }
 
-  val stringMonoid = new Monoid[String] {
+  val stringMonoid: Monoid[String] = new Monoid[String] {
 
     def op(a1: String, a2: String) = {
       a1 + a2
@@ -26,7 +26,7 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
     val zero = ""
   }
 
-  def listMonoid[A] = new Monoid[List[A]] {
+  def listMonoid[A]: Monoid[List[A]] = new Monoid[List[A]] {
     def op(a1: List[A], a2: List[A]) = a1 ++ a2
     val zero = Nil
   }
@@ -64,15 +64,15 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
     val zero = None
   }
 
-  def endoMonoid[A]: Monoid[A ⇒ A] = new Monoid[A ⇒ A] {
+  def endoMonoid[A]: Monoid[A => A] = new Monoid[A => A] {
 
-    def op(a1: A ⇒ A, a2: A ⇒ A): A ⇒ A = {
+    def op(a1: A => A, a2: A => A): A => A = {
       a1 compose a2
     }
     val zero = identity(_)
   }
 
-  def foldMap[A, B](as: List[A], m: Monoid[B])(f: A ⇒ B): B = {
+  def foldMap[A, B](as: List[A], m: Monoid[B])(f: A => B): B = {
     as.map(f).fold(m.zero)(m.op)
   }
 
@@ -82,16 +82,16 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
     val zero = m.zero
   }
 
-  def foldLeft[A, B](as: List[A])(z: B)(f: (B, A) ⇒ B): B = {
-    foldMap(as, dual(endoMonoid[B]))(a ⇒ b ⇒ f(b, a))(z)
+  def foldLeft[A, B](as: List[A])(z: B)(f: (B, A) => B): B = {
+    foldMap(as, dual(endoMonoid[B]))(a => b => f(b, a))(z)
   }
 
-  def foldRight[A, B](as: List[A])(z: B)(f: (A, B) ⇒ B): B = {
+  def foldRight[A, B](as: List[A])(z: B)(f: (A, B) => B): B = {
     // The `fold` above takes care of having always a B in place.
     foldMap(as, endoMonoid[B])(f.curried)(z)
   }
 
-  def foldMapV[A, B](w: IndexedSeq[A], m: Monoid[B])(f: A ⇒ B): B = {
+  def foldMapV[A, B](w: IndexedSeq[A], m: Monoid[B])(f: A => B): B = {
     val l = w.length
     if (l == 1) {
       m.op(m.zero, f(w(0)))
@@ -106,11 +106,11 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
     type oi = Option[Int]
     val m: Monoid[oi] = new Monoid[oi] {
       def op(x1: oi, x2: oi) = {
-        x1.flatMap(a ⇒ x2.flatMap(b ⇒ if (a <= b) Option(b) else None))
+        x1.flatMap(a => x2.flatMap(b => if (a <= b) Option(b) else None))
       }
       val zero: oi = Some(Int.MinValue)
     }
-    foldMap(w.toList, m)(x ⇒ Option(x)).isDefined
+    foldMap(w.toList, m)(x => Option(x)).isDefined
   }
 
   sealed trait WC {
@@ -121,7 +121,7 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
   }
   case class Part(lStub: String, words: Int, rStub: String) extends WC {
 
-    def getWordCount = {
+    def getWordCount: Int = {
       if (lStub.endsWith(" ") && !rStub.isEmpty) {
         words + 1
       } else {
@@ -134,25 +134,25 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
 
     def op(a1: WC, a2: WC): WC = {
       val res = a1 match {
-        case Stub(a) ⇒ a2 match {
-            case Stub(b) ⇒ if (a.endsWith(" ")) {
+        case Stub(a) => a2 match {
+            case Stub(b) => if (a.endsWith(" ")) {
                 Part(a, 0, b)
               } else {
                 Stub(a + b)
               }
-            case Part(l, w, r) ⇒ if (a.endsWith(" ")) {
+            case Part(l, w, r) => if (a.endsWith(" ")) {
                 Part(a + l, w + 1, r)
               } else {
                 Part(a + l, w, r)
               }
           }
-        case Part(l, w, r) ⇒ a2 match {
-            case Stub(b) ⇒ if (l.endsWith(" ")) {
+        case Part(l, w, r) => a2 match {
+            case Stub(b) => if (l.endsWith(" ")) {
                 Part(l, w + 1, b)
               } else {
                 Part(l + b, w, r)
               }
-            case Part(l1, w1, r1) ⇒ if (l.endsWith(" ")) {
+            case Part(l1, w1, r1) => if (l.endsWith(" ")) {
                 Part(l + l1, w + w1 + 1, r + r1)
               } else {
                 Part(l + l1, w + w1, r + r1)
@@ -179,9 +179,9 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
   }
 
   trait Foldable[F[_]] {
-    def foldRight[A, B](as: F[A])(z: B)(f: (A, B) ⇒ B): B
-    def foldLeft[A, B](as: F[A])(z: B)(f: (B, A) ⇒ B): B
-    def foldMap[A, B](as: F[A])(f: A ⇒ B)(mb: Monoid[B]): B
+    def foldRight[A, B](as: F[A])(z: B)(f: (A, B) => B): B
+    def foldLeft[A, B](as: F[A])(z: B)(f: (B, A) => B): B
+    def foldMap[A, B](as: F[A])(f: A => B)(mb: Monoid[B]): B
 
     def concatenate[A](as: F[A])(m: Monoid[A]): A =
       foldLeft(as)(m.zero)(m.op)
@@ -190,27 +190,27 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
   // scala -e 'println((1 to 1000000).foldRight(0)(_ + _))'  0.94s user 0.06s system 28% cpu 3.466 total
   // scala -e 'println((1 to 1000000).foldLeft(0)(_ + _))'  0.72s user 0.05s system 67% cpu 1.141 total
   object ListFoldable extends Foldable[List] {
-    override def foldRight[A, B](as: List[A])(z: B)(f: (A, B) ⇒ B) = {
-      foldLeft(as.reverse)(z)((a, b) ⇒ f(b, a))
+    override def foldRight[A, B](as: List[A])(z: B)(f: (A, B) => B): B = {
+      foldLeft(as.reverse)(z)((a, b) => f(b, a))
     }
-    override def foldLeft[A, B](as: List[A])(z: B)(f: (B, A) ⇒ B) = {
+    override def foldLeft[A, B](as: List[A])(z: B)(f: (B, A) => B): B = {
       as.foldLeft(z)(f)
     }
-    override def foldMap[A, B](as: List[A])(f: A ⇒ B)(mb: Monoid[B]): B = {
-      as.foldLeft(mb.zero)((a, b) ⇒ mb.op(a, f(b)))
+    override def foldMap[A, B](as: List[A])(f: A => B)(mb: Monoid[B]): B = {
+      as.foldLeft(mb.zero)((a, b) => mb.op(a, f(b)))
     }
   }
 
   object IndexedSeqFoldable extends Foldable[IndexedSeq] {
-    override def foldRight[A, B](as: IndexedSeq[A])(z: B)(f: (A, B) ⇒ B) = {
+    override def foldRight[A, B](as: IndexedSeq[A])(z: B)(f: (A, B) => B): B = {
       as.foldRight(z)(f)
     }
-    override def foldLeft[A, B](as: IndexedSeq[A])(z: B)(f: (B, A) ⇒ B) = {
+    override def foldLeft[A, B](as: IndexedSeq[A])(z: B)(f: (B, A) => B): B = {
       as.foldLeft(z)(f)
     }
     override def foldMap[A, B](
         as: IndexedSeq[A]
-    )(f: A ⇒ B)(mb: Monoid[B]): B = {
+    )(f: A => B)(mb: Monoid[B]): B = {
       // The book implements it with foldV:
       // That is because this operation can be parallelized I wonder.
       foldMapV(as, mb)(f)
@@ -219,13 +219,13 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
 
   object StreamFoldable extends Foldable[Stream] {
     // I believe in this case it is preferable to use foldleft too.
-    override def foldRight[A, B](as: Stream[A])(z: B)(f: (A, B) ⇒ B) = {
+    override def foldRight[A, B](as: Stream[A])(z: B)(f: (A, B) => B): B = {
       as.foldRight(z)(f)
     }
-    override def foldLeft[A, B](as: Stream[A])(z: B)(f: (B, A) ⇒ B) = {
+    override def foldLeft[A, B](as: Stream[A])(z: B)(f: (B, A) => B): B = {
       as.foldLeft(z)(f)
     }
-    override def foldMap[A, B](as: Stream[A])(f: A ⇒ B)(mb: Monoid[B]): B = {
+    override def foldMap[A, B](as: Stream[A])(f: A => B)(mb: Monoid[B]): B = {
       as.map(f).fold(mb.zero)(mb.op(_, _))
     }
   }
@@ -236,26 +236,26 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
 
   object TreeFoldable extends Foldable[Tree] {
 
-    def foldRight[A, B](as: Tree[A])(z: B)(f: (A, B) ⇒ B): B = {
+    def foldRight[A, B](as: Tree[A])(z: B)(f: (A, B) => B): B = {
       val newTree = as match {
-        case Leaf(a) ⇒ Leaf(a)
-        case Branch(l, r) ⇒ Branch(r, l)
+        case Leaf(a) => Leaf(a)
+        case Branch(l, r) => Branch(r, l)
       }
-      foldLeft(newTree)(z)((a, b) ⇒ f(b, a))
+      foldLeft(newTree)(z)((a, b) => f(b, a))
     }
 
-    def foldLeft[A, B](as: Tree[A])(z: B)(f: (B, A) ⇒ B) = {
+    def foldLeft[A, B](as: Tree[A])(z: B)(f: (B, A) => B): B = {
       as match {
-        case Leaf(a) ⇒ f(z, a)
+        case Leaf(a) => f(z, a)
         // Got this from book.
-        case Branch(l, r) ⇒ foldLeft(r)(foldLeft(l)(z)(f))(f)
+        case Branch(l, r) => foldLeft(r)(foldLeft(l)(z)(f))(f)
       }
     }
 
-    def foldMap[A, B](as: Tree[A])(f: A ⇒ B)(mb: Monoid[B]): B = {
+    def foldMap[A, B](as: Tree[A])(f: A => B)(mb: Monoid[B]): B = {
       as match {
-        case Leaf(a) ⇒ f(a)
-        case Branch(l, r) ⇒ {
+        case Leaf(a) => f(a)
+        case Branch(l, r) => {
           mb.op(foldMap(l)(f)(mb), foldMap(r)(f)(mb))
         }
       }
@@ -276,19 +276,19 @@ object FPISExerciseChapter10 extends ScalaInitiativesExercise {
 
   // object Laws {
   //   def equal[A](p1: Parser[A], p2: Parser[A])(in: Gen[String]): Prop =
-  //     forAll(in)(s ⇒ run(p1)(s) == run(p2)(s))
+  //     forAll(in)(s => run(p1)(s) == run(p2)(s))
   //   def mapLaw[A](p: Parser[A])(in: Gen[String]): Prop =
-  //     equal(p, p.map(a ⇒ a))(in)
+  //     equal(p, p.map(a => a))(in)
   // }
   object Laws {
 
     def applyingZero[A](m: Monoid[A], gen: Gen[A]): Prop = {
-      Prop.forAll(gen)(x ⇒ m.op(x, m.zero) == x)
+      Prop.forAll(gen)(x => m.op(x, m.zero) == x)
     }
 
     def associativity[A](m: Monoid[A], gen: Gen[A]): Prop = {
-      val gen3A: Gen[(A, A, A)] = gen.listOfN(3).map(x ⇒ (x(0), x(1), x(2)))
-      Prop.forAll(gen3A)(x ⇒ {
+      val gen3A: Gen[(A, A, A)] = gen.listOfN(3).map(x => (x(0), x(1), x(2)))
+      Prop.forAll(gen3A)(x => {
         val (x1, x2, x3) = x
         (m.op(m.op(x1, x2), x3)
           == m.op(x1, m.op(x2, x3)))

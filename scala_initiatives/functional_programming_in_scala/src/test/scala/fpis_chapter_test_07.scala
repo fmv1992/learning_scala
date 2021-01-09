@@ -16,7 +16,7 @@ class FPISTestChapter07 extends ScalaInitiativesTest {
     // Written Answer:
     //
     // ```
-    // def map2[A, B, C](a: Par[A], b: Par[B])(f: (A, B) ⇒ C): Par[C] = {
+    // def map2[A, B, C](a: Par[A], b: Par[B])(f: (A, B) => C): Par[C] = {
     // ```
   }
 
@@ -26,14 +26,14 @@ class FPISTestChapter07 extends ScalaInitiativesTest {
     // The Par class should have a lazily evaluated value:
     //
     // ```
-    // case class Par[A](v: ⇒ A)
+    // case class Par[A](v: => A)
     // ```
     //
     // But this gives:
     //
     // ```
     // [error] functional_programming_in_scala/src/test/scala/fpis_chapter_test_07.scala:22:26: `val' parameters may not be call-by-name
-    // [error]     case class Par[A](v: ⇒ A)
+    // [error]     case class Par[A](v: => A)
     // ```
     //
     // Anyways it should then get a lazily evaluated value:
@@ -56,7 +56,7 @@ class FPISTestChapter07 extends ScalaInitiativesTest {
     // A solution can be to use an explicit function:
     //
     // ```
-    // scala> case class Par[A](v: () ⇒ A)
+    // scala> case class Par[A](v: () => A)
     // defined class Par
     // ```
   }

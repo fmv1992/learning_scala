@@ -24,7 +24,7 @@ class FPISTestChapter09 extends ScalaInitiativesTest {
     //
     //    1. In this case an internal "state/representation" (counter in this
     //       case) could better encode the results than a list.
-    //    2. The repetitions can have a more general form. Eg: A ⇒ B for
+    //    2. The repetitions can have a more general form. Eg: A => B for
     //       a repeating A.
     //    3. The error could give context on the parsed material (which can be
     //       huge in its entirety. Also the rule which caused the error should
@@ -90,7 +90,7 @@ class FPISTestChapter09 extends ScalaInitiativesTest {
     // def Exercise9dot6(s: String) = {
     //   val reg: Regex = "([0-9]+)([a-z])([a-z]+)".r
     //   val p1: Parser[String] = regex(reg)
-    //   val p2: Parser[String] = flatMap(p1)( x ⇒ {
+    //   val p2: Parser[String] = flatMap(p1)( x => {
     //     val rmi: Regex.MatchIterator = x.r.findAllIn(s)
     //     val n: Int = rmi.group(1).toInt
     //     val c: String = rmi.group(2)

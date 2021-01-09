@@ -7,11 +7,11 @@ case class Interval(
     require(this.rowsInterval.length == 2)
     require(this.columnsInterval.length == 2)
 
-    val r0 = rowsInterval(0)
-    val r1 = rowsInterval(1)
+    val r0: Int = rowsInterval(0)
+    val r1: Int = rowsInterval(1)
 
-    val c0 = columnsInterval(0)
-    val c1 = columnsInterval(1)
+    val c0: Int = columnsInterval(0)
+    val c1: Int = columnsInterval(1)
 
   }
 
@@ -51,7 +51,7 @@ case class printMultiTable(val interval: Interval, val padding: Int) {
     joinedLines
   }
 
-  def apply() = println(this.getMultiTable())
+  def apply(): Unit = println(this.getMultiTable())
 
   def getListOfLists(): List[List[Int]] = {
 

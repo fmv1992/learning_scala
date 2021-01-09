@@ -33,7 +33,7 @@ class CommonUtilitiesTest extends ScalaInitiativesTest {
     val rt3 = Timer.runningTimeAgg(
       square(_),
       arg3,
-      (x: Seq[Double]) ⇒ Statistics.mean(x),
+      (x: Seq[Double]) => Statistics.mean(x),
       10
     )
 
@@ -43,10 +43,10 @@ class CommonUtilitiesTest extends ScalaInitiativesTest {
 
 class StatisticsTest extends ScalaInitiativesTest {
 
-  val repeatedZeros = List.fill(10)(0)
-  val repeatedOnes = List.fill(10)(0)
-  val fromZeroToTen = (0 to 10).toList
-  val zerosAndTen = List.fill(9)(0d) :+ 10.0d
+  val repeatedZeros: List[Int] = List.fill(10)(0)
+  val repeatedOnes: List[Int] = List.fill(10)(0)
+  val fromZeroToTen: List[Int] = (0 to 10).toList
+  val zerosAndTen: List[Double] = List.fill(9)(0d) :+ 10.0d
 
   test("Average and mean.") {
     assert(Statistics.average(repeatedZeros) == 0)

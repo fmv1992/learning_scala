@@ -20,7 +20,7 @@ case class Rational(private val n: Int, private val d: Int) {
 
   def this(n: Int) = this(n, 1)
 
-  override def toString = numer + "/" + denom
+  override def toString: String = numer + "/" + denom
 
   private def gcd(a: Int, b: Int): Int =
     if (b == 0) a else gcd(b, a % b)
@@ -42,15 +42,15 @@ case class Rational(private val n: Int, private val d: Int) {
 
   // Peeking into Chapter 30 we can do the following:
   // Chapter 30 8< ------------------------------------------------------------
-  override def hashCode = (numer, denom).##
-  override def equals(other: Any) = other match {
+  override def hashCode: Int = (numer, denom).##
+  override def equals(other: Any): Boolean = other match {
     case that: Rational =>
       (that canEqual this) &&
       (this.numer == that.numer) && (this.denom == that.denom)
     case _ =>
       false
   }
-  def canEqual(other: Any) = other.isInstanceOf[Rational]
+  def canEqual(other: Any): Boolean = other.isInstanceOf[Rational]
   // Chapter 30 ------------------------------------------------------------ >8
 
   // Define implicit conversions.

@@ -174,7 +174,7 @@ Website: <http://aperiodic.net/phil/scala/s-99/>.
 
 ## TODO
 
-*   On branch `dev_unstable`: migrate `project_euler` from `./legacy_code`.
+*   On branch `dev_unstable`: improve `sbt`/`scala` versioning for project euler.
 
 * Since branch `new_dev` migrate code from `./legacy_code` to a scala test framework with each project as a subproject in sbt.
 

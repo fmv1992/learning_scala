@@ -21,6 +21,9 @@ tmp/.fpinscala:
 	bash ./other_code/travis_ci/install_fpinscala.sh
 	touch -m $@
 
+scalafix:
+	cd ./scala_initiatives && sbt 'scalafixAll'
+
 clean_fpis_chapter:
 ifdef LEARNING_SCALA_CHAPTER
 	(find . -path '*/target/*FPIS*Chapter$(LEARNING_SCALA_CHAPTER)*.class' -type f -print0 | xargs -0 rm) || true

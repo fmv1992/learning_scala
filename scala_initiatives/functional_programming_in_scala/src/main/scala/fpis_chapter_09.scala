@@ -14,7 +14,7 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
   trait Parsers[Parser[+ _]] {
 
     // https://docs.scala-lang.org/tour/self-types.html
-    self ⇒ // Dummy comment.
+    self => // Dummy comment.
 
     def listOfN[A](n: Int, p: Parser[A]): Parser[List[A]] = {
       // Use map2.
@@ -36,26 +36,26 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
     def run[A, ParseError](p: Parser[A])(input: String): Either[ParseError, A]
 
     implicit def string(s: String): Parser[String]
-    implicit def operators[A](p: Parser[A]) = ParserOps[A](p)
+    implicit def operators[A](p: Parser[A]): ParserOps[A] = ParserOps[A](p)
     implicit def asStringParser[A](a: A)(
-        implicit f: A ⇒ Parser[String]
+        implicit f: A => Parser[String]
     ): ParserOps[String] = ParserOps(f(a))
     implicit def regex(r: Regex): Parser[String]
 
     case class ParserOps[A](p: Parser[A]) {
-      def |[B >: A](p2: ⇒ Parser[B]): Parser[B] = self.or(p, p2)
-      def or[B >: A](p2: ⇒ Parser[B]): Parser[B] = self.or(p, p2)
-      def **[B, C](p2: ⇒ Parser[B]): Parser[(A, B)] = self.product(p, p2)
-      def product[B, C](p2: ⇒ Parser[B]): Parser[(A, B)] = p ** p2
-      def map[B](f: A ⇒ B): Parser[B] = self.map(p)(f)
-      def many = self.many(p)
-      def many1 = self.many(p)
-      def slice = self.slice(p)
-      // def flatMap[A, B](f: A ⇒ Parser[B]) = self.flatMap(p)(f)
+      def |[B >: A](p2: => Parser[B]): Parser[B] = self.or(p, p2)
+      def or[B >: A](p2: => Parser[B]): Parser[B] = self.or(p, p2)
+      def **[B, C](p2: => Parser[B]): Parser[(A, B)] = self.product(p, p2)
+      def product[B, C](p2: => Parser[B]): Parser[(A, B)] = p ** p2
+      def map[B](f: A => B): Parser[B] = self.map(p)(f)
+      def many: Parser[List[A]] = self.many(p)
+      def many1: Parser[List[A]] = self.many(p)
+      def slice: Parser[String] = self.slice(p)
+      // def flatMap[A, B](f: A => Parser[B]) = self.flatMap(p)(f)
     }
 
     def char(c: Char): Parser[Char] = string(c.toString) map (_.charAt(0))
-    def succeed[A](a: A): Parser[A] = string("") map (_ ⇒ a)
+    def succeed[A](a: A): Parser[A] = string("") map (_ => a)
 
     def slice[A](p: Parser[A]): Parser[String]
 
@@ -83,22 +83,22 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
 
     // "Way of running one parser, followed by another, assuming the first is
     // successful."
-    def product[A, B](p: Parser[A], p2: ⇒ Parser[B]): Parser[(A, B)]
+    def product[A, B](p: Parser[A], p2: => Parser[B]): Parser[(A, B)]
 
-    def map2[A, B, C](p: Parser[A], p2: ⇒ Parser[B])(
-        f: (A, B) ⇒ C
+    def map2[A, B, C](p: Parser[A], p2: => Parser[B])(
+        f: (A, B) => C
     ): Parser[C] = {
       // From book: map(product(p, p2))(f.tupled)
-      product(p, p2).map(x ⇒ f(x._1, x._2))
-      flatMap(p)(x ⇒ {
-        p2.map(y ⇒ f(x, y))
+      product(p, p2).map(x => f(x._1, x._2))
+      flatMap(p)(x => {
+        p2.map(y => f(x, y))
       })
     }
 
-    def flatMap[A, B](p: Parser[A])(f: A ⇒ Parser[B]): Parser[B]
+    def flatMap[A, B](p: Parser[A])(f: A => Parser[B]): Parser[B]
 
-    def map[A, B](a: Parser[A])(f: A ⇒ B): Parser[B] = {
-      flatMap(a)(x ⇒ succeed(f(x)))
+    def map[A, B](a: Parser[A])(f: A => B): Parser[B] = {
+      flatMap(a)(x => succeed(f(x)))
     }
 
     // """
@@ -117,17 +117,17 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
   //   // since they are used to instantiate a new parser?
   //   //
   //   // def char(c: Char): Parser[Char] = string(c.toString) map (_.charAt(0))
-  //   // def succeed[A](a: A): Parser[A] = string("") map (_ ⇒ a)
+  //   // def succeed[A](a: A): Parser[A] = string("") map (_ => a)
   // }
 
   // Currently it breaks code:
   // object Laws {
 
   //   def equal[A](p1: Parser[A], p2: Parser[A])(in: Gen[String]): Prop =
-  //     forAll(in)(s ⇒ run(p1)(s) == run(p2)(s))
+  //     forAll(in)(s => run(p1)(s) == run(p2)(s))
 
   //   def mapLaw[A](p: Parser[A])(in: Gen[String]): Prop =
-  //     equal(p, p.map(a ⇒ a))(in)
+  //     equal(p, p.map(a => a))(in)
   // }
 
   trait JSON
@@ -165,17 +165,17 @@ object FPISExerciseChapter09 extends ScalaInitiativesExercise {
           + "]")
 
       val jboolfm: Parser[JSON] = jbool.map(
-        (x: String) ⇒ x match {
-            case "true" ⇒ JBool(true)
-            case "false" ⇒ JBool(false)
-            case _ ⇒ throw new Exception()
+        (x: String) => x match {
+            case "true" => JBool(true)
+            case "false" => JBool(false)
+            case _ => throw new Exception()
           }
       )
-      val jnumberfm = jnumber.map(x ⇒ JNumber(x.toDouble))
+      val jnumberfm = jnumber.map(x => JNumber(x.toDouble))
       val jstringfm = jstring.map(JString(_))
-      val jobjfm = jobj.map(x ⇒ JObject(Map(x)))
-      val jnullfm = jnull.map(x ⇒ JNull)
-      val jarrfm = jarr.map(x ⇒ null)
+      val jobjfm = jobj.map(x => JObject(Map(x)))
+      val jnullfm = jnull.map(x => JNull)
+      val jarrfm = jarr.map(x => null)
 
       (jboolfm | jnumberfm | jstringfm | jnullfm | jobjfm | jarrfm)
     }

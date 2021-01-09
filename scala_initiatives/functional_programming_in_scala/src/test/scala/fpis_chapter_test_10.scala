@@ -74,11 +74,11 @@ class FPISTestChapter10 extends ScalaInitiativesTest {
   // VGhlIHNlcXVlbmNlcyBvZiBsZW5ndGhzIDAgYW5kIDEgYXJlIHNwZWNpYWwgY2FzZXMgdG
   // 8gY29uc2lkZXIu
   test("10.7: Implement foldMapV.") {
-    foldMapV(Vector.tabulate(10)(x ⇒ x).map(_.toString), stringMonoid)(
+    foldMapV(Vector.tabulate(10)(x => x).map(_.toString), stringMonoid)(
       identity(_)
     )
     foldMap(
-      List.tabulate(10)(x ⇒ x).map(_.toString): List[String],
+      List.tabulate(10)(x => x).map(_.toString): List[String],
       stringMonoid
     )(identity(_))
     // Gives us:
@@ -167,7 +167,7 @@ class FPISTestChapter10 extends ScalaInitiativesTest {
   test("10.9: Implementation of isOrdered with foldmap.") {
     // Hard: Use foldMap to detect whether a given IndexedSeq[Int] is ordered.
     // You’ll need to come up with a creative Monoid .
-    assert(isOrdered(Vector.tabulate(10)(x ⇒ x)))
+    assert(isOrdered(Vector.tabulate(10)(x => x)))
     assert(!isOrdered(Vector(0, 1, 0)))
     assert(isOrdered(Vector(0)))
     assert(isOrdered(Vector(899, 899, 899)))
@@ -211,8 +211,8 @@ class FPISTestChapter10 extends ScalaInitiativesTest {
     val v1: String = "RIGHT"
     assert(ListFoldable.foldLeft(l1)(v0)(f1) == l1.foldLeft(v0)(f1))
     assert(
-      ListFoldable.foldRight(l1)(v1)((a, b) ⇒ f1(b, a))
-        == l1.foldRight(v1)((a, b) ⇒ f1(b, a))
+      ListFoldable.foldRight(l1)(v1)((a, b) => f1(b, a))
+        == l1.foldRight(v1)((a, b) => f1(b, a))
     )
   }
 

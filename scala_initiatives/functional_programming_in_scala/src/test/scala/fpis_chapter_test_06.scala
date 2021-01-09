@@ -32,7 +32,7 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
 
   val StreamOfRNGs100: Stream[SimpleRNG] = StreamOfRNGs
     .take(100)
-  val rng1 = SimpleRNG(1)
+  val rng1: SimpleRNG = SimpleRNG(1)
 
   val nextZeroRNG: RNG = SimpleRNG((0XFFFFFFFFFFFFL - 0XBL) / 0X5DEECE66DL)
 
@@ -228,14 +228,14 @@ class FPISTestChapter06 extends ScalaInitiativesTest with Matchers {
 
   // val s1 = State((x: Int) => (x + 1, State((y: Int) => 2 * x))
   // val immState = State(0, (x: Int) => (x, x))
-  val nextIntFunc = (x: Int) => (x + 1, x)
-  val nextIntState = State(nextIntFunc)
-  val doubleIntFunc = (x: Int) => (x + 1, 2 * x)
-  val doubleIntState = State(doubleIntFunc)
+  val nextIntFunc: Int => (Int, Int) = (x: Int) => (x + 1, x)
+  val nextIntState: State[Int,Int] = State(nextIntFunc)
+  val doubleIntFunc: Int => (Int, Int) = (x: Int) => (x + 1, 2 * x)
+  val doubleIntState: State[Int,Int] = State(doubleIntFunc)
   //  1.  The double of the current state.
   //  2.  A new state, which is the next integer.
 
-  val result1 = nextIntState.run(1)
+  val result1: (Int, Int) = nextIntState.run(1)
   val (s2, a1) = result1
   val (s3, b) = nextIntState.run(s2)
   assert(s2 == 2)

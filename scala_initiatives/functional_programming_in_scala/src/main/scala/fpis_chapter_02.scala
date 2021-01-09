@@ -31,7 +31,7 @@ object FPISExerciseChapter02 extends ScalaInitiativesExercise {
 
   def Exercise2Dot2isSorted[A](
       as: Array[A],
-      ordered: (A, A) ⇒ Boolean
+      ordered: (A, A) => Boolean
   ): Boolean = {
 
     def go(leftPosition: Int): Boolean = {
@@ -49,18 +49,18 @@ object FPISExerciseChapter02 extends ScalaInitiativesExercise {
     go(0)
   }
 
-  def Exercise2Dot3Currying[A, B, C](f: (A, B) ⇒ C): A ⇒ (B ⇒ C) = {
-    (a: A) ⇒ (
-        (b: B) ⇒ f(a, b)
+  def Exercise2Dot3Currying[A, B, C](f: (A, B) => C): A => (B => C) = {
+    (a: A) => (
+        (b: B) => f(a, b)
     )
   }
 
-  def Exercise2Dot4Uncurrying[A, B, C](f: A ⇒ B ⇒ C): (A, B) ⇒ C = {
-    (a: A, b: B) ⇒ f(a)(b)
+  def Exercise2Dot4Uncurrying[A, B, C](f: A => B => C): (A, B) => C = {
+    (a: A, b: B) => f(a)(b)
   }
 
-  def Exercise2Dot5Compose[A, B, C](f: B ⇒ C, g: A ⇒ B): A ⇒ C = {
-    x ⇒ f(g(x))
+  def Exercise2Dot5Compose[A, B, C](f: B => C, g: A => B): A => C = {
+    x => f(g(x))
   }
 
 }

@@ -11,11 +11,11 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
   val g3: Gen[Int] = Gen.unit(3)
   val g0To9: Gen[Int] = Gen.choose(0, 10)
   val g10To19: Gen[Int] = Gen.choose(10, 20)
-  val p0 = PRNG(0)
-  val sg0To9: SGen[Int] = SGen(x ⇒ g0To9)
+  val p0: PRNG = PRNG(0)
+  val sg0To9: SGen[Int] = SGen(x => g0To9)
 
   test(
-    "8.1: Thinking about the properties of a `sum: List[Int] ⇒ Int` function."
+    "8.1: Thinking about the properties of a `sum: List[Int] => Int` function."
   ) {
     // Written answer:
     //
@@ -26,7 +26,7 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
     // 4. The sum of a n=1 list is equal to l(0).
   }
   test(
-    "8.2: Thinking about the properties of a `max: List[Int] ⇒ Int` function."
+    "8.2: Thinking about the properties of a `max: List[Int] => Int` function."
   ) {
     // Written answer:
     //
@@ -65,11 +65,11 @@ class FPISTestChapter08 extends ScalaInitiativesTest {
     //    a. Gen[Option[Int]] from Gen[Int].
 
     val genOpt: Gen[Option[Int]] = Gen(
-      // (x: PRNG) ⇒ {
+      // (x: PRNG) => {
       //   val (p, ni) = PRNG.nextInt(x)
       //   val nio = if (ni % 2 == 0) Some(ni)  else None
       //   (p, nio)})
-      (x: PRNG) ⇒ {
+      (x: PRNG) => {
         val (p, ni) = g0.sample(x)
         (p, Some(ni))
       }

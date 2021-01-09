@@ -25,11 +25,11 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
 
     // From fpinscala <https://github.com/fpinscala/fpinscala>.
     val x = FPList(1, 2, 3, 4, 5) match {
-      case FPCons(x, FPCons(2, FPCons(4, _))) ⇒ x // (1)
-      case FPNil ⇒ 42 // (2)
-      case FPCons(x, FPCons(y, FPCons(3, FPCons(4, _)))) ⇒ x + y // (3)
-      case FPCons(h, t) ⇒ h + FPList.sum(t) // (4)
-      case _ ⇒ 101 // (5)
+      case FPCons(x, FPCons(2, FPCons(4, _))) => x // (1)
+      case FPNil => 42 // (2)
+      case FPCons(x, FPCons(y, FPCons(3, FPCons(4, _)))) => x + y // (3)
+      case FPCons(h, t) => h + FPList.sum(t) // (4)
+      case _ => 101 // (5)
     }
     //
     // Written answer:
@@ -68,8 +68,8 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
 
   test("3.5: List's implementation of dropWhile.") {
 
-    assert(FPList.dropWhile(oneToFiveFP)(x ⇒ true) == void)
-    assert(FPList.dropWhile(oneToFiveFP)(x ⇒ false) == oneToFiveFP)
+    assert(FPList.dropWhile(oneToFiveFP)(x => true) == void)
+    assert(FPList.dropWhile(oneToFiveFP)(x => false) == oneToFiveFP)
     assert(FPList.dropWhile(oneToFiveFP)(_ < 5) == FPList(5))
     assert(FPList.dropWhile(oneToFiveFP)(_ < 0) == oneToFiveFP)
 
@@ -114,8 +114,8 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
     //
     // ```
     //    x match {
-    //      case FPNil ⇒ FPNil
-    //      case FPCons(h, t) ⇒ t
+    //      case FPNil => FPNil
+    //      case FPCons(h, t) => t
     //    }
     // ```
     //
@@ -204,10 +204,10 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
   }
 
   namedTest("Compare foldRight and foldLeft.") {
-    val joinAsStringRight: (Int, String) ⇒ String =
-      (member: Int, agg: String) ⇒ agg + member.toString
-    val joinAsStringLeft: (String, Int) ⇒ String =
-      (x, y) ⇒ joinAsStringRight(y, x)
+    val joinAsStringRight: (Int, String) => String =
+      (member: Int, agg: String) => agg + member.toString
+    val joinAsStringLeft: (String, Int) => String =
+      (x, y) => joinAsStringRight(y, x)
     println("Original sequence: " + oneToFiveFP)
     println(FPList.foldRight(oneToFiveFP, "start right →")(joinAsStringRight))
     println(FPList.foldLeft(oneToFiveFP, "start left →")(joinAsStringLeft))
@@ -227,8 +227,8 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
     //
     // ???: Not satisfactorily answered.
 
-    val nonCommutativeFunctionL: (String, Int) ⇒ String =
-      (s, x) ⇒ s + "→" + x.toString + "←"
+    val nonCommutativeFunctionL: (String, Int) => String =
+      (s, x) => s + "→" + x.toString + "←"
     val foldLeftResult =
       FPList.foldLeft(oneToFiveFP, "seed")(nonCommutativeFunctionL)
     assert(
@@ -237,7 +237,7 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
       ))
     )
     val nonCommutativeFunctionR =
-      (i: Int, s: String) ⇒ nonCommutativeFunctionL(s, i)
+      (i: Int, s: String) => nonCommutativeFunctionL(s, i)
     val foldRightResult =
       FPList.foldRight(oneToFiveFP, "seed")(nonCommutativeFunctionR)
     assert(
@@ -288,9 +288,9 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
     //                | Commit: e871cb96a264b27693fa1300bcf180ee6f547e95
     // 1:             | def append[T](l1: FPList[T], l2: FPList[T]): FPList[T] = {
     // 2: [constant]  |   l1 match {
-    // 3: [linear]    |     case FPCons(h, t) ⇒ FPCons(h,
+    // 3: [linear]    |     case FPCons(h, t) => FPCons(h,
     //  :             |       foldRight(t, l2)(FPCons(_, _)))
-    // 4: [constant]  |     case FPNil ⇒ l2
+    // 4: [constant]  |     case FPNil => l2
     // 5:             |   }
     // 6:             | }
     //
@@ -379,24 +379,24 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
   }
 
   test("3.19: List's implementation of filter.") {
-    assert(FPList.filter(oneToFiveFP)((x: Int) ⇒ x % 2 == 0) == FPList(2, 4))
-    assert(FPList.filter(FPNil)((x: Int) ⇒ true) == FPNil)
-    assert(FPList.filter(minusTentoTen)((x: Int) ⇒ false) == FPNil)
+    assert(FPList.filter(oneToFiveFP)((x: Int) => x % 2 == 0) == FPList(2, 4))
+    assert(FPList.filter(FPNil)((x: Int) => true) == FPNil)
+    assert(FPList.filter(minusTentoTen)((x: Int) => false) == FPNil)
     assert(
       FPList.filter(FPList("alice", "bob", "jalile", "adam"))(
-        (x: String) ⇒ x.startsWith("a")
+        (x: String) => x.startsWith("a")
       ) == FPList("alice", "adam")
     )
   }
 
   test("3.20: List's implementation of flatMap.") {
     assert(
-      FPList.flatMap(oneToFiveFP)(i ⇒ FPList(i, i)) == FPList(1, 1, 2, 2, 3, 3,
+      FPList.flatMap(oneToFiveFP)(i => FPList(i, i)) == FPList(1, 1, 2, 2, 3, 3,
         4, 4, 5, 5)
     )
     assert(
       FPList.toBuiltinScalaList(
-        FPList.flatMap(oneToFiveFP)(i ⇒ FPList("" + i + "|", "empty"))
+        FPList.flatMap(oneToFiveFP)(i => FPList("" + i + "|", "empty"))
       )
         ==
           List(
@@ -422,13 +422,13 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
   }
 
   test("3.21: List's implementation of filter via flatMap.") {
-    import FPList.{filterUsingFlatMap ⇒ filterFM}
-    assert(filterFM(oneToFiveFP)((x: Int) ⇒ x % 2 == 0) == FPList(2, 4))
-    assert(filterFM(FPNil)((x: Int) ⇒ true) == FPNil)
-    assert(filterFM(minusTentoTen)((x: Int) ⇒ false) == FPNil)
+    import FPList.{filterUsingFlatMap => filterFM}
+    assert(filterFM(oneToFiveFP)((x: Int) => x % 2 == 0) == FPList(2, 4))
+    assert(filterFM(FPNil)((x: Int) => true) == FPNil)
+    assert(filterFM(minusTentoTen)((x: Int) => false) == FPNil)
     assert(
       filterFM(FPList("alice", "bob", "jalile", "adam"))(
-        (x: String) ⇒ x.startsWith("a")
+        (x: String) => x.startsWith("a")
       ) == FPList("alice", "adam")
     )
   }
@@ -450,7 +450,7 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
     assert(
       FPList.toBuiltinScalaList(
         FPList.zipWith(
-          FPList.zipWith(x1, x2)((s, c) ⇒ (c.asDigit + s.toInt) * (c.asDigit)),
+          FPList.zipWith(x1, x2)((s, c) => (c.asDigit + s.toInt) * (c.asDigit)),
           x3
         )(_ + _)
       )
@@ -514,18 +514,18 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
     // |   // Debugging with print...
     // |   @annotation.tailrec
     // |   def go(l1: FPList[A], l2: FPList[A]): Boolean = {
-    // |     println("sup " + foldLeft(l1, "")((x: String, y: A) ⇒ x + "|" + y))
-    // |     println("sub " + foldLeft(l2, "")((x: String, y: A) ⇒ x + "|" + y))
+    // |     println("sup " + foldLeft(l1, "")((x: String, y: A) => x + "|" + y))
+    // |     println("sub " + foldLeft(l2, "")((x: String, y: A) => x + "|" + y))
     // |     l1 match {
-    // |       case FPNil ⇒ l1 == l2
-    // |       case FPCons(h1, t1) ⇒ l2 match {
-    // |         case FPNil ⇒ {
+    // |       case FPNil => l1 == l2
+    // |       case FPCons(h1, t1) => l2 match {
+    // |         case FPNil => {
     // |           t1 != FPNil
     // |           // true  // ???: Violates: FPISTestChapter03.this.minusTentoTen, FPISExerciseChapter03.FPList.apply[Int](7, 8, 9)
     // |           // false // ???: Violates: FPISTestChapter03.this.minusTentoTen, FPISExerciseChapter03.FPList.apply[Int](-10, -9, -8)
     // |           // throw new Exception()
     // |         }
-    // |         case FPCons(h2, t2) ⇒ if (h1 == h2) go(t1, t2) else go(t1, sub)
+    // |         case FPCons(h2, t2) => if (h1 == h2) go(t1, t2) else go(t1, sub)
     // |       }
     // |     }
     // |   }
@@ -626,7 +626,7 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
       // Test some maps.
       assert(Tree.map(tree2)(_ + 999) == Leaf(1000))
       assert(Tree.map(tree3)(_.toString) == tree3AsString)
-      assert(tree3AsDoubledTuple == Tree.map(tree3)(x ⇒ (x, x)))
+      assert(tree3AsDoubledTuple == Tree.map(tree3)(x => (x, x)))
     }
 
     test("3.29: Tree's Implementation of fold.") {
@@ -654,16 +654,16 @@ class FPISTestChapter03 extends ScalaInitiativesTest {
 
       // Map.
       val lot: List[Tree[Int]] = List(tree1, tree2, tree3, tree4, tree5)
-      val lof: List[Int ⇒ Int] = List(
+      val lof: List[Int => Int] = List(
         identity,
         _ + 2,
-        x ⇒ 0,
-        x ⇒ x * x
+        x => 0,
+        x => x * x
       )
-      lot.map(x ⇒ {
+      lot.map(x => {
         println("-" * 79)
         println("Original: " + x)
-        lof.map(f ⇒ {
+        lof.map(f => {
           val simpleMap = Tree.map(x)(f)
           val map = Tree.mapUsingFold(x)(f)
           println("Mapped:\n" + f + ":\n" + map)
