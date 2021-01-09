@@ -1,5 +1,7 @@
 package fmv1992.project_euler
 
+import scala.collection.compat._
+
 object Common {
 
   private def streamLong(from: Long): Stream[Long] =
@@ -26,7 +28,7 @@ object Common {
         def streamLong(from: Long): Stream[Long] =
           from #:: streamLong(from + 1L)
         !(streamLong(2L)
-          .takeWhile(_ <= scala.math.ceil(scala.math.sqrt(l)))
+          .takeWhile(_ <= scala.math.ceil(scala.math.sqrt(l.toDouble)))
           .exists(l % _ == 0))
       }
     }

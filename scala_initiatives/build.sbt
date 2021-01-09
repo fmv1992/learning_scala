@@ -8,7 +8,7 @@ licenses += "GPLv2" -> url("https://www.gnu.org/licenses/gpl-2.0.html")
 
 inThisBuild(
   List(
-    scalaVersion := "2.12.12", // 2.11.12, or 2.13.4
+    scalaVersion := "2.13.4", // 2.11.12, or 2.13.4
     semanticdbEnabled := true, // enable SemanticDB
     semanticdbVersion := scalafixSemanticdb.revision // use Scalafix compatible version
   )
@@ -48,14 +48,19 @@ lazy val scala213Options = Seq(
 //    "com.sandinh" %% "scala-rewrites" % "0.1.10-sd"
 //  ),
 //  libraryDependencies += "org.scalameta" %% "scalameta" % "4.4.4"
-  scalaVersion := "2.13.4", // 2.11.12, or 2.13.4
+  // scalaVersion := "2.13.4", // 2.11.12, or 2.13.4
+  scalaVersion := "2.11.12", // 2.11.12, or 2.13.4
   semanticdbEnabled := true, // enable SemanticDB
   semanticdbVersion := scalafixSemanticdb.revision, // use Scalafix compatible version
   // scalacOptions += "-Ywarn-unused-import" // required by `RemoveUnused` rule
   //
   //
-  libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.3.2",
-  scalafixDependencies in ThisBuild += "org.scala-lang.modules" %% "scala-collection-migrations" % "2.3.2"
+  //
+  //
+  scalafixDependencies in ThisBuild += "org.scala-lang.modules" %% "scala-collection-migrations" % "2.3.2",
+  /* libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.3.2",*/
+  addCompilerPlugin(scalafixSemanticdb),
+  scalacOptions ++= List("-Yrangepos", "-P:semanticdb:synthetics:on")
 )
 
 // Common to all projects.

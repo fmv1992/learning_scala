@@ -23,6 +23,9 @@ object ID_0005_SmallestMultiple {
     val keys = decomposed.map(_.keySet).reduce(_ ++ _).toSeq
     val maxExpos =
       keys.map(k => (k, decomposed.map(m => m.getOrElse(k, 0L)).max))
-    maxExpos.map(x => scala.math.pow(x._1, x._2)).map(_.toInt).reduce(_ * _)
+    maxExpos
+      .map(x => scala.math.pow(x._1.toDouble, x._2.toDouble))
+      .map(_.toInt)
+      .reduce(_ * _)
   }
 }
